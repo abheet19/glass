@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en" data-glass="zeno">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glass — a design system extracted from eight projects</title>
+<meta name="description" content="oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose.">
+
+<!-- The system itself. Nothing else is loaded: no build step, no bundler, no
+     CDN, no webfont. Open this file from disk and it works. -->
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="../src/primitives.css">
+<link rel="stylesheet" href="../src/themes/zeno.css">
+<link rel="stylesheet" href="../src/themes/weft.css">
+<link rel="stylesheet" href="../src/themes/vantage.css">
+<link rel="stylesheet" href="../src/themes/shield.css">
+<link rel="stylesheet" href="../src/themes/textify.css">
+<link rel="stylesheet" href="../src/themes/health.css">
+<link rel="stylesheet" href="../src/themes/rephrase.css">
+<link rel="stylesheet" href="../src/themes/detect.css">
+
+<style>
+/* Demo-only layout. Every value below is a token from the system; this page
+   introduces no colour, no radius, no duration and no font of its own. */
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--sp-6); }
+
+/* ---- the bar ------------------------------------------------------------ */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  border-radius: 0; border-width: 0 0 1px;
+  padding: var(--sp-3) 0;
+}
+.bar-in { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: var(--sp-3); margin-right: auto; }
+.brand-name {
+  font-size: var(--fs-2); font-weight: 650; letter-spacing: .22em;
+  line-height: 1; color: var(--ink);
+}
+.brand-sub { font-size: var(--fs-0); color: var(--ink-2); letter-spacing: .02em; }
+
+.seg {
+  display: inline-flex; gap: 2px; padding: 3px;
+  background: color-mix(in srgb, var(--ink) 7%, var(--surface));
+  border: 1px solid var(--line); border-radius: var(--r-1);
+}
+.seg .btn { border-color: transparent; background: transparent; color: var(--ink-2); }
+.seg .btn[aria-pressed="true"] { background: var(--raised); border-color: var(--line); color: var(--ink); }
+#flat[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.swatch-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3) var(--sp-1) var(--sp-2);
+}
+.dot { width: 11px; height: 11px; border-radius: var(--r-pill); flex: none; box-shadow: inset 0 0 0 1px oklch(0% 0 0 / .28); }
+.themes {
+  order: 2; flex: 1 0 100%;
+  display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  padding-top: var(--sp-3); border-top: 1px solid var(--gl-edge);
+}
+
+/* ---- hero --------------------------------------------------------------- */
+.hero { padding: var(--sp-8) 0 var(--sp-7); }
+.display {
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-3); line-height: var(--lh-1); font-weight: 680;
+  letter-spacing: -0.03em; color: var(--ink);
+}
+.display em { font-style: normal; color: var(--accent); }
+.lede { max-width: 62ch; margin: 0 0 var(--sp-5); color: var(--ink-2); font-size: var(--fs-2); line-height: var(--lh-3); }
+.hero-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* ---- sections ----------------------------------------------------------- */
+section { padding: var(--sp-8) 0; border-top: 1px solid var(--line); }
+.sec-head { display: flex; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-6); }
+h2 { margin: 0; font-size: var(--fs-2); font-weight: 650; letter-spacing: -0.01em; color: var(--ink); }
+.sec-note { margin: 0; max-width: 66ch; color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
+.kicker {
+  font-family: var(--font-mono); font-size: var(--fs-0); letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+
+.grid { display: grid; gap: var(--sp-5); }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.stack { display: flex; flex-direction: column; gap: var(--sp-4); }
+.row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+
+/* ---- the ramp ----------------------------------------------------------- */
+.ramp { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: var(--sp-2); }
+.ramp-cell {
+  border: 1px solid var(--line); border-radius: var(--r-1); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.ramp-swatch { height: 56px; }
+.ramp-meta { padding: var(--sp-2); background: var(--surface); }
+.ramp-name { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink); }
+.ramp-val { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); }
+
+/* ---- tables ------------------------------------------------------------- */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--fs-0); }
+th, td { text-align: left; padding: var(--sp-2) var(--sp-4); border-bottom: 1px solid var(--line); white-space: nowrap; }
+thead th { color: var(--ink-3); font-weight: 550; letter-spacing: .06em; text-transform: uppercase; font-size: var(--fs-0); }
+tbody tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+td.tok { font-family: var(--font-mono); color: var(--ink-2); }
+.verdict { font-family: var(--font-mono); font-weight: 600; }
+.verdict.pass { color: var(--ok); }
+.verdict.fail { color: var(--bad); }
+
+/* ---- gallery ------------------------------------------------------------ */
+.gal-row {
+  display: grid; grid-template-columns: minmax(150px, 1fr) 1fr 1fr; gap: var(--sp-4);
+  align-items: center; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--line);
+}
+.gal-row:last-child { border-bottom: 0; }
+.gal-name { display: flex; flex-direction: column; gap: 2px; }
+.gal-title { font-weight: 600; color: var(--ink); font-size: var(--fs-1); }
+.gal-origin { font-size: var(--fs-0); color: var(--ink-3); }
+.strip { display: flex; height: 30px; border-radius: var(--r-1); overflow: hidden; border: 1px solid var(--line); }
+.strip > i { flex: 1; }
+.strip-label { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); margin-bottom: 4px; }
+
+/* ---- misc --------------------------------------------------------------- */
+.type-row { display: flex; align-items: baseline; gap: var(--sp-4); border-bottom: 1px solid var(--line); padding: var(--sp-3) 0; }
+.type-row:last-child { border-bottom: 0; }
+.type-tag { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); width: 6.5rem; flex: none; }
+.radii { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
+.radii figure { margin: 0; text-align: center; }
+.radii .box { width: 76px; height: 56px; background: var(--raised); border: 1px solid var(--line); }
+.radii figcaption { margin-top: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); }
+.mono { font-family: var(--font-mono); }
+pre {
+  margin: 0; padding: var(--sp-4); overflow-x: auto;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2);
+  font-family: var(--font-mono); font-size: var(--fs-0); line-height: var(--lh-2); color: var(--ink-2);
+}
+pre b { color: var(--accent); font-weight: 500; }
+footer { padding: var(--sp-8) 0; border-top: 1px solid var(--line); color: var(--ink-3); font-size: var(--fs-0); }
+footer a { color: var(--ink-2); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 720px) {
+  .gal-row { grid-template-columns: 1fr; }
+  .wrap { padding: 0 var(--sp-4); }
+}
+</style>
+</head>
+
+<body class="glass-page glass-atmosphere">
+
+<!-- ===================================================================== -->
+<header class="bar glass">
+  <div class="wrap bar-in">
+    <div class="brand">
+      <!-- Three planes — cast, flank, face — the construction the Zeno, Weft
+           and Vantage marks share. It takes its colour from the live tokens,
+           so it restyles itself with the theme. -->
+      <svg width="34" height="34" viewBox="0 0 64 64" role="img" aria-label="Glass">
+        <rect x="15" y="15" width="36" height="36" rx="9" transform="translate(5,5)" fill="var(--bg)"/>
+        <rect x="15" y="15" width="36" height="36" rx="9" transform="translate(2.5,2.5)" fill="var(--accent-2)"/>
+        <rect x="15" y="15" width="36" height="36" rx="9" fill="var(--accent)"/>
+        <rect x="15" y="15" width="36" height="36" rx="9" fill="none" stroke="var(--ink)" stroke-opacity=".45" stroke-width="1.5"/>
+        <path d="M22 41 L41 22" stroke="var(--on-accent)" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">GLASS</span>
+      <span class="brand-sub" id="bar-sub">zeno · dark</span>
+    </div>
+
+    <div class="themes" id="themes" role="group" aria-label="Theme"></div>
+
+    <div class="seg" role="group" aria-label="Ground">
+      <button class="btn" data-ground="dark"   aria-pressed="false">Dark</button>
+      <button class="btn" data-ground="system" aria-pressed="true">System</button>
+      <button class="btn" data-ground="light"  aria-pressed="false">Light</button>
+    </div>
+
+    <button class="btn" id="flat" aria-pressed="false" title="Sets data-flat=&quot;1&quot; on :root — the manual escape hatch from tokens.css §3">
+      Reduce transparency
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- =================================================================== -->
+  <div class="hero">
+    <p class="kicker">a personal design system</p>
+    <h1 class="display">Eight projects had already<br>converged. <em>This is the extraction.</em></h1>
+    <p class="lede">
+      Weft and Vantage were shipping byte-identical glass values, radii, motion and theme triad
+      without sharing a stylesheet. Zeno had independently built a colour law where every value
+      carries its measured contrast ratio and a script fails the build if it drifts. Five side
+      projects were saying the same three things in a vocabulary I had improvised. So: one grammar,
+      eight themes, and a budget that runs on all sixteen palettes in CI.
+    </p>
+    <div class="hero-chips">
+      <span class="chip chip-accent">oklch, not hex</span>
+      <span class="chip">dark-first · three-way triad</span>
+      <span class="chip">8 themes × 2 grounds</span>
+      <span class="chip chip-mono" id="assert-count">814 assertions</span>
+      <span class="chip">WCAG 2.2 AA, measured</span>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <section id="ramp">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">01 — the ramp</p>
+        <h2>A theme owns hue. The system owns everything else.</h2>
+      </div>
+      <p class="sec-note">
+        Every swatch below is read live out of <span class="mono">getComputedStyle</span> and
+        measured in this page, right now, against the plane it is allowed to sit on. Switch theme
+        or ground in the bar and the numbers recompute. The lightness of each step is identical in
+        all eight themes — only the hue rotates.
+      </p>
+    </div>
+    <div class="ramp" id="ramp-strip"></div>
+  </section>
+
+  <!-- =================================================================== -->
+  <section id="budget">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">02 — the law</p>
+        <h2>Machine-verified, not asserted</h2>
+      </div>
+      <p class="sec-note">
+        The same pairs <span class="mono">scripts/contrast.mjs</span> asserts in CI, computed here
+        in the browser from the live tokens. <span class="mono">plane</span> is
+        <span class="mono">--raised</span>, the lightest opaque surface text may land on;
+        <span class="mono">glass</span> is <span class="mono">--gl-worst</span>, the worst realistic
+        composite behind a pane. If a row ever reads FAIL, the build is already red.
+      </p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Pair</th><th>Role</th><th>Measured</th><th>Minimum</th><th>Result</th></tr>
+        </thead>
+        <tbody id="budget-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <section id="primitives">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">03 — primitives</p>
+        <h2>Seven, and no more</h2>
+      </div>
+      <p class="sec-note">
+        <span class="mono">.glass .card .btn .field .chip .state .gauge</span> — every one of them
+        drawn entirely from tokens. The a11y fallbacks are live: press
+        <b>Reduce transparency</b> in the bar and every pane on this page drops its blur for the
+        opaque <span class="mono">--raised</span> plane, which is a surface the budget already
+        measures.
+      </p>
+    </div>
+
+    <div class="grid g2">
+      <div class="glass" style="padding: var(--sp-5)">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">.glass · .glass-inner</p>
+        <h3 class="card-title">The material</h3>
+        <p class="card-note" style="margin-bottom: var(--sp-4)">
+          A tint, a real blur with a saturation lift, a 1px edge that makes the pane an object, and
+          the specular line that says which way the light is.
+        </p>
+        <div class="glass-inner">
+          <span class="mono" style="font-size: var(--fs-0); color: var(--ink)">
+            glass has no fixed luminance — a label needs a plate
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">.btn</p>
+        <h3 class="card-title">Four weights, one shape</h3>
+        <p class="card-note" style="margin-bottom: var(--sp-4)">
+          Minimum target size is enforced by the primitive, not left to the caller (SC 2.5.8).
+        </p>
+        <div class="row">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn">Quiet</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-glass">Glass</button>
+          <button class="btn" disabled>Disabled</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">.field</p>
+        <h3 class="card-title">Recessed, on both grounds</h3>
+        <div class="stack" style="margin-top: var(--sp-4)">
+          <div>
+            <label class="field-label" for="f1">Project</label>
+            <input class="field" id="f1" value="glass" />
+          </div>
+          <div>
+            <label class="field-label" for="f2">Token</label>
+            <input class="field field-mono" id="f2" placeholder="--accent-2" />
+          </div>
+          <div>
+            <label class="field-label" for="f3">Invalid state</label>
+            <input class="field" id="f3" aria-invalid="true" value="#C81E33" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-raised">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">.state · .chip</p>
+        <h3 class="card-title">Four channels, of which colour is one</h3>
+        <p class="card-note" style="margin-bottom: var(--sp-4)">
+          A fill, a key bar, a glyph and a word. Print this in greyscale and the status still reads —
+          the four fills are held apart in luminance, and the script fails if any two collapse.
+        </p>
+        <div class="row" style="margin-bottom: var(--sp-4)">
+          <span class="state state-ok state-text"></span>
+          <span class="state state-warn state-text"></span>
+          <span class="state state-bad state-text"></span>
+          <span class="state state-info state-text"></span>
+        </div>
+        <div class="row">
+          <span class="chip">neutral</span>
+          <span class="chip chip-accent">accent</span>
+          <span class="chip chip-mono">--r-pill</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">.gauge</p>
+        <h3 class="card-title">A quantity, and only when it is known</h3>
+        <p class="card-note" style="margin-bottom: var(--sp-4)">
+          There is no indeterminate spinner in this package. A spinner is an animation that claims
+          to be information; if the progress is not known, say so in words.
+        </p>
+        <div class="stack">
+          <div><div class="gauge-row"><span>Coverage</span><span class="gauge-value">86%</span></div>
+               <div class="gauge"><span class="gauge-fill" style="width:86%"></span></div></div>
+          <div class="gauge-ok"><div class="gauge-row"><span>Passing</span><span class="gauge-value">814/814</span></div>
+               <div class="gauge"><span class="gauge-fill" style="width:100%"></span></div></div>
+          <div class="gauge-warn"><div class="gauge-row"><span>Budget headroom</span><span class="gauge-value">31%</span></div>
+               <div class="gauge"><span class="gauge-fill" style="width:31%"></span></div></div>
+          <div class="gauge-bad"><div class="gauge-row"><span>Themes on the old vocabulary</span><span class="gauge-value">0/8</span></div>
+               <div class="gauge"><span class="gauge-fill" style="width:4%"></span></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">type · radii</p>
+        <h3 class="card-title">The scale</h3>
+        <div style="margin-top: var(--sp-3)">
+          <div class="type-row"><span class="type-tag">--fs-3</span><span style="font-size:var(--fs-3);line-height:var(--lh-1);font-weight:650;letter-spacing:-.03em">Display</span></div>
+          <div class="type-row"><span class="type-tag">--fs-2</span><span style="font-size:var(--fs-2);font-weight:600">Section title</span></div>
+          <div class="type-row"><span class="type-tag">--fs-1</span><span style="font-size:var(--fs-1)">Body copy, the default</span></div>
+          <div class="type-row"><span class="type-tag">--fs-0</span><span style="font-size:var(--fs-0);color:var(--ink-2)">Meta, chips and table cells</span></div>
+          <div class="type-row"><span class="type-tag">--font-mono</span><span class="mono" style="font-size:var(--fs-0)">0123456789 · oklch(78% .125 22.2)</span></div>
+        </div>
+        <div class="radii" style="margin-top: var(--sp-5)">
+          <figure><div class="box" style="border-radius:var(--r-1)"></div><figcaption>--r-1</figcaption></figure>
+          <figure><div class="box" style="border-radius:var(--r-2)"></div><figcaption>--r-2</figcaption></figure>
+          <figure><div class="box" style="border-radius:var(--r-3)"></div><figcaption>--r-3</figcaption></figure>
+          <figure><div class="box" style="border-radius:var(--r-pill)"></div><figcaption>--r-pill</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <section id="gallery">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">04 — the eight</p>
+        <h2>One grammar, eight hues</h2>
+      </div>
+      <p class="sec-note">
+        Each theme file is nine numbers: the ground's hue and chroma, and the hue plus a per-ground
+        chroma for each accent. No structural token is in scope inside a theme, so a theme cannot
+        break the ladder. The strips below are resolved live from those nine numbers. Click a row to
+        wear it.
+      </p>
+    </div>
+    <div class="tablewrap" id="gallery-rows"></div>
+  </section>
+
+  <!-- =================================================================== -->
+  <section id="use">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">05 — how to use it</p>
+        <h2>Three CSS files and an attribute</h2>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">plain css</p>
+<pre>&lt;link rel="stylesheet" href="<b>src/tokens.css</b>"&gt;
+&lt;link rel="stylesheet" href="<b>src/themes/weft.css</b>"&gt;
+&lt;link rel="stylesheet" href="<b>src/primitives.css</b>"&gt;
+
+&lt;html <b>data-glass="weft"</b>&gt;            <span style="opacity:.6">&lt;!-- hue --&gt;</span>
+&lt;html data-glass="weft" <b>data-theme="light"</b>&gt;
+&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span style="opacity:.6">&lt;!-- no blur --&gt;</span></pre>
+      </div>
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">verify</p>
+<pre><b>node scripts/contrast.mjs</b>
+  8 themes x 2 grounds = 16 palettes
+  <span style="color:var(--ok)">PASS</span> — 814/814 assertions hold.
+
+<b>node scripts/contrast.mjs --verbose</b>   <span style="opacity:.6"># every pair</span>
+<b>node scripts/contrast.mjs --theme weft</b> <span style="opacity:.6"># one theme</span>
+<b>node scripts/contrast.mjs --emit-json</b>  <span style="opacity:.6"># rebuild tokens.json</span></pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>
+    Built by <a href="https://github.com/abheet19">Abheet Singh Isher</a> ·
+    <a href="https://github.com/abheet19/glass">github.com/abheet19/glass</a> · MIT.
+    Extracted from Zeno, Weft, Vantage, ShieldAI, Textify, HealthFlow,
+    Smart-Rephraser-Lite and AI-Detector-Web-Extension. Not published to npm.
+  </p>
+  <p>This page loads no font, no script and no stylesheet from the network. Open it from disk and it is complete.</p>
+</footer>
+
+<script>
+/* ==========================================================================
+   The page audits itself.
+
+   Nothing about the palette is duplicated here. Every value is read back out
+   of the live cascade with getComputedStyle, converted from oklch with the
+   same maths scripts/contrast.mjs uses, and measured in front of you. If the
+   CSS changes, this page changes with it; there is no second copy to drift.
+   ========================================================================== */
+
+const THEMES = [
+  ['zeno',     'crimson',          'Zeno · agent suite'],
+  ['weft',     'teal + indigo',    'Weft · CRDT editor'],
+  ['vantage',  'gold + ochre',     'Vantage · analytics'],
+  ['shield',   'steel blue',       'ShieldAI · privacy'],
+  ['textify',  'copper',           'Textify · summariser'],
+  ['health',   'clinical emerald', 'HealthFlow · clinical'],
+  ['rephrase', 'violet + orchid',  'Smart-Rephraser-Lite'],
+  ['detect',   'rose',             'AI-Detector extension'],
+];
+
+const html = document.documentElement;
+
+/* ---- colour maths, identical to scripts/contrast.mjs -------------------- */
+const linToSrgb = c => (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055) * 255;
+
+function oklchToLin(L, C, H) {
+  const h = H * Math.PI / 180, a = C * Math.cos(h), b = C * Math.sin(h);
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+  const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+  return [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+  ];
+}
+const inGamut = lin => lin.every(c => c >= -1e-5 && c <= 1 + 1e-5);
+function oklchToRgb(L, C, H) {
+  let lin = oklchToLin(L, C, H);
+  if (!inGamut(lin)) {
+    let lo = 0, hi = C;
+    for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (inGamut(oklchToLin(L, m, H))) lo = m; else hi = m; }
+    lin = oklchToLin(L, lo, H);
+  }
+  return lin.map(c => linToSrgb(Math.min(1, Math.max(0, c))));
+}
+const lum = rgb => {
+  const [r, g, b] = rgb.map(c8 => { const c = c8 / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const ratio = (a, b) => { const x = lum(a), y = lum(b); const [hi, lo] = x > y ? [x, y] : [y, x]; return (hi + 0.05) / (lo + 0.05); };
+const hex = rgb => '#' + rgb.map(c => Math.round(Math.min(255, Math.max(0, c))).toString(16).padStart(2, '0').toUpperCase()).join('');
+const over = (c, bd) => (c.a >= 1 ? c.rgb : c.rgb.map((v, i) => v * c.a + bd[i] * (1 - c.a)));
+
+/* Parse whatever the browser hands back for a custom property: an oklch()
+   after var() substitution, a color-mix() of two of them, or a plain rgb(). */
+function splitTop(str, sep) {
+  const out = []; let d = 0, buf = '';
+  for (const ch of str) {
+    if (ch === '(') d++; else if (ch === ')') d--;
+    if (ch === sep && d === 0) { out.push(buf); buf = ''; continue; }
+    buf += ch;
+  }
+  out.push(buf);
+  return out.map(s => s.trim()).filter(Boolean);
+}
+
+function parseColor(v) {
+  v = String(v).trim();
+  let m = v.match(/^rgba?\(([^)]+)\)$/i);
+  if (m) {
+    const p = m[1].split(/[\s,/]+/).filter(Boolean).map(parseFloat);
+    return { rgb: [p[0], p[1], p[2]], a: p.length > 3 ? p[3] : 1 };
+  }
+  m = v.match(/^oklch\(\s*([\s\S]+?)\s*\)$/i);
+  if (m) {
+    const [body, alpha] = splitTop(m[1], '/');
+    const parts = body.split(/\s+/).filter(Boolean);
+    const num = (t, scale) => (String(t).trim().endsWith('%') ? parseFloat(t) / 100 * scale : parseFloat(t));
+    return { rgb: oklchToRgb(num(parts[0], 1), num(parts[1], 0.4), num(parts[2].replace(/deg$/i, ''), 360)),
+             a: alpha === undefined ? 1 : num(alpha, 1) };
+  }
+  m = v.match(/^color-mix\(\s*in\s+srgb\s*,([\s\S]+)\)$/i);
+  if (m) {
+    const parts = splitTop(m[1], ',').map(p => {
+      const pm = p.match(/^([\s\S]+?)\s+([\d.]+)%$/);
+      return pm ? { c: pm[1].trim(), p: parseFloat(pm[2]) } : { c: p.trim(), p: null };
+    });
+    const [x, y] = parts;
+    if (x.p === null && y.p === null) { x.p = 50; y.p = 50; }
+    else if (x.p === null) x.p = 100 - y.p; else if (y.p === null) y.p = 100 - x.p;
+    const wx = x.p / (x.p + y.p), wy = y.p / (x.p + y.p);
+    const cx = x.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(x.c);
+    const cy = y.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(y.c);
+    const a = cx.a * wx + cy.a * wy;
+    return { rgb: a === 0 ? [0, 0, 0] : [0, 1, 2].map(i => (cx.rgb[i] * cx.a * wx + cy.rgb[i] * cy.a * wy) / a), a };
+  }
+  return { rgb: [128, 128, 128], a: 1 };
+}
+
+const TOKENS = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3',
+                '--accent', '--accent-2', '--on-accent', '--ok', '--warn', '--bad', '--info', '--gl-worst'];
+
+/* Read one palette by borrowing the root element for a synchronous moment.
+   No paint happens between the two writes, so nothing flickers. */
+function readPalette(theme, ground) {
+  const g0 = html.dataset.glass, t0 = html.dataset.theme;
+  html.dataset.glass = theme;
+  if (ground) html.dataset.theme = ground; else delete html.dataset.theme;
+  const cs = getComputedStyle(html);
+  const out = {};
+  for (const t of TOKENS) out[t] = parseColor(cs.getPropertyValue(t));
+  html.dataset.glass = g0;
+  if (t0) html.dataset.theme = t0; else delete html.dataset.theme;
+  return out;
+}
+
+const flat = p => Object.fromEntries(TOKENS.map(t => [t, over(p[t], p['--bg'].rgb)]));
+
+/* ---- 01 · the ramp ------------------------------------------------------ */
+const RAMP = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3', '--accent', '--accent-2'];
+
+function renderRamp() {
+  const p = flat(readPalette(html.dataset.glass, html.dataset.theme || null));
+  document.getElementById('ramp-strip').innerHTML = RAMP.map(t => `
+    <div class="ramp-cell">
+      <div class="ramp-swatch" style="background:${hex(p[t])}"></div>
+      <div class="ramp-meta"><span class="ramp-name">${t}</span><span class="ramp-val">${hex(p[t])}</span></div>
+    </div>`).join('');
+}
+
+/* ---- 02 · the budget ---------------------------------------------------- */
+const PAIRS = [
+  ['--ink on --raised', 'body text · worst opaque plane', '--ink', '--raised', 4.5],
+  ['--ink on --gl-worst', 'body text · worst glass', '--ink', '--gl-worst', 4.5],
+  ['--ink-2 on --raised', 'secondary text', '--ink-2', '--raised', 4.5],
+  ['--ink-2 on --gl-worst', 'secondary text on glass', '--ink-2', '--gl-worst', 4.5],
+  ['--ink-3 on --raised', 'graphic only — never text', '--ink-3', '--raised', 3.0],
+  ['--accent on --raised', 'accent as text', '--accent', '--raised', 4.5],
+  ['--accent on --gl-worst', 'accent as text on glass', '--accent', '--gl-worst', 4.5],
+  ['--accent-2 on --raised', 'secondary accent as text', '--accent-2', '--raised', 4.5],
+  ['--accent-2 on --gl-worst', 'graphic only on glass', '--accent-2', '--gl-worst', 3.0],
+  ['--on-accent on --accent', '.btn-primary label', '--on-accent', '--accent', 4.5],
+  ['--ok on --raised', 'state as text', '--ok', '--raised', 4.5],
+  ['--warn on --raised', 'state as text', '--warn', '--raised', 4.5],
+  ['--bad on --raised', 'state as text', '--bad', '--raised', 4.5],
+  ['--info on --raised', 'state as text', '--info', '--raised', 4.5],
+  ['--bad on --gl-worst', 'state glyph on glass', '--bad', '--gl-worst', 3.0],
+];
+
+function renderBudget() {
+  const p = flat(readPalette(html.dataset.glass, html.dataset.theme || null));
+  document.getElementById('budget-rows').innerHTML = PAIRS.map(([pair, role, fg, bg, min]) => {
+    const r = ratio(p[fg], p[bg]);
+    const ok = r >= min;
+    return `<tr>
+      <td class="tok">${pair}</td>
+      <td style="color:var(--ink-2);white-space:normal">${role}</td>
+      <td class="num">${r.toFixed(2)}:1</td>
+      <td class="num" style="color:var(--ink-3)">${min.toFixed(1)}:1</td>
+      <td class="verdict ${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---- 04 · the gallery --------------------------------------------------- */
+const STRIP = ['--bg', '--surface', '--raised', '--ink-2', '--ink', '--accent', '--accent-2'];
+
+function renderGallery() {
+  document.getElementById('gallery-rows').innerHTML = THEMES.map(([id, hue, origin]) => {
+    const strips = ['dark', 'light'].map(g => {
+      const p = flat(readPalette(id, g));
+      return `<div><span class="strip-label">${g}</span><div class="strip">${
+        STRIP.map(t => `<i style="background:${hex(p[t])}" title="${t} ${hex(p[t])}"></i>`).join('')
+      }</div></div>`;
+    }).join('');
+    return `<div class="gal-row" role="button" tabindex="0" data-pick="${id}">
+      <div class="gal-name"><span class="gal-title">${id} · ${hue}</span><span class="gal-origin">${origin}</span></div>
+      ${strips}
+    </div>`;
+  }).join('');
+  for (const el of document.querySelectorAll('[data-pick]')) {
+    const go = () => setTheme(el.dataset.pick);
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  }
+}
+
+/* ---- the switcher ------------------------------------------------------- */
+function renderThemeButtons() {
+  const host = document.getElementById('themes');
+  host.innerHTML = THEMES.map(([id, hue]) => {
+    const p = flat(readPalette(id, html.dataset.theme || null));
+    return `<button class="btn swatch-btn" data-theme-btn="${id}" aria-pressed="false" title="${id} — ${hue}">
+      <span class="dot" style="background:linear-gradient(135deg, ${hex(p['--accent'])}, ${hex(p['--accent-2'])})"></span>${id}</button>`;
+  }).join('');
+  for (const el of host.querySelectorAll('[data-theme-btn]')) {
+    el.addEventListener('click', () => setTheme(el.dataset.themeBtn));
+  }
+}
+
+function setTheme(id) { html.dataset.glass = id; refresh(); }
+
+function setGround(g) {
+  if (g === 'system') delete html.dataset.theme; else html.dataset.theme = g;
+  refresh();
+}
+
+for (const el of document.querySelectorAll('[data-ground]')) {
+  el.addEventListener('click', () => setGround(el.dataset.ground));
+}
+
+document.getElementById('flat').addEventListener('click', e => {
+  const on = html.dataset.flat === '1';
+  if (on) delete html.dataset.flat; else html.dataset.flat = '1';
+  e.currentTarget.setAttribute('aria-pressed', String(!on));
+});
+
+function refresh() {
+  const theme = html.dataset.glass;
+  const ground = html.dataset.theme
+    || (matchMedia('(prefers-color-scheme: light)').matches ? 'light (system)' : 'dark (system)');
+  document.getElementById('bar-sub').textContent = `${theme} · ${ground}`;
+  for (const el of document.querySelectorAll('[data-theme-btn]')) {
+    el.setAttribute('aria-pressed', String(el.dataset.themeBtn === theme));
+  }
+  for (const el of document.querySelectorAll('[data-ground]')) {
+    el.setAttribute('aria-pressed', String(el.dataset.ground === (html.dataset.theme || 'system')));
+  }
+  renderRamp();
+  renderBudget();
+  renderThemeButtons();
+  for (const el of document.querySelectorAll('[data-theme-btn]')) {
+    el.setAttribute('aria-pressed', String(el.dataset.themeBtn === theme));
+  }
+}
+
+/* Deep links: ?glass=weft&theme=light — handy for sharing a specific palette,
+   and for the scripted screenshots in docs/screenshots. */
+{
+  const q = new URLSearchParams(location.search);
+  const g = q.get('glass');
+  const t = q.get('theme');
+  if (g && THEMES.some(([id]) => id === g)) html.dataset.glass = g;
+  if (t === 'light' || t === 'dark') html.dataset.theme = t;
+  if (q.get('flat') === '1') { html.dataset.flat = '1'; document.getElementById('flat').setAttribute('aria-pressed', 'true'); }
+}
+
+renderGallery();
+refresh();
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', refresh);
+</script>
+</body>
+</html>
