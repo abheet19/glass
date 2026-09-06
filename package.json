@@ -1,0 +1,57 @@
+{
+  "name": "@abheet19/glass",
+  "version": "0.1.0",
+  "description": "A personal design system extracted from eight projects that had already converged on it. oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose.",
+  "license": "MIT",
+  "author": "Abheet Singh Isher <abheet19@gmail.com> (https://github.com/abheet19)",
+  "homepage": "https://github.com/abheet19/glass#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abheet19/glass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/abheet19/glass/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "css-variables",
+    "oklch",
+    "glassmorphism",
+    "wcag",
+    "contrast",
+    "accessibility",
+    "dark-mode",
+    "tailwind-preset"
+  ],
+  "type": "module",
+  "private": false,
+  "sideEffects": [
+    "src/*.css",
+    "src/themes/*.css"
+  ],
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./primitives.css": "./src/primitives.css",
+    "./tokens.json": "./src/tokens.json",
+    "./tailwind-preset": "./tailwind-preset.js",
+    "./themes/*.css": "./src/themes/*.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "tailwind-preset.js",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "node scripts/contrast.mjs",
+    "check:verbose": "node scripts/contrast.mjs --verbose",
+    "tokens": "node scripts/contrast.mjs --emit-json",
+    "test": "node scripts/contrast.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
