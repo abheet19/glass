@@ -1,0 +1,34 @@
+/* =============================================================================
+   GLASS theme — vantage · gold + ochre
+   Vantage — the analytics and MCP workspace. The other half of the converged
+   pair. Its dark accent, oklch(80.4% 0.146 78.2) as shipped, is within 2.4
+   lightness points of this system's L 78% — the ladder was already there.
+
+   Mark palette (the origin of every number below):
+     #0B0D10 slate (ground) · #F2B23E gold (accent) ·
+     #C8801E amber/ochre (accent-2) · #7A4A0E ochre deep · #F7EFE0 bone
+
+   Vantage is also where contrast.mjs found a real bug: its light-ground --warn,
+   oklch(60% 0.15 75), measures 3.59:1 as text. Fixed in tokens.css at 53%, and
+   the flagship still ships the old value — see the README.
+
+   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   the motion curve and the four state hues all come from src/tokens.css and are
+   not visible from here — which is why a theme cannot break them.
+
+     hue    taken from the mark, unchanged.
+     chroma the mark's chroma, capped at the most saturated value sRGB can hold
+            at the lightness the contrast law assigns. Two numbers per accent
+            because the gamut at L 78% and the gamut at L 50% are different
+            shapes; one number would mean silent clipping in one of the two.
+     L      NOT HERE. Lightness is what contrast is made of, so it belongs to
+            the system. See tokens.css §1.3-1.4.
+
+   Verified by: node scripts/contrast.mjs
+   ============================================================================= */
+
+:root[data-glass="vantage"] {
+  --h-ground: 258.4;    --c-ground: 0.0072;
+  --h-accent: 78.2;    --c-accent: 0.146;    --c-accent-lt: 0.101;
+  --h-accent-2: 67.9; --c-accent-2: 0.136; --c-accent-2-lt: 0.096;
+}

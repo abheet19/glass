@@ -1,0 +1,35 @@
+/* =============================================================================
+   GLASS theme — detect · rose
+   AI-Detector-Web-Extension — the browser extension. The only one of the eight
+   that runs under an extension CSP, which is why it loads no webfonts; this
+   package loads none either, in any theme.
+
+   Mark palette (the origin of every number below):
+     #0D0A0C ground · #F76B8A rose bright (accent) ·
+     #E8496C rose mid · #B02E4C rose deep (accent-2) · #F5E7EB bone
+
+   Rose sits at hue 8.9, four degrees from Zeno's crimson at 22.2 — the two
+   nearest themes in the set. They separate on chroma and on ground hue (338 vs
+   360), which is thin, and is the honest cost of extracting eight palettes that
+   were never designed against each other.
+
+   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   the motion curve and the four state hues all come from src/tokens.css and are
+   not visible from here — which is why a theme cannot break them.
+
+     hue    taken from the mark, unchanged.
+     chroma the mark's chroma, capped at the most saturated value sRGB can hold
+            at the lightness the contrast law assigns. Two numbers per accent
+            because the gamut at L 78% and the gamut at L 50% are different
+            shapes; one number would mean silent clipping in one of the two.
+     L      NOT HERE. Lightness is what contrast is made of, so it belongs to
+            the system. See tokens.css §1.3-1.4.
+
+   Verified by: node scripts/contrast.mjs
+   ============================================================================= */
+
+:root[data-glass="detect"] {
+  --h-ground: 338.1;    --c-ground: 0.0066;
+  --h-accent: 8.9;    --c-accent: 0.129;    --c-accent-lt: 0.173;
+  --h-accent-2: 12.1; --c-accent-2: 0.166; --c-accent-2-lt: 0.166;
+}

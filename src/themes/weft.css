@@ -1,0 +1,35 @@
+/* =============================================================================
+   GLASS theme — weft · teal + indigo
+   Weft — the CRDT collaborative editor. One half of the pair that had already
+   converged: Weft and Vantage ship byte-identical glass values, radii, motion
+   and theme triad, and differ only in the two numbers below.
+
+   Mark palette (the origin of every number below):
+     #0A0C0E ink (ground) · #2ED3C6 weft/teal (accent) ·
+     #4F7DF3 warp/indigo (accent-2) · #E8F6F4 bone
+
+   The only theme whose two accents are a genuine pair rather than one family at
+   two depths: the mark is an interlace, and the two threads have to read as two
+   threads. Teal's light-ground chroma (0.085) is the tightest in the set — cyan
+   simply runs out of sRGB gamut fast as it darkens.
+
+   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   the motion curve and the four state hues all come from src/tokens.css and are
+   not visible from here — which is why a theme cannot break them.
+
+     hue    taken from the mark, unchanged.
+     chroma the mark's chroma, capped at the most saturated value sRGB can hold
+            at the lightness the contrast law assigns. Two numbers per accent
+            because the gamut at L 78% and the gamut at L 50% are different
+            shapes; one number would mean silent clipping in one of the two.
+     L      NOT HERE. Lightness is what contrast is made of, so it belongs to
+            the system. See tokens.css §1.3-1.4.
+
+   Verified by: node scripts/contrast.mjs
+   ============================================================================= */
+
+:root[data-glass="weft"] {
+  --h-ground: 248.2;    --c-ground: 0.0054;
+  --h-accent: 186.7;    --c-accent: 0.129;    --c-accent-lt: 0.085;
+  --h-accent-2: 265.4; --c-accent-2: 0.146; --c-accent-2-lt: 0.184;
+}
