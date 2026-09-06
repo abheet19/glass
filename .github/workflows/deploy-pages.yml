@@ -1,0 +1,71 @@
+# =============================================================================
+# Publish demo/ to GitHub Pages.
+#
+# The demo is a single self-contained file that loads ../src/*.css by relative
+# path, so the site keeps that shape exactly: demo/ and src/ side by side, and a
+# one-line redirect at the root. Nothing is bundled, rewritten or minified —
+# what is served is the same file you open from disk.
+#
+# The budget runs first. A palette that fails the contrast law is not published.
+#
+# One-time setup: Settings → Pages → Source: GitHub Actions.
+# =============================================================================
+name: Deploy demo to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a queued run supersedes an older one but never
+# cancels a deployment that is already in flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: contrast budget must pass before anything ships
+        run: node scripts/contrast.mjs
+
+      - name: assemble _site
+        run: |
+          mkdir -p _site/demo _site/src
+          cp -r src/. _site/src/
+          cp demo/index.html _site/demo/index.html
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Glass — redirecting to the demo</title>
+          <meta http-equiv="refresh" content="0; url=./demo/">
+          <link rel="canonical" href="./demo/">
+          <p>Redirecting to <a href="./demo/">the Glass demo</a>.</p>
+          HTML
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

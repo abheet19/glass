@@ -1,0 +1,48 @@
+# =============================================================================
+# The contrast budget, on every push.
+#
+# This is the whole of CI, and it is not a formality: scripts/contrast.mjs runs
+# the budget on 8 themes x 2 grounds and exits non-zero if any of the 814
+# assertions drifts. A colour change that lowers a ceiling cannot merge.
+#
+# Dependency-free, so there is nothing to install and nothing to cache.
+# =============================================================================
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contrast:
+    name: contrast budget · 16 palettes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: node scripts/contrast.mjs
+        run: node scripts/contrast.mjs
+
+      # Prints every pair on all sixteen palettes into the job log, so a
+      # regression is diagnosable from the failed run alone rather than only
+      # reproducible locally.
+      - name: full budget (verbose log)
+        if: always()
+        run: node scripts/contrast.mjs --verbose
+
+      # tokens.json is generated from the CSS. The step above already fails if
+      # the committed file disagrees; this makes the remedy explicit in the log.
+      - name: tokens.json is in sync
+        run: |
+          node scripts/contrast.mjs --emit-json
+          git diff --exit-code -- src/tokens.json \
+            || (echo "::error::src/tokens.json is stale — run: node scripts/contrast.mjs --emit-json" && exit 1)
