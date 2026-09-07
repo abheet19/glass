@@ -598,6 +598,7 @@ function buildJson() {
      '--font-ui', '--font-mono', '--fs-0', '--fs-1', '--fs-2', '--fs-3',
      '--lh-1', '--lh-2', '--lh-3', '--target-min',
      '--sp-1', '--sp-2', '--sp-3', '--sp-4', '--sp-5', '--sp-6', '--sp-7', '--sp-8',
+     '--z-dropdown', '--z-tooltip', '--z-toast', '--z-modal',
     ].map((k) => [k.replace(/^--/, ''), ROOT_DARK[k]]),
   );
   const COLOUR_TOKENS = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3',

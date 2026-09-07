@@ -10,6 +10,10 @@
      CDN, no webfont. Open this file from disk and it works. -->
 <link rel="stylesheet" href="../src/tokens.css">
 <link rel="stylesheet" href="../src/primitives.css">
+<link rel="stylesheet" href="../src/forms.css">
+<link rel="stylesheet" href="../src/navigation.css">
+<link rel="stylesheet" href="../src/feedback.css">
+<link rel="stylesheet" href="../src/data.css">
 <link rel="stylesheet" href="../src/themes/zeno.css">
 <link rel="stylesheet" href="../src/themes/weft.css">
 <link rel="stylesheet" href="../src/themes/vantage.css">
@@ -371,10 +375,128 @@ footer a { color: var(--ink-2); }
   </section>
 
   <!-- =================================================================== -->
+  <section id="components">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">04 — the extended set</p>
+        <h2>Forms, navigation, feedback, data</h2>
+      </div>
+      <p class="sec-note">
+        Four more files, same rule: <span class="mono">src/forms.css src/navigation.css
+        src/feedback.css src/data.css</span>, every declaration reading from the tokens above —
+        no new colour anywhere below. <span class="mono">src/components.css</span> imports all
+        five component files (the original seven primitives plus this set) as one entry point.
+      </p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">forms.css</p>
+        <h3 class="card-title">Textarea, select, checkbox, radio, switch</h3>
+        <div class="stack" style="margin-top: var(--sp-4)">
+          <div class="field-group">
+            <label class="field-label" for="d-ta">Notes</label>
+            <textarea class="field" id="d-ta" rows="2">A textarea is .field, extended.</textarea>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="d-sel">Theme</label>
+            <select class="field" id="d-sel">
+              <option>zeno</option><option>weft</option><option>vantage</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="d-err">Required field</label>
+            <input class="field" id="d-err" aria-invalid="true" value="" />
+            <p class="field-error-text">This field is required.</p>
+          </div>
+          <div class="row">
+            <label class="checkbox"><input type="checkbox" checked /> Checkbox</label>
+            <label class="radio"><input type="radio" name="d-r" checked /> Radio</label>
+            <label class="switch"><input type="checkbox" checked /> Switch</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">navigation.css</p>
+        <h3 class="card-title">Tabs, breadcrumbs, menu</h3>
+        <nav class="tabs" role="tablist" style="margin-bottom: var(--sp-4)">
+          <button class="tab" role="tab" aria-selected="true">Overview</button>
+          <button class="tab" role="tab" aria-selected="false">Tokens</button>
+          <button class="tab" role="tab" aria-selected="false">Themes</button>
+        </nav>
+        <ol class="breadcrumbs" style="margin-bottom: var(--sp-4)">
+          <li><a href="#">glass</a></li>
+          <li><a href="#">demo</a></li>
+          <li aria-current="page">components</li>
+        </ol>
+        <div class="glass-inner" style="padding: var(--sp-2)">
+          <ul class="menu" style="position: static; width: 100%; box-sizing: border-box;">
+            <li><button class="menu-item">Duplicate</button></li>
+            <li><button class="menu-item">Rename</button></li>
+            <li><hr class="menu-sep"></li>
+            <li><button class="menu-item menu-item-danger">Delete</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card card-raised">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">feedback.css</p>
+        <h3 class="card-title">Toast, modal shell, tooltip, skeleton</h3>
+        <div class="stack" style="margin-top: var(--sp-4)">
+          <div class="toast toast-ok" style="position: static;">
+            <span class="toast-icon">&#10003;</span>
+            <div class="toast-body">
+              <p class="toast-title">Saved</p>
+              <p class="toast-message">814/814 assertions still hold.</p>
+            </div>
+          </div>
+          <div class="row" style="align-items: center;">
+            <button class="btn" style="position: relative;">
+              Hover for tooltip
+              <span class="tooltip" style="position: absolute; bottom: calc(100% + 6px); left: 0;">A small opaque label, never glass.</span>
+            </button>
+          </div>
+          <div class="stack" style="gap: var(--sp-2)">
+            <span class="skeleton skeleton-title"></span>
+            <span class="skeleton skeleton-text"></span>
+            <span class="skeleton skeleton-text" style="width: 80%"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker" style="margin:0 0 var(--sp-3)">data.css</p>
+        <h3 class="card-title">Table, badge, avatar</h3>
+        <div class="table-wrap" style="margin-bottom: var(--sp-4)">
+          <table class="table table-striped">
+            <thead><tr><th>Theme</th><th data-numeric="true">Ratio</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>zeno</td><td data-numeric="true">8.42:1</td><td><span class="badge badge-ok">pass</span></td></tr>
+              <tr><td>weft</td><td data-numeric="true">14.21:1</td><td><span class="badge badge-ok">pass</span></td></tr>
+              <tr><td>vantage</td><td data-numeric="true">7.90:1</td><td><span class="badge badge-ok">pass</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="align-items: center;">
+          <div class="avatar">AI</div>
+          <div class="avatar-group">
+            <span class="avatar avatar-sm">Z</span>
+            <span class="avatar avatar-sm">W</span>
+            <span class="avatar avatar-sm avatar-fallback">V</span>
+          </div>
+          <span class="badge badge-accent">New</span>
+          <span class="badge-dot badge-bad"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
   <section id="gallery">
     <div class="sec-head">
       <div>
-        <p class="kicker">04 — the eight</p>
+        <p class="kicker">05 — the eight</p>
         <h2>One grammar, eight hues</h2>
       </div>
       <p class="sec-note">
@@ -391,7 +513,7 @@ footer a { color: var(--ink-2); }
   <section id="use">
     <div class="sec-head">
       <div>
-        <p class="kicker">05 — how to use it</p>
+        <p class="kicker">06 — how to use it</p>
         <h2>Three CSS files and an attribute</h2>
       </div>
     </div>

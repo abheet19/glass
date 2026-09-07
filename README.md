@@ -19,6 +19,8 @@ that a script proves on every one of them.
 [![Colour](https://img.shields.io/badge/colour-oklch-B98BFF)](#why-oklch-and-not-hex)
 [![Runtime deps](https://img.shields.io/badge/runtime_dependencies-0-F2B23E)](#-what-it-doesnt-do)
 [![Network](https://img.shields.io/badge/network_requests-none-C81E33)](#-what-it-doesnt-do)
+[![Components](https://img.shields.io/badge/components-5_files_·_20-2ED3C6)](#-the-components)
+[![Used in production](https://img.shields.io/badge/used_in_production-Zeno_·_Weft_·_Vantage-3ECF8E)](#-used-in-production)
 [![License](https://img.shields.io/badge/license-MIT-8a94a6)](LICENSE)
 
 <br>
@@ -78,8 +80,9 @@ $ node scripts/contrast.mjs
 - [The token grammar](#-the-token-grammar)
 - [The eight themes](#-the-eight-themes)
 - [The contrast law](#-the-contrast-law)
-- [The primitives](#-the-primitives)
+- [The components](#-the-components)
 - [Accessibility](#-accessibility)
+- [Used in production](#-used-in-production)
 - [Screenshots](#-screenshots)
 - [Recording the demo GIF](#recording-the-demo-gif)
 - [What it doesn't do](#-what-it-doesnt-do)
@@ -106,20 +109,23 @@ already agreed on written down once.
 
 ## The finding
 
-**Weft and Vantage were already the same system.** Not similar — the same. Byte-identical `--gl-*`
-glass values. The same `--r-1/2/3`. The same `--t-fast/base/slow` over the same
-`cubic-bezier(.2,.8,.2,1)`. The same three-way theme triad. The same accessibility fallback block.
-Two separate repositories, no shared file, and the only real difference between them was the accent
-hue.
+**Weft and Vantage were already close to the same system**, independently. The same `--r-1`/`--r-2`
+(8px / 12px), the same `--t-fast`/`--t-base`/`--t-slow` over the same `cubic-bezier(.2,.8,.2,1)`,
+the same `--gl-blur` and `--gl-edge`, the same three-way theme triad, the same accessibility
+fallback block. Two separate repositories, no shared file. The differences that remained — `--r-3`
+(18px in Weft, 16px in Vantage), `--gl-spec`'s alpha (.32 vs .30) — are exactly the kind of drift
+two independent implementations of one idea accumulate over time, and this package is what
+resolves them onto one number each (`themes/weft.css` and `themes/vantage.css` document which value
+each flagship shipped, so the delta is checkable, not asserted).
 
 The five side projects were saying the same three things — a dark ground, a glass plane, one accent
-family — in a **second vocabulary I had improvised**: `--bg-elevated`, `--glass-border`,
-`--text-dim`, a `--radius` with no scale, and a palette in hex duplicated by hand into
-`tailwind.config.js` *and* `theme.ts`.
+family — in a second, less disciplined vocabulary: `--bg-elevated`, `--glass-border`, `--text-dim`,
+a `--radius` with no scale, and a palette in hex duplicated by hand into `tailwind.config.js` *and*
+`theme.ts`.
 
 So there were two dialects and one of them was clearly the more mature. **This package unifies on
-the flagship grammar and retires the other**, and it adds the one thing neither half had: a budget
-that runs on every theme, not just the one you happened to be looking at.
+the flagship grammar**, and it adds the one thing neither half had: a budget that runs on every
+theme, not just the one you happened to be looking at.
 
 > The one idea, stated once: **a theme file contains nine numbers and no structure.** The lightness
 > ladder, the radii, the type scale, the motion curve and the four state hues are not *discouraged*
@@ -142,13 +148,36 @@ source hex is recorded in its theme file as the documented origin.
 
 ## 🚀 Install and use
 
-Not on npm. Clone it, submodule it, or vendor `src/`.
+**Not on npm.** Four ways to consume it today, all real and all in use by the three projects in
+[Used in production](#-used-in-production):
 
 ```bash
+# 1 · clone and verify
 git clone https://github.com/abheet19/glass.git
 node glass/scripts/contrast.mjs      # prove it before you trust it
 open glass/demo/index.html           # no build step, no server
+
+# 2 · a git submodule inside another repo
+git submodule add https://github.com/abheet19/glass.git vendor/glass
+
+# 3 · an npm workspace / file: dependency, IN a monorepo that has both checked out as siblings
+#     ("dependencies": { "@abheet19/glass": "file:../../glass" } — this is how Zeno consumes it)
+npm install
+
+# 4 · straight from GitHub via jsDelivr's CDN — no clone, no build, pins a tag or a commit
+#     (swap @main for a tag once one exists, so the URL cannot move under you)
 ```
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abheet19/glass@main/src/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abheet19/glass@main/src/themes/weft.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abheet19/glass@main/src/components.css">
+```
+
+When a project's build context can't reach a sibling checkout or `node_modules` (a Docker build
+that only copies its own repo, for instance), the reliable option is a committed, generated vendor
+copy instead — see `tools/sync-glass.mjs` in Weft or Vantage for the exact pattern Used in
+production relies on.
 
 <table>
 <tr><td width="50%" valign="top">
@@ -438,11 +467,14 @@ necessary rather than folklore.
 
 ---
 
-## ▣ The primitives
+## ▣ The components
 
-Seven. `src/primitives.css` introduces no colour, no radius, no duration and no font of its own — if
-you want a value that is not a token, what you want is a new token, and it has to clear the budget
-before it exists.
+Five files, one entry point (`src/components.css` imports all five). None of them introduces a
+colour, a radius, a duration or a font of its own — if you want a value that is not a token, what
+you want is a new token, and it has to clear the budget before it exists. Every one below is in the
+[live demo](https://abheet19.github.io/glass/demo/#components) with real markup you can copy.
+
+**`primitives.css`** — the original seven
 
 | | Class | What it is |
 |:--:|---|---|
@@ -452,7 +484,28 @@ before it exists.
 | ▭ | `.field` `.field-label` `.field-mono` | recessed on both grounds with one rule |
 | ⬭ | `.chip` `.chip-accent` | a label. Never a status |
 | ◈ | `.state` `-ok` `-warn` `-bad` `-info` | a status, in **four channels**: fill, key bar, glyph, word |
-| ▬ | `.gauge` `.gauge-fill` | a determinate bar. There is deliberately **no indeterminate spinner** — a spinner is an animation that claims to be information |
+| ▬ | `.gauge` `.gauge-fill` `-ok` `-warn` `-bad` | a determinate bar — and the progress bar; there is deliberately **no indeterminate spinner** — a spinner is an animation that claims to be information |
+
+**`forms.css`** — text input (`.field` on `<input>`, reused for `<textarea>` and `<select>`),
+`.checkbox`, `.radio`, `.switch`, and `.field-group`/`.field-hint`/`.field-error-text` for the
+label/hint/error stack every one of them needs. Default, focus, `:invalid`/`aria-invalid`, and
+`:disabled` states throughout.
+
+**`navigation.css`** — `.tabs` (`role="tablist"`, `aria-selected` drives the underline),
+`.breadcrumbs` (`aria-current="page"` on the trail's end), `.menu`/`.menu-item` (a glass dropdown
+panel, `.menu-item-danger` for destructive actions).
+
+**`feedback.css`** — `.toast`/`.toast-region` (opaque, four `-ok`/`-warn`/`-bad`/`-info` variants
+sharing `.state`'s colour law), `.modal-scrim`/`.modal` (a glass panel over an opaque scrim — never
+glass-on-glass), `.tooltip` (opaque, `--on-accent`/`--bg` for guaranteed contrast on any surface),
+`.skeleton`/`-text`/`-title`/`-avatar` (a loading placeholder, not a spinner — same principle as
+`.gauge`). The four overlay layers share one stacking order — `--z-dropdown` (300) `<`
+`--z-tooltip` (400) `<` `--z-toast` (500) `<` `--z-modal` (600), declared once in `tokens.css` §1.12
+so a tooltip never hides under a menu and a modal always wins.
+
+**`data.css`** — `.table`/`.table-striped` (row striping is `--surface`/`--raised`, the same two
+planes `.card` already uses, not a new colour), `.badge`/`-accent`/`-ok`/`-warn`/`-bad`/`-info`
+(the same `.state` colour formula, sized for a count), `.avatar`/`-sm`/`-lg`/`-fallback`/`-group`.
 
 <details>
 <summary><b>Why a state chip's label is <code>--ink</code> and not the state colour</b></summary>
@@ -487,6 +540,27 @@ of these paths must produce a completely usable surface with the decoration swit
 | Focus | a real 2px border offset 2px, in the accent, verified at 3:1 on every plane **and** on glass |
 
 ---
+
+## 🔌 Used in production
+
+Not aspirational — each row below is a real dependency in that project's `package.json` (or a
+committed, generated vendor copy where the deploy pipeline's build context rules out a live link),
+wired in as an `@import` layered *underneath* the project's own token declarations, so the
+project's colours are unchanged and every claim below is CI- and screenshot-verified.
+
+| Project | How it consumes glass | Verified |
+|---|---|---|
+| **[Zeno](https://github.com/abheet19/Zeno)** | `packages/daemon` depends on `@abheet19/glass` via a `file:` workspace reference — real enough that Zeno's own zero-external-runtime-deps CI check (which allow-lists `@abheet19/*` by name) had to pass with it present. Zeno's own hash-pinned, Gate-2-approved colour law is untouched; the import only adds tokens Zeno doesn't already define. | `npm run check` — 1256/1256 tests, unchanged |
+| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Full test suite (162+52+83+301 = 598 tests) green; pixel-identical before/after screenshot, local and live |
+| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | typecheck, lint, 135 unit tests, coverage gate, 11 Playwright e2e tests, all green; pixel-identical before/after screenshot, local and live |
+
+Weft and Vantage's Fly.io Docker builds run from each repo's own directory as build context, with
+no sibling repo reachable — so neither can take a live `file:`/npm link to a `glass` checked out
+next to it the way Zeno's local daemon can. Each instead runs `tools/sync-glass.mjs` (committed to
+that repo) from a machine with `glass` checked out as a sibling, which copies `glass`'s
+`src/tokens.css` in verbatim and commits the copy; the import is real, the dependency is just
+expressed as a tracked file instead of a package-manager edge. Re-run that script and commit the
+result whenever `glass`'s `tokens.css` changes.
 
 ## 📸 Screenshots
 
@@ -533,19 +607,27 @@ compression on flat surfaces like these. The storyboard lives in the `board` arr
 
 ## 🚧 What it doesn't do
 
-I would rather you read this here than find it yourself.
+Read this before you rely on it, rather than discover it later.
 
 - **Not published to npm.** The `package.json` is correct and side-effect-free, but nothing is
-  published. Clone, submodule, or vendor `src/`.
-- **No components.** Seven primitives and a token grammar. There is no `<Button>`, no React, no Web
-  Component, and no plan for one — the whole point is that eight projects with different stacks
-  (plain CSS, Vite, Flask, Tailwind + MUI, a browser extension) can share the *tokens*.
-- **The eight source projects have not been migrated onto it.** This is the extraction; the
-  retrofit is separate work. Vantage still ships the light `--warn` that fails AA.
+  published. Clone, submodule, vendor `src/`, or pull it from jsDelivr's GitHub CDN (below).
+- **CSS only, no framework bindings.** Five component files and a token grammar. There is no
+  `<Button>`, no React, no Web Component, and no plan for one — the whole point is that projects on
+  different stacks (plain CSS, Vite, Tailwind + MUI, a browser extension) can share the *tokens*
+  and the *markup contract*, not a JS runtime.
+- **Three of the eight source projects have been migrated onto it** — see
+  [Used in production](#-used-in-production) below, with what each verified. **The other five
+  (ShieldAI, Textify, HealthFlow, Smart-Rephraser-Lite, AI-Detector-Web-Extension) have not** —
+  their theme files exist here (the extraction covers all eight hues), but the retrofit of each
+  project's own stylesheet is separate, unstarted work. Vantage's own `tokens.css` still ships the
+  light `--warn` that measures 3.59:1 (below the 4.5:1 this package's ladder requires) —
+  the import in [Used in production](#-used-in-production) sits *underneath* that value, not over
+  it, so it does not fix it.
 - **No visual regression tests.** The contrast budget is machine-checked; whether a card *looks*
   right is not.
 - **`--gl-worst` is a model, not a measurement of your page.** It is the worst realistic composite
-  behind a pane. If you put glass over a photograph, the budget cannot help you and neither can I.
+  behind a pane. If you put glass over a photograph, the budget cannot help you — measure that case
+  directly.
 - **The dark ground uses one lightness ladder for all eight themes.** Faithful to the marks in hue,
   approximately faithful in ground lightness — each source ground sits within 1.8 L points of the
   system's 14%, and the ladder wins.
@@ -559,7 +641,8 @@ I would rather you read this here than find it yourself.
 
 Built by **[Abheet Singh Isher](https://github.com/abheet19)**
 
-*Eight projects agreed on a surface before I noticed. The only new work was proving it holds.*
+*Eight projects had already converged on this surface. The work here is the grammar, the budget
+that proves it, and — now — the wiring back into the projects that found it.*
 
 <br>
 

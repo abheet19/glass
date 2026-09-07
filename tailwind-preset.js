@@ -23,7 +23,7 @@
 
      // tailwind.config.js
      import glass from '@abheet19/glass/tailwind-preset';
-     export default { presets: [glass], content: ['./src/**/*.{ts,tsx,html}'] };
+     export default { presets: [glass], content: ['./src/**\/*.{ts,tsx,html}'] };
 
      // and once, at your CSS entry point — the preset maps names to tokens,
      // it does not define them:
@@ -131,6 +131,15 @@ const preset = {
       backdropSaturate: { glass: '1.4' },
 
       boxShadow: { glass: 'var(--gl-shadow)' },
+
+      /* One stacking order for every overlay component in components.css:
+         dropdown < tooltip < toast < modal (tokens.css §1.12). */
+      zIndex: {
+        dropdown: s['z-dropdown'],
+        tooltip: s['z-tooltip'],
+        toast: s['z-toast'],
+        modal: s['z-modal'],
+      },
     },
   },
 };

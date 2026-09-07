@@ -33,6 +33,11 @@
   "exports": {
     "./tokens.css": "./src/tokens.css",
     "./primitives.css": "./src/primitives.css",
+    "./forms.css": "./src/forms.css",
+    "./navigation.css": "./src/navigation.css",
+    "./feedback.css": "./src/feedback.css",
+    "./data.css": "./src/data.css",
+    "./components.css": "./src/components.css",
     "./tokens.json": "./src/tokens.json",
     "./tailwind-preset": "./tailwind-preset.js",
     "./themes/*.css": "./src/themes/*.css",

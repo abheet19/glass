@@ -239,6 +239,16 @@
 
   /* WCAG 2.2 SC 2.5.8 — minimum interactive target. */
   --target-min: 24px;
+
+  /* 1.12 Z-INDEX SCALE — one shared stacking order for the overlay components
+     in src/feedback.css and src/navigation.css. Structural, not colour: no
+     token here paints anything, so contrast.mjs has nothing to assert about
+     this block. The gaps (100 apart) are room to insert a layer later without
+     renumbering every one above it. */
+  --z-dropdown: 300;
+  --z-tooltip:  400;
+  --z-toast:    500;
+  --z-modal:    600;
 }
 
 /* =============================================================================
