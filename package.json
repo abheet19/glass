@@ -49,9 +49,13 @@
     "check": "node scripts/contrast.mjs",
     "check:verbose": "node scripts/contrast.mjs --verbose",
     "tokens": "node scripts/contrast.mjs --emit-json",
-    "test": "node scripts/contrast.mjs"
+    "test": "node scripts/contrast.mjs",
+    "record:demo": "node tools/record-demo.mjs"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
   }
 }

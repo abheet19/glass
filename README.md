@@ -29,6 +29,16 @@ that a script proves on every one of them.
 
 </div>
 
+<div align="center">
+
+<img src="docs/demo/glass-demo.gif" alt="The Glass demo page cycling through all eight themes on both grounds, then the contrast budget recomputing live for each one — every row PASS." width="1000">
+
+<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure — then the same budget <code>scripts/contrast.mjs</code> asserts in CI, recomputed in the browser from the live tokens. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>.</sub>
+
+<br>
+
+</div>
+
 > [!NOTE]
 > **The contrast law is verified, not asserted.** Every ratio quoted in this README and in every
 > comment in the source is printed by `node scripts/contrast.mjs`, which runs the whole budget on
@@ -71,6 +81,7 @@ $ node scripts/contrast.mjs
 - [The primitives](#-the-primitives)
 - [Accessibility](#-accessibility)
 - [Screenshots](#-screenshots)
+- [Recording the demo GIF](#recording-the-demo-gif)
 - [What it doesn't do](#-what-it-doesnt-do)
 
 </details>
@@ -498,6 +509,25 @@ uses, and **measures itself in front of you**. Switch theme or ground and every 
 </div>
 
 <div align="center"><sub><a href="demo/index.html">demo/index.html</a> — or <a href="https://abheet19.github.io/glass/demo/">open it live</a>. Deep-link a palette with <code>?glass=weft&amp;theme=light</code>.</sub></div>
+
+### Recording the demo GIF
+
+The hero GIF at the top is not a mock-up — it is a scripted capture of that same page, and it
+re-records from scratch:
+
+```console
+$ npm install                        # playwright, devDependency only — there are still zero runtime deps
+$ npx playwright install chromium
+$ npm run record:demo                # tools/record-demo.mjs  → docs/demo/.frames/
+$ python tools/assemble_gif.py       # Pillow                 → docs/demo/glass-demo.gif
+```
+
+`record-demo.mjs` drives the page's own theme switcher and screenshots it at 1280 CSS px on a 2×
+device scale, so the downscale to 1000 px supersamples and the table text stays sharp.
+`assemble_gif.py` quantises every frame against **one shared 256-colour palette with dithering
+off** — Floyd–Steinberg noise is uncorrelated between frames and destroys GIF's inter-frame
+compression on flat surfaces like these. The storyboard lives in the `board` array at the top of
+`record-demo.mjs`; edit it there.
 
 ---
 
