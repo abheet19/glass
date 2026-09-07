@@ -42,6 +42,25 @@ palette = strip.quantize(colors=256, method=Image.MEDIANCUT, dither=Image.Dither
 
 quantized = [im.quantize(palette=palette, dither=Image.Dither.NONE) for im in images]
 
+# Continuous capture means consecutive samples are sometimes pixel-identical
+# (nothing moved between two 100ms shots). Collapse those runs into one frame,
+# folding their durations together, capped at 1500ms so a long identical run
+# still reads as a beat rather than a freeze. The cap has to be enforced here
+# (not just left as one long frame) because Pillow's GIF `optimize` pass would
+# otherwise re-merge two adjacent byte-identical frames back into one anyway.
+MAX_HOLD_MS = 1500
+dedup_images, dedup_holds = [], []
+prev_bytes = None
+for im, ms in zip(quantized, holds):
+    b = im.tobytes()
+    if prev_bytes is not None and b == prev_bytes:
+        dedup_holds[-1] = min(MAX_HOLD_MS, dedup_holds[-1] + ms)
+        continue
+    dedup_images.append(im)
+    dedup_holds.append(min(MAX_HOLD_MS, ms))
+    prev_bytes = b
+quantized, holds = dedup_images, dedup_holds
+
 quantized[0].save(
     OUT,
     save_all=True,
