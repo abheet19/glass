@@ -255,6 +255,25 @@ $ node scripts/contrast.mjs
 
 ---
 
+## How the pieces fit
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#142d35','primaryTextColor':'#e6f4f1','primaryBorderColor':'#2ed3c6','lineColor':'#647c8d'}}}%%
+flowchart LR
+    S[Theme seeds] --> T[Shared token grammar]
+    T --> C[CSS primitives and components]
+    T --> V[Contrast and structure checks]
+    V --> J[Derived token JSON]
+    C --> D[Interactive demo]
+    C --> A[Versioned vendor copy in apps]
+    V --> P[Pages release gate]
+    D --> P
+    classDef proof fill:#143b2b,stroke:#3ecf8e,color:#e6f4f1
+    class V,J,P proof
+```
+
+The CSS is the reusable product; demo JavaScript adds example interactions. Theme and ground controls, keyboard tabs, focusable tooltips and native form inputs are exercised by `node tools/verify-demo.mjs`. The static menu/table examples are explicitly labeled. Automated browser checks complement the contrast law; they do not establish that every consuming application's layout is accessible.
+
 ## 🎨 The token grammar
 
 The Weft/Vantage grammar, adopted whole. Everything below lives in `src/tokens.css`; **none of it is
@@ -541,12 +560,9 @@ of these paths must produce a completely usable surface with the decoration swit
 
 ---
 
-## 🔌 Used in production
+## 🔌 Project integrations
 
-Not aspirational — each row below is a real dependency in that project's `package.json` (or a
-committed, generated vendor copy where the deploy pipeline's build context rules out a live link),
-wired in as an `@import` layered *underneath* the project's own token declarations, so the
-project's colours are unchanged and every claim below is CI- and screenshot-verified.
+Projects consume committed CSS or a local package reference, so a release is reproducible. Each app still owns its layout, interaction code, and verification; importing tokens alone does not certify an entire interface.
 
 | Project | How it consumes glass | Verified |
 |---|---|---|
@@ -561,6 +577,19 @@ that repo) from a machine with `glass` checked out as a sibling, which copies `g
 `src/tokens.css` in verbatim and commits the copy; the import is real, the dependency is just
 expressed as a tracked file instead of a package-manager edge. Re-run that script and commit the
 result whenever `glass`'s `tokens.css` changes.
+
+ShieldAI also serves committed local copies of `tokens.css`, `primitives.css` and `themes/shield.css` with the MIT license; its Fly release 8 was verified at source commit `e3e1f0d`. Textify's current FastAPI source vendors `tokens.css`, `primitives.css`, and `themes/textify.css`; its upload, question, deletion and safe text rendering flows passed local browser verification. See that repository for its separate deployment status. Shared CSS files were not changed by this demo update.
+
+### Verify the demo
+
+```console
+npm run check              # 814 numerical/structural assertions, 16 palettes
+npm install
+npx playwright install chromium
+npm run test:browser       # 10 groups of theme, keyboard, form and mobile checks
+```
+
+The menu actions are styling specimens with explicit demo feedback. Tabs, theme controls, fields and tooltips are interactive. Both CI and Pages publication run the contrast and browser checks. The browser script also captures screenshots; these are evidence, not automatic pixel-diff baselines.
 
 ## 📸 Screenshots
 
@@ -615,16 +644,8 @@ Read this before you rely on it, rather than discover it later.
   `<Button>`, no React, no Web Component, and no plan for one — the whole point is that projects on
   different stacks (plain CSS, Vite, Tailwind + MUI, a browser extension) can share the *tokens*
   and the *markup contract*, not a JS runtime.
-- **Three of the eight source projects have been migrated onto it** — see
-  [Used in production](#-used-in-production) below, with what each verified. **The other five
-  (ShieldAI, Textify, HealthFlow, Smart-Rephraser-Lite, AI-Detector-Web-Extension) have not** —
-  their theme files exist here (the extraction covers all eight hues), but the retrofit of each
-  project's own stylesheet is separate, unstarted work. Vantage's own `tokens.css` still ships the
-  light `--warn` that measures 3.59:1 (below the 4.5:1 this package's ladder requires) —
-  the import in [Used in production](#-used-in-production) sits *underneath* that value, not over
-  it, so it does not fix it.
-- **No visual regression tests.** The contrast budget is machine-checked; whether a card *looks*
-  right is not.
+- **Integration is per project.** Theme files exist for all eight source palettes, but that does not mean every app has migrated every component. Zeno, Weft and Vantage consume shared tokens; Textify's current source also vendors its theme and primitives. Check each consumer's current deployment and test evidence before describing it as verified. A later app-level CSS declaration can still override a safer shared token.
+- **No pixel-baseline regression suite.** The contrast budget and demo behavior are machine-checked; screenshots still need human review for visual quality.
 - **`--gl-worst` is a model, not a measurement of your page.** It is the worst realistic composite
   behind a pane. If you put glass over a photograph, the budget cannot help you — measure that case
   directly.

@@ -1,11 +1,11 @@
 # =============================================================================
 # The contrast budget, on every push.
 #
-# This is the whole of CI, and it is not a formality: scripts/contrast.mjs runs
+# Contrast verification: scripts/contrast.mjs runs
 # the budget on 8 themes x 2 grounds and exits non-zero if any of the 814
 # assertions drifts. A colour change that lowers a ceiling cannot merge.
 #
-# Dependency-free, so there is nothing to install and nothing to cache.
+# The contrast verifier has no dependencies. Browser workflow tests use Playwright.
 # =============================================================================
 name: CI
 
@@ -46,3 +46,27 @@ jobs:
           node scripts/contrast.mjs --emit-json
           git diff --exit-code -- src/tokens.json \
             || (echo "::error::src/tokens.json is stale — run: node scripts/contrast.mjs --emit-json" && exit 1)
+
+  browser:
+    name: demo interactions and keyboard access
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser verification tooling
+        run: |
+          npm install --ignore-scripts --no-package-lock
+          npx playwright install --with-deps chromium
+
+      - name: Verify interactive demo and keyboard flows
+        run: npm run test:browser
+        env:
+          GLASS_EVIDENCE_DIR: ${{ runner.temp }}/glass-browser-evidence
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glass-browser-evidence
+          path: ${{ runner.temp }}/glass-browser-evidence

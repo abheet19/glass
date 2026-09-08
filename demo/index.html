@@ -149,6 +149,9 @@ footer a { color: var(--ink-2); }
   .gal-row { grid-template-columns: 1fr; }
   .wrap { padding: 0 var(--sp-4); }
 }
+.tooltip-trigger .tooltip { visibility: hidden; }
+.tooltip-trigger:hover .tooltip, .tooltip-trigger:focus-visible .tooltip { visibility: visible; }
+[role="tabpanel"][hidden] { display: none; }
 </style>
 </head>
 
@@ -288,11 +291,11 @@ footer a { color: var(--ink-2); }
           Minimum target size is enforced by the primitive, not left to the caller (SC 2.5.8).
         </p>
         <div class="row">
-          <button class="btn btn-primary">Primary</button>
-          <button class="btn">Quiet</button>
-          <button class="btn btn-ghost">Ghost</button>
-          <button class="btn btn-glass">Glass</button>
-          <button class="btn" disabled>Disabled</button>
+          <button class="btn btn-primary" data-sample-button>Primary</button>
+          <button class="btn" data-sample-button>Quiet</button>
+          <button class="btn btn-ghost" data-sample-button>Ghost</button>
+          <button class="btn btn-glass" data-sample-button>Glass</button>
+          <button class="btn" disabled>Disabled</button><span id="button-sample-status" role="status"></span>
         </div>
       </div>
 
@@ -419,30 +422,33 @@ footer a { color: var(--ink-2); }
 
       <div class="card">
         <p class="kicker" style="margin:0 0 var(--sp-3)">navigation.css</p>
-        <h3 class="card-title">Tabs, breadcrumbs, menu</h3>
-        <nav class="tabs" role="tablist" style="margin-bottom: var(--sp-4)">
-          <button class="tab" role="tab" aria-selected="true">Overview</button>
-          <button class="tab" role="tab" aria-selected="false">Tokens</button>
-          <button class="tab" role="tab" aria-selected="false">Themes</button>
+        <h3 class="card-title">Tabs, breadcrumbs, menu</h3><p id="menu-sample-status" role="status">Menu actions are visual specimens; they do not modify data.</p>
+        <nav class="tabs" role="tablist" aria-label="Component example" style="margin-bottom: var(--sp-4)">
+          <button id="sample-tab-overview" class="tab" role="tab" aria-controls="sample-panel-overview" aria-selected="true" tabindex="0">Overview</button>
+          <button id="sample-tab-tokens" class="tab" role="tab" aria-controls="sample-panel-tokens" aria-selected="false" tabindex="-1">Tokens</button>
+          <button id="sample-tab-themes" class="tab" role="tab" aria-controls="sample-panel-themes" aria-selected="false" tabindex="-1">Themes</button>
         </nav>
+        <p id="sample-panel-overview" role="tabpanel" aria-labelledby="sample-tab-overview">CSS defines the appearance; this demo adds the tab interaction. Use arrow keys, Home or End.</p>
+        <p id="sample-panel-tokens" role="tabpanel" aria-labelledby="sample-tab-tokens" hidden>Tokens name a shared role: surface, ink, spacing, focus and motion.</p>
+        <p id="sample-panel-themes" role="tabpanel" aria-labelledby="sample-tab-themes" hidden>Choose a hue above. The system keeps its spacing and contrast rules.</p>
         <ol class="breadcrumbs" style="margin-bottom: var(--sp-4)">
-          <li><a href="#">glass</a></li>
-          <li><a href="#">demo</a></li>
+          <li><a href="#ramp">glass</a></li>
+          <li><a href="#components">demo</a></li>
           <li aria-current="page">components</li>
         </ol>
         <div class="glass-inner" style="padding: var(--sp-2)">
           <ul class="menu" style="position: static; width: 100%; box-sizing: border-box;">
-            <li><button class="menu-item">Duplicate</button></li>
-            <li><button class="menu-item">Rename</button></li>
+            <li><button class="menu-item" data-menu-sample="Duplicate">Duplicate</button></li>
+            <li><button class="menu-item" data-menu-sample="Rename">Rename</button></li>
             <li><hr class="menu-sep"></li>
-            <li><button class="menu-item menu-item-danger">Delete</button></li>
+            <li><button class="menu-item menu-item-danger" data-menu-sample="Delete">Delete</button></li>
           </ul>
         </div>
       </div>
 
       <div class="card card-raised">
         <p class="kicker" style="margin:0 0 var(--sp-3)">feedback.css</p>
-        <h3 class="card-title">Toast, modal shell, tooltip, skeleton</h3>
+        <h3 class="card-title">Toast, tooltip, skeleton</h3>
         <div class="stack" style="margin-top: var(--sp-4)">
           <div class="toast toast-ok" style="position: static;">
             <span class="toast-icon">&#10003;</span>
@@ -452,9 +458,9 @@ footer a { color: var(--ink-2); }
             </div>
           </div>
           <div class="row" style="align-items: center;">
-            <button class="btn" style="position: relative;">
-              Hover for tooltip
-              <span class="tooltip" style="position: absolute; bottom: calc(100% + 6px); left: 0;">A small opaque label, never glass.</span>
+            <button class="btn tooltip-trigger" style="position: relative;" aria-describedby="sample-tooltip">
+              Hover or focus for tooltip
+              <span id="sample-tooltip" role="tooltip" class="tooltip" style="position: absolute; bottom: calc(100% + 6px); left: 0;">A small opaque label, never glass.</span>
             </button>
           </div>
           <div class="stack" style="gap: var(--sp-2)">
@@ -467,10 +473,10 @@ footer a { color: var(--ink-2); }
 
       <div class="card">
         <p class="kicker" style="margin:0 0 var(--sp-3)">data.css</p>
-        <h3 class="card-title">Table, badge, avatar</h3>
+        <h3 class="card-title">Table, badge, avatar</h3><p>Illustrative table data. The live measured ratios are in the contrast budget above.</p>
         <div class="table-wrap" style="margin-bottom: var(--sp-4)">
           <table class="table table-striped">
-            <thead><tr><th>Theme</th><th data-numeric="true">Ratio</th><th>Status</th></tr></thead>
+            <thead><tr><th>Theme</th><th data-numeric="true">Example ratio</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td>zeno</td><td data-numeric="true">8.42:1</td><td><span class="badge badge-ok">pass</span></td></tr>
               <tr><td>weft</td><td data-numeric="true">14.21:1</td><td><span class="badge badge-ok">pass</span></td></tr>
@@ -745,6 +751,7 @@ function renderGallery() {
 /* ---- the switcher ------------------------------------------------------- */
 function renderThemeButtons() {
   const host = document.getElementById('themes');
+  const focusedTheme = document.activeElement?.dataset.themeBtn;
   host.innerHTML = THEMES.map(([id, hue]) => {
     const p = flat(readPalette(id, html.dataset.theme || null));
     return `<button class="btn swatch-btn" data-theme-btn="${id}" aria-pressed="false" title="${id} — ${hue}">
@@ -753,6 +760,7 @@ function renderThemeButtons() {
   for (const el of host.querySelectorAll('[data-theme-btn]')) {
     el.addEventListener('click', () => setTheme(el.dataset.themeBtn));
   }
+  if (focusedTheme) host.querySelector(`[data-theme-btn="${focusedTheme}"]`)?.focus();
 }
 
 function setTheme(id) { html.dataset.glass = id; refresh(); }
@@ -802,6 +810,32 @@ function refresh() {
   if (q.get('flat') === '1') { html.dataset.flat = '1'; document.getElementById('flat').setAttribute('aria-pressed', 'true'); }
 }
 
+const sampleTabs = [...document.querySelectorAll('[role="tab"]')];
+function selectSampleTab(tab) {
+  for (const item of sampleTabs) {
+    const active = item === tab;
+    item.setAttribute('aria-selected', String(active));
+    item.tabIndex = active ? 0 : -1;
+    document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
+  }
+  tab.focus();
+}
+for (const [index, tab] of sampleTabs.entries()) {
+  tab.addEventListener('click', () => selectSampleTab(tab));
+  tab.addEventListener('keydown', event => {
+    const destinations = { ArrowRight: (index + 1) % sampleTabs.length, ArrowLeft: (index + sampleTabs.length - 1) % sampleTabs.length, Home: 0, End: sampleTabs.length - 1 };
+    if (event.key in destinations) {
+      event.preventDefault();
+      selectSampleTab(sampleTabs[destinations[event.key]]);
+    }
+  });
+}
+for (const button of document.querySelectorAll('[data-menu-sample]')) {
+  button.addEventListener('click', () => { document.getElementById('menu-sample-status').textContent = `${button.dataset.menuSample} style selected. Demo only; no data was changed.`; });
+}
+for (const button of document.querySelectorAll('[data-sample-button]')) {
+  button.addEventListener('click', () => { document.getElementById('button-sample-status').textContent = `${button.textContent} button activated.`; });
+}
 renderGallery();
 refresh();
 matchMedia('(prefers-color-scheme: light)').addEventListener('change', refresh);

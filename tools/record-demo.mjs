@@ -42,7 +42,7 @@ const board = [
   { theme: 'zeno', ground: 'dark', at: 'budget', hold: 1400 },
 ];
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: process.env.GLASS_BROWSER_CHANNEL });
 const page = await browser.newPage({
   viewport: { width: 1280, height: 820 },
   deviceScaleFactor: 2,

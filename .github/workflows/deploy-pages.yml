@@ -41,6 +41,16 @@ jobs:
       - name: contrast budget must pass before anything ships
         run: node scripts/contrast.mjs
 
+      - name: Install browser verification tooling
+        run: |
+          npm install --ignore-scripts --no-package-lock
+          npx playwright install --with-deps chromium
+
+      - name: Verify interactive demo and keyboard flows
+        run: npm run test:browser
+        env:
+          GLASS_EVIDENCE_DIR: ${{ runner.temp }}/glass-browser-evidence
+
       - name: assemble _site
         run: |
           mkdir -p _site/demo _site/src
