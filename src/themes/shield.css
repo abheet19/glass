@@ -13,7 +13,7 @@
    two accent hues here are 1.8 degrees apart, and the separation is carried by
    lightness — which is exactly what the ladder is for.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 

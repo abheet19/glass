@@ -12,7 +12,7 @@
    system's --raised plane — below AA. The hue survives; the lightness does not.
    That single fact is the argument for the whole package.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 

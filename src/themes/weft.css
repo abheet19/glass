@@ -13,7 +13,7 @@
    threads. Teal's light-ground chroma (0.085) is the tightest in the set — cyan
    simply runs out of sRGB gamut fast as it darkens.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 

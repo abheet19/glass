@@ -13,7 +13,7 @@
    360), which is thin, and is the honest cost of extracting eight palettes that
    were never designed against each other.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 

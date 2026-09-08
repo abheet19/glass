@@ -14,7 +14,7 @@
 
      Structure  — the lightness ladder, radii, the type scale, motion, spacing,
                   the glass geometry, and the four state hues.  DEFINED HERE.
-     Hue        — nine numbers per theme: the ground's hue and chroma, and the
+     Hue        — eight numbers per theme: the ground's hue and chroma, and the
                   hue plus a per-ground chroma for each of the two accents.
                   DEFINED IN src/themes/*.css, AND NOWHERE ELSE.
 

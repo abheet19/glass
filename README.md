@@ -127,7 +127,7 @@ So there were two dialects and one of them was clearly the more mature. **This p
 the flagship grammar**, and it adds the one thing neither half had: a budget that runs on every
 theme, not just the one you happened to be looking at.
 
-> The one idea, stated once: **a theme file contains nine numbers and no structure.** The lightness
+> The one idea, stated once: **a theme file contains eight numbers and no structure.** The lightness
 > ladder, the radii, the type scale, the motion curve and the four state hues are not *discouraged*
 > inside a theme — they are not **in scope**. A theme cannot break the ladder because it is handed
 > nothing to break it with, and `contrast.mjs` asserts that too.
@@ -342,7 +342,7 @@ And the accents drop 28 lightness points, because the same colour cannot clear 4
 
 ## ⬡ The eight themes
 
-Nine numbers each. The mark hex is the documented origin of the hue; the lightness comes from the
+Eight numbers each. The mark hex is the documented origin of the hue; the lightness comes from the
 law. Both resolved accents below are printed by `contrast.mjs --emit-json`.
 
 | Theme | Origin | Mark palette | Dark accent | Light accent |
@@ -409,7 +409,7 @@ $ node scripts/contrast.mjs --emit-json # rebuild src/tokens.json
 | 📏 | **4.5:1 text** and **3:1 graphic**, against the worst backdrop each token is permitted on — on all 16 palettes |
 | 🪟 | text on **glass**, measured against `--gl-worst` rather than guessed at |
 | 🧊 | the two **light blocks** are identical, declaration for declaration |
-| 🔒 | every theme file declares **exactly the nine seeds and nothing else** |
+| 🔒 | every theme file declares **exactly the eight seeds and nothing else** |
 | 📐 | the resolved **lightness ladder** is numerically identical across all eight themes |
 | 🔗 | every `var()` in all ten stylesheets **resolves to a property that exists** |
 | ▤ | every state fill **separates from its plane**, and no two collapse onto the same greyscale luminance |

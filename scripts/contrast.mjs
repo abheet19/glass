@@ -21,7 +21,7 @@
 
      · the two light blocks in tokens.css are identical, declaration for
        declaration — the only reason it is safe to write them twice
-     · every theme file declares EXACTLY the nine seed properties and nothing
+     · every theme file declares EXACTLY the eight seed properties and nothing
        else, so a theme structurally cannot alter the ladder
      · the resolved lightness ladder is numerically identical across all eight
        themes, on both grounds
@@ -64,7 +64,7 @@ const FILL_DELTA_MIN = 1.10;
 const LADDER_GAP_MIN = 0.0025;
 const LADDER_L_TOLERANCE = 0.005; /* resolved lightness drift allowed between themes */
 
-/* The nine numbers a theme is allowed to set, and the only ones. */
+/* The eight numbers a theme is allowed to set, and the only ones. */
 const SEED_PROPS = [
   '--h-ground', '--c-ground',
   '--h-accent', '--c-accent', '--c-accent-lt',
@@ -517,7 +517,7 @@ const law = (name, pass, note = '') => { if (!pass) failures++; laws.push({ name
     drift.length ? `drift: ${drift.join(', ')}` : `${keys.size} declarations, both blocks`);
 }
 
-/* 6.2 A theme may declare the nine seeds and nothing else. This is what makes
+/* 6.2 A theme may declare the eight seeds and nothing else. This is what makes
    "a theme cannot alter structure" a fact rather than a convention. */
 for (const [name, file] of Object.entries(themeCss)) {
   const sel = `:root[data-glass="${name}"]`;
@@ -528,7 +528,7 @@ for (const [name, file] of Object.entries(themeCss)) {
   const extra = got.filter((k) => !want.includes(k));
   const missing = want.filter((k) => !got.includes(k));
   const otherRules = file.rules.filter((r) => r.selector !== sel);
-  law(`themes/${name}.css declares exactly the nine seeds`,
+  law(`themes/${name}.css declares exactly ${SEED_PROPS.length} seeds`,
     extra.length === 0 && missing.length === 0 && otherRules.length === 0,
     [extra.length ? `extra: ${extra.join(', ')}` : '',
      missing.length ? `missing: ${missing.join(', ')}` : '',

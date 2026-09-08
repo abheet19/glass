@@ -12,7 +12,7 @@
    only C 0.129 survives at L 78%. The dark accent is therefore noticeably
    calmer than the mark. That is the gamut, not a preference.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 

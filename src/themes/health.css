@@ -13,7 +13,7 @@
    ground it is the tightest: emerald at L 52% measured 4.45:1 on the worst
    glass, which is what pushed the whole system's light accent down to L 50%.
 
-   Nine numbers. No structure. The lightness ladder, the radii, the type scale,
+   Eight numbers. No structure. The lightness ladder, the radii, the type scale,
    the motion curve and the four state hues all come from src/tokens.css and are
    not visible from here — which is why a theme cannot break them.
 
