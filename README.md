@@ -20,7 +20,7 @@ that a script proves on every one of them.
 [![Runtime deps](https://img.shields.io/badge/runtime_dependencies-0-F2B23E)](#-what-it-doesnt-do)
 [![Network](https://img.shields.io/badge/network_requests-none-C81E33)](#-what-it-doesnt-do)
 [![Components](https://img.shields.io/badge/components-5_files_·_20-2ED3C6)](#-the-components)
-[![Used in production](https://img.shields.io/badge/used_in_production-Zeno_·_Weft_·_Vantage-3ECF8E)](#-used-in-production)
+[![Consumers](https://img.shields.io/badge/consumers-Zeno_·_Weft_·_Vantage-3ECF8E)](#-project-integrations)
 [![License](https://img.shields.io/badge/license-MIT-8a94a6)](LICENSE)
 
 <br>
@@ -82,7 +82,7 @@ $ node scripts/contrast.mjs
 - [The contrast law](#-the-contrast-law)
 - [The components](#-the-components)
 - [Accessibility](#-accessibility)
-- [Used in production](#-used-in-production)
+- [Project integrations](#-project-integrations)
 - [Screenshots](#-screenshots)
 - [Recording the demo GIF](#recording-the-demo-gif)
 - [What it doesn't do](#-what-it-doesnt-do)
@@ -149,7 +149,7 @@ source hex is recorded in its theme file as the documented origin.
 ## 🚀 Install and use
 
 **Not on npm.** Four ways to consume it today, all real and all in use by the three projects in
-[Used in production](#-used-in-production):
+[Project integrations](#-project-integrations):
 
 ```bash
 # 1 · clone and verify
@@ -566,9 +566,9 @@ Projects consume committed CSS or a local package reference, so a release is rep
 
 | Project | How it consumes glass | Verified |
 |---|---|---|
-| **[Zeno](https://github.com/abheet19/Zeno)** | `packages/daemon` depends on `@abheet19/glass` via a `file:` workspace reference — real enough that Zeno's own zero-external-runtime-deps CI check (which allow-lists `@abheet19/*` by name) had to pass with it present. Zeno's own hash-pinned, Gate-2-approved colour law is untouched; the import only adds tokens Zeno doesn't already define. | `npm run check` — 1256/1256 tests, unchanged |
-| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Full test suite (162+52+83+301 = 598 tests) green; pixel-identical before/after screenshot, local and live |
-| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | typecheck, lint, 135 unit tests, coverage gate, 11 Playwright e2e tests, all green; pixel-identical before/after screenshot, local and live |
+| **[Zeno](https://github.com/abheet19/Zeno)** | `packages/daemon` depends on `@abheet19/glass` via a `file:` workspace reference. Its static-asset sync script exposes the installed CSS to the daemon without changing Zeno's own colour law. | The dependency/import boundary is real; current product behavior and test totals belong to Zeno's own verification artifact. |
+| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Current local source gate: 612 distinct Vitest + 27 Playwright cases. See [Weft's dated verification](https://github.com/abheet19/Weft/blob/main/docs/VERIFICATION.md) for the separate public-image SHA. |
+| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | Current source/live gate: 824 distinct cases with configured coverage gates; see [Vantage's dated verification](https://github.com/abheet19/Vantage/blob/main/docs/VERIFICATION.md). |
 
 Weft and Vantage's Fly.io Docker builds run from each repo's own directory as build context, with
 no sibling repo reachable — so neither can take a live `file:`/npm link to a `glass` checked out
@@ -578,7 +578,7 @@ that repo) from a machine with `glass` checked out as a sibling, which copies `g
 expressed as a tracked file instead of a package-manager edge. Re-run that script and commit the
 result whenever `glass`'s `tokens.css` changes.
 
-ShieldAI also serves committed local copies of `tokens.css`, `primitives.css` and `themes/shield.css` with the MIT license; its Fly release 8 was verified at source commit `e3e1f0d`. Textify's current FastAPI source vendors `tokens.css`, `primitives.css`, and `themes/textify.css`; its upload, question, deletion and safe text rendering flows passed local browser verification. See that repository for its separate deployment status. Shared CSS files were not changed by this demo update.
+ShieldAI and Textify also vendor committed Glass CSS with the MIT license. Their feature work and deployment status evolve independently, so each repository's own verification artifact is authoritative; this README only claims that the vendored files and imports exist. Shared Glass CSS values were not changed by this documentation reconciliation.
 
 ### Verify the demo
 
