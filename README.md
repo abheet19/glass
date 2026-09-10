@@ -569,8 +569,8 @@ Projects consume committed CSS or a local package reference, so a release is rep
 | Project | How it consumes glass | Verified |
 |---|---|---|
 | **[Zeno](https://github.com/abheet19/Zeno)** | `packages/daemon` depends on `@abheet19/glass` via a `file:` workspace reference. Its static-asset sync script exposes the installed CSS to the daemon without changing Zeno's own colour law. | The dependency/import boundary is real; current product behavior and test totals belong to Zeno's own verification artifact. |
-| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Current local source gate: 612 distinct Vitest + 27 Playwright cases. See [Weft's dated verification](https://github.com/abheet19/Weft/blob/main/docs/VERIFICATION.md) for the separate public-image SHA. |
-| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | Current source/live gate: 824 distinct cases with configured coverage gates; see [Vantage's dated verification](https://github.com/abheet19/Vantage/blob/main/docs/VERIFICATION.md). |
+| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Current local source gate: 612 distinct Vitest + 28 Playwright cases. See [Weft's dated verification](https://github.com/abheet19/Weft/blob/main/docs/VERIFICATION.md) for the separate public-image SHA. |
+| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | Current local source gate: 825 distinct cases with configured coverage gates; see [Vantage's dated verification](https://github.com/abheet19/Vantage/blob/main/docs/VERIFICATION.md). |
 
 Weft and Vantage's Fly.io Docker builds run from each repo's own directory as build context, with
 no sibling repo reachable — so neither can take a live `file:`/npm link to a `glass` checked out
