@@ -1,6 +1,6 @@
 # glass — current implementation context
 
-> Evidence snapshot: 10 September 2026 IST. Canonical repository: `D:\Code\glass`. The last public Pages mapping independently verified before this release was source `8d3dd5607ebf5bcca11877ae2f04c21593a72e62`; determine any later mapping from the Pages workflow/deployment and a live HTTP probe.
+> Evidence snapshot: 10 September 2026 IST. Canonical repository: `D:\Code\glass`. Public `main`, successful Pages workflow run `34441715981`, Pages deployment `6365312606`, and the live demo were independently verified at source `bf8677bf7359dee7c579646d4c08bf83633b1aaa`. The live `demo/index.html` was byte-identical to that commit (SHA-256 `E734534B184D935B1A91D88D6E49A7BB82DD13BA992E2C5AA35127C58D0AAFE1`).
 >
 > This is the short, AI-readable map. Current source and executable tests win if an older design note disagrees. A dirty working tree is a candidate, not a release; a configured URL is not proof that the candidate is deployed.
 
@@ -73,7 +73,7 @@ The retained pre-release assembled-site probe passed ten browser groups. For any
 | 814 contrast/structure assertions passed across 16 palettes | `D:\Work\glass Study Pack\08_TESTING_ARTIFACT.md` |
 | 10 local browser groups, zero browser errors | `D:\Code\glass\docs\verification\browser-results.json` |
 | Assembled `_site` 10/10 including `/brand/mark.svg` HTTP 200 | `verification-work\glass-site-20260910\evidence\browser-results.json (SHA-256 3507DB65…AB36)` |
-| Last Pages source recorded before this release was `8d3dd56...` | `D:\Work\glass Study Pack\08_TESTING_ARTIFACT.md` |
+| Public `main`, Pages workflow/deployment, and live demo map to `bf8677b...`; live HTML SHA-256 `E734534B...AAFE1` | GitHub public APIs and byte-for-byte HTTP probe on 10 September 2026 IST |
 
 The evidence above belongs to the named local working-tree snapshot unless it explicitly names a release/image. It does not become live evidence merely because a deployment configuration exists.
 

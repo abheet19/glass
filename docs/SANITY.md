@@ -25,11 +25,11 @@ npm pack --dry-run
 - [ ] Generated token JSON has only intended changes; package contains only intended source/demo/brand files.
 - [ ] Assembled Pages artifact serves root/deep links, CSS, controls, and brand mark before publication.
 
-## Retained evidence for the reviewed release candidate
+## Retained evidence for the reviewed release
 
 - 814 local contrast/structure assertions and 10 local browser groups passed.
 - `verification-work/glass-site-20260910/evidence/browser-results.json`: assembled site 10/10, mark HTTP 200.
-- The last public Pages mapping recorded before this release was `8d3dd56...`; verify any later release by workflow SHA and live HTTP probe.
+- Public `main`, successful Pages workflow run `34441715981`, Pages deployment `6365312606`, and the live demo map to `bf8677b...`; live `demo/index.html` was byte-identical to that commit (SHA-256 `E734534B...AAFE1`).
 
 ## Release sequence
 
