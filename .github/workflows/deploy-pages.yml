@@ -66,7 +66,8 @@ jobs:
           <!doctype html>
           <meta charset="utf-8">
           <title>Glass — redirecting to the demo</title>
-          <meta http-equiv="refresh" content="0; url=./demo/">
+          <script>location.replace("./demo/" + location.search + location.hash);</script>
+          <noscript><meta http-equiv="refresh" content="0; url=./demo/"></noscript>
           <link rel="canonical" href="./demo/">
           <p>Redirecting to <a href="./demo/">the Glass demo</a>.</p>
           HTML
