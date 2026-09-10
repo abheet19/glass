@@ -1,46 +1,34 @@
-# glass — sanity, acceptance, and release guide
+# Glass sanity, acceptance, and release guide
 
-> Snapshot: 10 September 2026 IST. Run this against disposable or synthetic data. Save the branch, commit, complete dirty-path list, command, exit code, environment, and artifact hashes with every result.
-
-## Before running
-
-Run against the checked local demo first. Treat consumer applications and the public Pages site as separate targets. Do not edit generated JSON manually.
+Run against synthetic demo data and record the branch, commit, dirty-path list, commands, environment, evidence hashes, CI run, and live SHA.
 
 ```powershell
 Set-Location 'D:\Code\glass'
 npm ci
+npm run format:check
+npm run lint
 npm run check
-npm run tokens
-git diff -- src/tokens.json
 npm run test:browser
 npm pack --dry-run
 ```
 
-## Product sanity checklist
+## Product acceptance
 
-- [ ] All eight themes on light/dark/system grounds update selected controls and measured budget.
-- [ ] Keyboard theme/gallery/tabs/Home/End/tooltip/form/state actions work with visible focus.
-- [ ] Reduced motion halts animation and flat/reduced transparency toggles round-trip.
-- [ ] Deep links choose the expected palette and mobile overflow stays inside intended scrollers.
-- [ ] Generated token JSON has only intended changes; package contains only intended source/demo/brand files.
-- [ ] Assembled Pages artifact serves root/deep links, CSS, controls, and brand mark before publication.
-
-## Retained evidence for the reviewed release
-
-- 814 local contrast/structure assertions and 10 local browser groups passed.
-- `verification-work/glass-site-20260910/evidence/browser-results.json`: assembled site 10/10, mark HTTP 200.
-- Public `main`, successful Pages workflow run `34441715981`, Pages deployment `6365312606`, and the live demo map to `bf8677b...`; live `demo/index.html` was byte-identical to that commit (SHA-256 `E734534B...AAFE1`).
+- [ ] Eight themes and light/dark/system grounds update both selected controls and the measured budget.
+- [ ] Keyboard theme/gallery/tabs/Home/End/tooltip/form/menu actions work with visible focus.
+- [ ] Reduced motion stops animation; flat transparency and deep links round-trip.
+- [ ] Every explorer item opens a file tab; explorer/assistant toggle; tree disclosure hides content.
+- [ ] Split resize works by keyboard; Problems, Output, Debug Console, Terminal, and Ports all open.
+- [ ] Composer handles valid and empty submissions; sanitized run details toggle.
+- [ ] No duplicate IDs, unnamed buttons, unlabelled fields, broken local anchors, browser errors, or page overflow at 320 px.
+- [ ] Token JSON and package payload contain only intended files.
 
 ## Release sequence
 
-1. Review the local visual/Pages diff and freeze one commit.
-2. Run check, clean token generation diff, browser, package dry-run, and assembled-site probe.
-3. Publish Pages with approval; record workflow, source SHA, URL/deep-link/mark smoke, and rollback source.
-4. Publish npm only through a separate reviewed registry release and record package integrity.
+1. Inspect the visual and source diff, focused desktop/mobile captures, and package payload.
+2. Freeze one commit and rerun every gate on it.
+3. Push; require green CI and Pages for that commit.
+4. Verify `/release.json`, the live demo, a themed deep link, CSS, and brand mark against the full commit SHA.
+5. Record the rollback commit and update `CONTEXT.md`, `MEMORY.md`, and the external Study Pack.
 
-## Claims this guide does not establish
-
-- No universal consumer certification, pixel visual regression, full screen-reader matrix, or field Core Web Vitals.
-- Local package/Pages assembly is not a public Pages or npm release.
-
-A green local run is evidence for the exact tested tree. Call a feature deployed only after recording `source commit -> CI run -> image/release -> post-deploy smoke` for the same bytes.
+Automated results are scoped evidence for the exact tree. They are not an external WCAG certification, pixel baseline, full screen-reader/device matrix, consumer-app certification, or npm registry release.

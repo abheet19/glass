@@ -85,6 +85,83 @@ try {
     }
     assert.equal(await page.getByRole('button', { name: 'Disabled', exact: true }).isDisabled(), true);
   });
+  await check('workspace shell controls every panel, tab, tree, split and composer flow', async () => {
+    const frame = page.locator('#workspace-demo');
+    assert.equal(await frame.getAttribute('data-nav-collapsed'), 'false');
+    assert.equal(await frame.getAttribute('data-aside-collapsed'), 'false');
+    assert.equal(await page.locator('[aria-label="Open files"] [role="tab"]').count(), 3);
+    assert.equal(await page.locator('[aria-label="Developer tool views"] [role="tab"]').count(), 5);
+
+    await page.locator('[data-workspace-file="policy"]').click();
+    assert.equal(await page.locator('#workspace-file-tab-policy').getAttribute('aria-selected'), 'true');
+    assert.equal(await page.locator('#workspace-file-panel-policy').isVisible(), true);
+    await page.locator('[data-workspace-file="readme"]').click();
+    assert.equal(await page.locator('#workspace-file-tab-readme').getAttribute('aria-selected'), 'true');
+    assert.equal(await page.locator('#workspace-file-panel-readme').isVisible(), true);
+    await page.locator('#workspace-file-tab-main').click();
+
+    await page.locator('#workspace-tree-toggle').click();
+    assert.equal(await page.locator('#workspace-tree-toggle').getAttribute('aria-expanded'), 'false');
+    assert.equal(await page.locator('#workspace-tree-src').isHidden(), true);
+    await page.locator('#workspace-tree-toggle').click();
+
+    for (const [button, attribute] of [
+      ['#workspace-toggle-nav', 'data-nav-collapsed'],
+      ['#workspace-toggle-aside', 'data-aside-collapsed'],
+    ]) {
+      await page.locator(button).click();
+      assert.equal(await frame.getAttribute(attribute), 'true');
+      assert.equal(await page.locator(button).getAttribute('aria-expanded'), 'false');
+      await page.locator(button).click();
+      assert.equal(await frame.getAttribute(attribute), 'false');
+    }
+
+    await page.locator('#workspace-dock-tab-terminal').click();
+    assert.equal(await page.locator('#workspace-dock-panel-terminal').isVisible(), true);
+    assert.ok((await page.locator('#workspace-dock-panel-terminal').innerText()).includes('D:\\Code\\Project'));
+
+    await page.locator('#workspace-divider').focus();
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await page.locator('#workspace-divider').getAttribute('aria-valuenow'), '63');
+    assert.equal(
+      await page.locator('#workspace-editor-grid').evaluate(element => element.style.getPropertyValue('--workspace-primary-pane')),
+      '63%',
+    );
+
+    await page.locator('#workspace-prompt').fill('Verify the release');
+    await page.locator('#workspace-composer').getByRole('button', { name: 'Run', exact: true }).click();
+    assert.equal(await page.locator('#workspace-prompt').inputValue(), '');
+    assert.ok((await page.locator('#workspace-composer-status').innerText()).includes('Verify the release'));
+    await page.locator('#workspace-composer').getByRole('button', { name: 'Run', exact: true }).click();
+    assert.ok((await page.locator('#workspace-composer-status').innerText()).includes('Describe a task'));
+
+    const disclosure = page.locator('.thinking-disclosure');
+    await disclosure.locator('summary').click();
+    assert.equal(await disclosure.getAttribute('open'), '');
+    await frame.screenshot({ path: path.join(out, 'glass-workspace-desktop.png') });
+  });
+  await check('accessible names, labels, IDs and local anchors are structurally complete', async () => {
+    const defects = await page.evaluate(() => {
+      const duplicateIds = [...document.querySelectorAll('[id]')]
+        .map(element => element.id)
+        .filter((id, index, ids) => ids.indexOf(id) !== index);
+      const unnamedButtons = [...document.querySelectorAll('button')]
+        .filter(button => !(button.getAttribute('aria-label') || button.textContent.trim() || button.title))
+        .map(button => button.outerHTML.slice(0, 100));
+      const unlabelledFields = [...document.querySelectorAll('input, select, textarea')]
+        .filter(field => {
+          if (field.type === 'hidden') return false;
+          const labels = field.labels ? [...field.labels] : [];
+          return !labels.length && !field.getAttribute('aria-label') && !field.getAttribute('aria-labelledby');
+        })
+        .map(field => field.id || field.outerHTML.slice(0, 100));
+      const brokenLocalAnchors = [...document.querySelectorAll('a[href^="#"]')]
+        .map(anchor => anchor.getAttribute('href').slice(1))
+        .filter(id => id && !document.getElementById(id));
+      return { duplicateIds, unnamedButtons, unlabelledFields, brokenLocalAnchors };
+    });
+    assert.deepEqual(defects, { duplicateIds: [], unnamedButtons: [], unlabelledFields: [], brokenLocalAnchors: [] });
+  });
   await check('reduced motion stops skeleton animation', async () => {
     assert.equal(await page.locator('.skeleton').first().evaluate(el => getComputedStyle(el).animationName), 'none');
   });
@@ -99,12 +176,21 @@ try {
   await page.locator('#flat').click();
   await page.screenshot({ path: path.join(out, 'glass-dark-weft.png'), fullPage: true });
   await check('mobile layout contains overflow within intended scroll containers', async () => {
-    await page.setViewportSize({ width: 390, height: 844 });
+    await page.setViewportSize({ width: 320, height: 844 });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    assert.ok(await page.locator('#workspace-demo').evaluate(element => element.scrollWidth <= element.clientWidth + 1));
+    await page.locator('#workspace-toggle-nav').click();
+    assert.equal(await page.locator('#workspace-demo').getAttribute('data-nav-collapsed'), 'true');
+    await page.locator('#workspace-toggle-aside').click();
+    assert.equal(await page.locator('#workspace-demo').getAttribute('data-aside-collapsed'), 'true');
+    const stickyHeader = page.locator('body > .bar');
+    await stickyHeader.evaluate(element => { element.style.visibility = 'hidden'; });
+    await page.locator('#workspace-demo').screenshot({ path: path.join(out, 'glass-workspace-mobile.png') });
+    await stickyHeader.evaluate(element => { element.style.visibility = ''; });
   });
   await page.screenshot({ path: path.join(out, 'glass-mobile.png'), fullPage: true });
   assert.deepEqual(errors, []);
   const result = { url, checks, count: checks.length, browserErrors: errors, scope: 'Behavior and screenshots; contrast math is separately checked by npm run check. No pixel-baseline or consumer-app certification.' };
-  await writeFile(path.join(out, 'browser-results.json'), JSON.stringify(result, null, 2));
+  await writeFile(path.join(out, 'browser-results.json'), `${JSON.stringify(result, null, 2)}\n`);
   console.log(JSON.stringify({ checks: checks.length, browserErrors: errors, result: path.join(out, 'browser-results.json') }));
 } finally { await browser.close(); }

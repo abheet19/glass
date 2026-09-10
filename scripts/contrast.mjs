@@ -3,8 +3,8 @@
    GLASS — the contrast budget
    scripts/contrast.mjs
 
-   Dependency-free. Reads src/tokens.css, all eight src/themes/*.css and
-   src/primitives.css; resolves every custom property (nested var(), oklch()
+   Dependency-free. Reads every stylesheet under src/; resolves every
+   custom property (nested var(), oklch()
    with sRGB gamut mapping, color-mix(in srgb, ...), alpha compositing);
    computes WCAG 2.x relative luminance; and asserts the budget for
 
@@ -25,7 +25,7 @@
        else, so a theme structurally cannot alter the ladder
      · the resolved lightness ladder is numerically identical across all eight
        themes, on both grounds
-     · every var() referenced in any of the ten stylesheets resolves to a
+     · every var() referenced in any shipped stylesheet resolves to a
        property that is actually declared somewhere
      · every state chip's fill separates from the plane, no two state fills
        collapse onto the same greyscale luminance, and every glyph and label is
@@ -220,6 +220,10 @@ function loadCss(path) {
 
 const tokensCss = loadCss(join(SRC, 'tokens.css'));
 const primitivesCss = loadCss(join(SRC, 'primitives.css'));
+const componentCss = readdirSync(SRC)
+  .filter((file) => file.endsWith('.css') && !['tokens.css', 'primitives.css'].includes(file))
+  .sort()
+  .map((file) => loadCss(join(SRC, file)));
 const themeFiles = readdirSync(THEMES_DIR).filter((f) => f.endsWith('.css')).sort();
 const themeCss = Object.fromEntries(
   themeFiles.map((f) => [f.replace(/\.css$/, ''), loadCss(join(THEMES_DIR, f))]),
@@ -558,7 +562,7 @@ for (const [name, file] of Object.entries(themeCss)) {
 {
   const declared = new Set();
   const referenced = new Map();
-  const files = [tokensCss, primitivesCss, ...Object.values(themeCss)];
+  const files = [tokensCss, primitivesCss, ...componentCss, ...Object.values(themeCss)];
   for (const f of files) {
     const bare = stripComments(f.raw);
     for (const m of bare.matchAll(/(--[\w-]+)\s*:/g)) declared.add(m[1]);

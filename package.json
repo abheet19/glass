@@ -37,6 +37,7 @@
     "./navigation.css": "./src/navigation.css",
     "./feedback.css": "./src/feedback.css",
     "./data.css": "./src/data.css",
+    "./workspace.css": "./src/workspace.css",
     "./components.css": "./src/components.css",
     "./tokens.json": "./src/tokens.json",
     "./tailwind-preset": "./tailwind-preset.js",
@@ -57,12 +58,17 @@
     "tokens": "node scripts/contrast.mjs --emit-json",
     "test": "node scripts/contrast.mjs",
     "record:demo": "node tools/record-demo.mjs",
-    "test:browser": "node tools/verify-demo.mjs"
+    "test:browser": "node tools/verify-demo.mjs",
+    "lint": "node tools/quality.mjs",
+    "format:check": "node tools/quality.mjs --format",
+    "validate": "npm run format:check && npm run lint && npm run check && npm run test:browser",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
-    "playwright": "^1.49.0"
+    "husky": "9.1.7",
+    "playwright": "1.63.0"
   }
 }

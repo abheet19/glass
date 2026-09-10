@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="../src/navigation.css">
 <link rel="stylesheet" href="../src/feedback.css">
 <link rel="stylesheet" href="../src/data.css">
+<link rel="stylesheet" href="../src/workspace.css">
 <link rel="stylesheet" href="../src/themes/zeno.css">
 <link rel="stylesheet" href="../src/themes/weft.css">
 <link rel="stylesheet" href="../src/themes/vantage.css">
@@ -87,7 +88,7 @@ h2 { margin: 0; font-size: var(--fs-2); font-weight: 650; letter-spacing: -0.01e
 }
 
 .grid { display: grid; gap: var(--sp-5); }
-.g2 { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
 .g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .stack { display: flex; flex-direction: column; gap: var(--sp-4); }
 .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
@@ -136,6 +137,16 @@ td.tok { font-family: var(--font-mono); color: var(--ink-2); }
 .radii figure { margin: 0; text-align: center; }
 .radii .box { width: 76px; height: 56px; background: var(--raised); border: 1px solid var(--line); }
 .radii figcaption { margin-top: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
+/* Dense 13.5px specimen labels use primary ink. This keeps the reference page
+   above 4.5:1 even in audit engines that quantize OKLCH secondary ink. */
+.ramp-val,
+thead th,
+#budget-rows td.num,
+.kicker,
+.type-tag,
+.radii figcaption,
+.gal-origin,
+.strip-label { color: var(--ink); }
 .mono { font-family: var(--font-mono); }
 pre {
   margin: 0; padding: var(--sp-4); overflow-x: auto;
@@ -491,11 +502,122 @@ footer a { color: var(--ink-2); }
     </div>
   </section>
 
+
+  <!-- =================================================================== -->
+  <section id="workspace">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">05 — workspace patterns</p>
+        <h2>Native-feeling shells without a framework lock-in</h2>
+      </div>
+      <p class="sec-note">
+        A responsive editor and agent shell built from the same semantic roles: toggleable panels,
+        file and dock tabs, a split view, tree disclosure, a command composer, run disclosure, and
+        a status line. The CSS owns layout and states; products own data and execution.
+      </p>
+    </div>
+
+    <div class="workspace-frame" id="workspace-demo" data-nav-collapsed="false" data-aside-collapsed="false">
+      <header class="workspace-titlebar">
+        <div class="workspace-toolbar-group">
+          <button class="workspace-icon-button" id="workspace-toggle-nav" type="button" aria-label="Toggle project explorer" aria-controls="workspace-sidebar" aria-expanded="true">☰</button>
+          <strong>Project / src</strong>
+        </div>
+        <div class="workspace-toolbar-group" data-align="end">
+          <span class="chip chip-mono">main</span>
+          <button class="workspace-icon-button" id="workspace-toggle-aside" type="button" aria-label="Toggle assistant panel" aria-controls="workspace-aside" aria-expanded="true">✦</button>
+        </div>
+      </header>
+
+      <div class="workspace-body">
+        <aside class="workspace-sidebar" id="workspace-sidebar" aria-label="Project explorer">
+          <div class="workspace-panel-header"><span>Explorer</span><span>3 files</span></div>
+          <ul class="workspace-tree">
+            <li>
+              <button class="workspace-tree-item" id="workspace-tree-toggle" type="button" aria-expanded="true" aria-controls="workspace-tree-src">src</button>
+              <ul id="workspace-tree-src">
+                <li><button class="workspace-tree-item" type="button" aria-current="page" data-workspace-file="main">main.ts</button></li>
+                <li><button class="workspace-tree-item" type="button" data-workspace-file="policy">policy.ts</button></li>
+              </ul>
+            </li>
+            <li><button class="workspace-tree-item" type="button" data-workspace-file="readme">README.md</button></li>
+          </ul>
+        </aside>
+
+        <div class="workspace-main">
+          <div class="workspace-editor">
+            <div class="workspace-tabstrip" role="tablist" aria-label="Open files">
+              <button class="workspace-tab" id="workspace-file-tab-main" type="button" role="tab" aria-selected="true" aria-controls="workspace-file-panel-main" tabindex="0">main.ts</button>
+              <button class="workspace-tab" id="workspace-file-tab-policy" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-policy" tabindex="-1">policy.ts</button>
+              <button class="workspace-tab" id="workspace-file-tab-readme" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-readme" tabindex="-1">README.md</button>
+            </div>
+            <div class="workspace-editor-grid" id="workspace-editor-grid">
+              <div class="workspace-pane">
+                <pre id="workspace-file-panel-main" role="tabpanel" aria-labelledby="workspace-file-tab-main">const receipt = await kernel.decide(proposal);
+if (receipt.effect === "allow") await executor.run(receipt);</pre>
+                <pre id="workspace-file-panel-policy" role="tabpanel" aria-labelledby="workspace-file-tab-policy" hidden>export const policy = definePolicy({
+  destructive: "ask",
+  network: "bounded"
+});</pre>
+                <pre id="workspace-file-panel-readme" role="tabpanel" aria-labelledby="workspace-file-tab-readme" hidden># Project
+
+A deterministic agent workspace with reviewable actions.</pre>
+              </div>
+              <button class="workspace-divider" id="workspace-divider" type="button" role="separator" aria-label="Resize editor panes" aria-orientation="vertical" aria-valuemin="35" aria-valuemax="75" aria-valuenow="58"></button>
+              <div class="workspace-pane" aria-label="Preview pane">
+                <p class="kicker">Preview</p>
+                <div class="state state-ok state-text"></div>
+                <p class="card-note">One proposal, one deterministic decision, one receipt.</p>
+              </div>
+            </div>
+          </div>
+
+          <section class="workspace-dock" aria-label="Developer tools">
+            <div class="workspace-tabstrip" role="tablist" aria-label="Developer tool views">
+              <button class="workspace-tab" id="workspace-dock-tab-problems" type="button" role="tab" aria-selected="true" aria-controls="workspace-dock-panel-problems" tabindex="0">Problems</button>
+              <button class="workspace-tab" id="workspace-dock-tab-output" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-output" tabindex="-1">Output</button>
+              <button class="workspace-tab" id="workspace-dock-tab-debug" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-debug" tabindex="-1">Debug Console</button>
+              <button class="workspace-tab" id="workspace-dock-tab-terminal" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-terminal" tabindex="-1">Terminal</button>
+              <button class="workspace-tab" id="workspace-dock-tab-ports" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-ports" tabindex="-1">Ports</button>
+            </div>
+            <div class="workspace-dock-content" id="workspace-dock-panel-problems" role="tabpanel" aria-labelledby="workspace-dock-tab-problems">No problems detected.</div>
+            <div class="workspace-dock-content" id="workspace-dock-panel-output" role="tabpanel" aria-labelledby="workspace-dock-tab-output" hidden>Checks are ready.</div>
+            <div class="workspace-dock-content" id="workspace-dock-panel-debug" role="tabpanel" aria-labelledby="workspace-dock-tab-debug" hidden>Debug console is idle.</div>
+            <div class="workspace-dock-content" id="workspace-dock-panel-terminal" role="tabpanel" aria-labelledby="workspace-dock-tab-terminal" hidden>PS D:\Code\Project&gt;</div>
+            <div class="workspace-dock-content" id="workspace-dock-panel-ports" role="tabpanel" aria-labelledby="workspace-dock-tab-ports" hidden>No forwarded ports.</div>
+          </section>
+        </div>
+
+        <aside class="workspace-aside" id="workspace-aside" aria-label="Assistant session">
+          <div class="workspace-panel-header"><span>Session</span><span class="state state-info state-text"></span></div>
+          <details class="thinking-disclosure">
+            <summary>Run details</summary>
+            <p>Sanitized checkpoints and tool outcomes belong here; private model reasoning does not.</p>
+          </details>
+          <form class="command-composer" id="workspace-composer">
+            <label class="sr" for="workspace-prompt">Ask the assistant</label>
+            <textarea id="workspace-prompt" placeholder="Ask anything, @ to mention, / for actions"></textarea>
+            <div class="command-composer-actions">
+              <span>Local · reviewed actions</span>
+              <button class="btn btn-primary" type="submit">Run</button>
+            </div>
+            <span id="workspace-composer-status" role="status"></span>
+          </form>
+        </aside>
+      </div>
+
+      <footer class="workspace-statusbar">
+        <span>main · 0 errors · 0 warnings</span>
+        <span>Ln 1, Col 1 · UTF-8 · TypeScript</span>
+      </footer>
+    </div>
+  </section>
+
   <!-- =================================================================== -->
   <section id="gallery">
     <div class="sec-head">
       <div>
-        <p class="kicker">05 — the eight</p>
+        <p class="kicker">06 — the eight</p>
         <h2>One grammar, eight hues</h2>
       </div>
       <p class="sec-note">
@@ -512,7 +634,7 @@ footer a { color: var(--ink-2); }
   <section id="use">
     <div class="sec-head">
       <div>
-        <p class="kicker">06 — how to use it</p>
+        <p class="kicker">07 — how to use it</p>
         <h2>Three CSS files and an attribute</h2>
       </div>
     </div>
@@ -523,9 +645,9 @@ footer a { color: var(--ink-2); }
 &lt;link rel="stylesheet" href="<b>src/themes/weft.css</b>"&gt;
 &lt;link rel="stylesheet" href="<b>src/primitives.css</b>"&gt;
 
-&lt;html <b>data-glass="weft"</b>&gt;            <span>&lt;!-- hue --&gt;</span>
+&lt;html <b>data-glass="weft"</b>&gt;            <span style="color:var(--ink)">&lt;!-- hue --&gt;</span>
 &lt;html data-glass="weft" <b>data-theme="light"</b>&gt;
-&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span>&lt;!-- no blur --&gt;</span></pre>
+&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span style="color:var(--ink)">&lt;!-- no blur --&gt;</span></pre>
       </div>
       <div class="card">
         <p class="kicker" style="margin:0 0 var(--sp-3)">verify</p>
@@ -533,9 +655,9 @@ footer a { color: var(--ink-2); }
   8 themes x 2 grounds = 16 palettes
   <span style="color:var(--ok)">PASS</span> — 814/814 assertions hold.
 
-<b>node scripts/contrast.mjs --verbose</b>   <span># every pair</span>
-<b>node scripts/contrast.mjs --theme weft</b> <span># one theme</span>
-<b>node scripts/contrast.mjs --emit-json</b>  <span># rebuild tokens.json</span></pre>
+<b>node scripts/contrast.mjs --verbose</b>   <span style="color:var(--ink)"># every pair</span>
+<b>node scripts/contrast.mjs --theme weft</b> <span style="color:var(--ink)"># one theme</span>
+<b>node scripts/contrast.mjs --emit-json</b>  <span style="color:var(--ink)"># rebuild tokens.json</span></pre>
       </div>
     </div>
   </section>
@@ -803,26 +925,84 @@ function refresh() {
   if (q.get('flat') === '1') { html.dataset.flat = '1'; document.getElementById('flat').setAttribute('aria-pressed', 'true'); }
 }
 
-const sampleTabs = [...document.querySelectorAll('[role="tab"]')];
-function selectSampleTab(tab) {
-  for (const item of sampleTabs) {
-    const active = item === tab;
-    item.setAttribute('aria-selected', String(active));
-    item.tabIndex = active ? 0 : -1;
-    document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
-  }
-  tab.focus();
-}
-for (const [index, tab] of sampleTabs.entries()) {
-  tab.addEventListener('click', () => selectSampleTab(tab));
-  tab.addEventListener('keydown', event => {
-    const destinations = { ArrowRight: (index + 1) % sampleTabs.length, ArrowLeft: (index + sampleTabs.length - 1) % sampleTabs.length, Home: 0, End: sampleTabs.length - 1 };
-    if (event.key in destinations) {
-      event.preventDefault();
-      selectSampleTab(sampleTabs[destinations[event.key]]);
+
+
+function wireTabList(tablist) {
+  const tabs = [...tablist.querySelectorAll(':scope > [role="tab"]')];
+  const select = (tab, moveFocus = true) => {
+    for (const item of tabs) {
+      const active = item === tab;
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+      const panel = document.getElementById(item.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !active;
     }
+    if (moveFocus) tab.focus();
+  };
+  for (const [index, tab] of tabs.entries()) {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', event => {
+      const destinations = {
+        ArrowRight: (index + 1) % tabs.length,
+        ArrowLeft: (index + tabs.length - 1) % tabs.length,
+        Home: 0,
+        End: tabs.length - 1,
+      };
+      if (event.key in destinations) {
+        event.preventDefault();
+        select(tabs[destinations[event.key]]);
+      }
+    });
+  }
+  return { tabs, select };
+}
+
+const tablists = [...document.querySelectorAll('[role="tablist"]')].map(wireTabList);
+const fileTabs = tablists.find(({ tabs }) => tabs.some(tab => tab.id === 'workspace-file-tab-main'));
+for (const button of document.querySelectorAll('[data-workspace-file]')) {
+  button.addEventListener('click', () => {
+    const target = fileTabs?.tabs.find(tab => tab.id === `workspace-file-tab-${button.dataset.workspaceFile}`);
+    if (target) fileTabs.select(target);
   });
 }
+
+const workspace = document.getElementById('workspace-demo');
+for (const [buttonId, attribute] of [
+  ['workspace-toggle-nav', 'data-nav-collapsed'],
+  ['workspace-toggle-aside', 'data-aside-collapsed'],
+]) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', () => {
+    const collapsed = workspace.getAttribute(attribute) === 'true';
+    workspace.setAttribute(attribute, String(!collapsed));
+    button.setAttribute('aria-expanded', String(collapsed));
+  });
+}
+
+document.getElementById('workspace-tree-toggle').addEventListener('click', event => {
+  const expanded = event.currentTarget.getAttribute('aria-expanded') === 'true';
+  event.currentTarget.setAttribute('aria-expanded', String(!expanded));
+  document.getElementById('workspace-tree-src').hidden = expanded;
+});
+
+document.getElementById('workspace-divider').addEventListener('keydown', event => {
+  if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+  event.preventDefault();
+  const separator = event.currentTarget;
+  const current = Number(separator.getAttribute('aria-valuenow'));
+  const next = Math.min(75, Math.max(35, current + (event.key === 'ArrowRight' ? 5 : -5)));
+  separator.setAttribute('aria-valuenow', String(next));
+  document.getElementById('workspace-editor-grid').style.setProperty('--workspace-primary-pane', `${next}%`);
+});
+
+document.getElementById('workspace-composer').addEventListener('submit', event => {
+  event.preventDefault();
+  const prompt = document.getElementById('workspace-prompt');
+  const status = document.getElementById('workspace-composer-status');
+  const value = prompt.value.trim();
+  status.textContent = value ? `Queued: ${value}` : 'Describe a task before running.';
+  if (value) prompt.value = '';
+});
 for (const button of document.querySelectorAll('[data-menu-sample]')) {
   button.addEventListener('click', () => { document.getElementById('menu-sample-status').textContent = `${button.dataset.menuSample} style selected. Demo only; no data was changed.`; });
 }

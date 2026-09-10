@@ -29,6 +29,11 @@ jobs:
         with:
           node-version: 22
 
+      - name: Source quality
+        run: |
+          node tools/quality.mjs --format
+          node tools/quality.mjs
+
       - name: node scripts/contrast.mjs
         run: node scripts/contrast.mjs
 
@@ -57,7 +62,7 @@ jobs:
           node-version: 22
       - name: Install browser verification tooling
         run: |
-          npm install --ignore-scripts --no-package-lock
+          npm ci --ignore-scripts
           npx playwright install --with-deps chromium
 
       - name: Verify interactive demo and keyboard flows

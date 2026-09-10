@@ -21,7 +21,7 @@ that a script proves on every one of them.
 [![Colour](https://img.shields.io/badge/colour-oklch-B98BFF)](#why-oklch-and-not-hex)
 [![Runtime deps](https://img.shields.io/badge/runtime_dependencies-0-F2B23E)](#-what-it-doesnt-do)
 [![Network](https://img.shields.io/badge/network_requests-none-C81E33)](#-what-it-doesnt-do)
-[![Components](https://img.shields.io/badge/components-5_files_·_20-2ED3C6)](#-the-components)
+[![Components](https://img.shields.io/badge/components-6_files_·_workspace_ready-2ED3C6)](#-the-components)
 [![Consumers](https://img.shields.io/badge/consumers-Zeno_·_Weft_·_Vantage-3ECF8E)](#-project-integrations)
 [![License](https://img.shields.io/badge/license-MIT-8a94a6)](LICENSE)
 
@@ -83,6 +83,7 @@ $ node scripts/contrast.mjs
 - [The eight themes](#-the-eight-themes)
 - [The contrast law](#-the-contrast-law)
 - [The components](#-the-components)
+- [Workspace shells](#workspace-shells)
 - [Accessibility](#-accessibility)
 - [Project integrations](#-project-integrations)
 - [Screenshots](#-screenshots)
@@ -490,7 +491,7 @@ necessary rather than folklore.
 
 ## ▣ The components
 
-Five files, one entry point (`src/components.css` imports all five). None of them introduces a
+Six files, one entry point (`src/components.css` imports all six). None of them introduces a
 colour, a radius, a duration or a font of its own — if you want a value that is not a token, what
 you want is a new token, and it has to clear the budget before it exists. Every one below is in the
 [live demo](https://abheet19.github.io/glass/demo/#components) with real markup you can copy.
@@ -528,6 +529,17 @@ so a tooltip never hides under a menu and a modal always wins.
 planes `.card` already uses, not a new colour), `.badge`/`-accent`/`-ok`/`-warn`/`-bad`/`-info`
 (the same `.state` colour formula, sized for a count), `.avatar`/`-sm`/`-lg`/`-fallback`/`-group`.
 
+### Workspace shells
+
+**`workspace.css`** provides framework-neutral layout primitives for editor, agent, and
+operations surfaces: title/status bars, project trees with native disclosures, multi-file
+tabs, keyboard-resizable split panes, five-tab tool docks, toggleable side panels, command
+composers, sanitized run-details disclosure, search/filter rows, and metric cards. The CSS
+owns layout and responsive states; the consuming product owns files, terminals, agents, and
+execution. At 900 px the assistant becomes an overlay; at 640 px both side panels become
+toggleable overlays and split panes stack. No action disappears. See the live
+[workspace specimen](https://abheet19.github.io/glass/demo/#workspace).
+
 <details>
 <summary><b>Why a state chip's label is <code>--ink</code> and not the state colour</b></summary>
 
@@ -559,6 +571,8 @@ of these paths must produce a completely usable surface with the decoration swit
 | Colour | never the only channel. Every state carries a glyph and a word, both asserted unique |
 | Targets | `--target-min: 24px`, enforced inside `.btn` and `.field` (WCAG 2.2 SC 2.5.8) |
 | Focus | a real 2px border offset 2px, in the accent, verified at 3:1 on every plane **and** on glass |
+| Structure | native buttons, labels, tabs, tabpanels, details/summary, and separators expose names and state; browser tests reject duplicate IDs, unnamed controls, unlabelled fields, and broken local anchors |
+| Responsive | the demo is exercised at 320 px; page overflow is rejected while wide tables and tab strips retain intentional local scrolling |
 
 ---
 
@@ -588,10 +602,10 @@ ShieldAI and Textify also vendor committed Glass CSS with the MIT license. Their
 npm run check              # 814 numerical/structural assertions, 16 palettes
 npm install
 npx playwright install chromium
-npm run test:browser       # 10 groups of theme, keyboard, form and mobile checks
+npm run test:browser       # 12 groups covering themes, controls, workspace and 320 px layout
 ```
 
-The menu actions are styling specimens with explicit demo feedback. Tabs, theme controls, fields and tooltips are interactive. Both CI and Pages publication run the contrast and browser checks. The browser script also captures screenshots; these are evidence, not automatic pixel-diff baselines.
+Every visible demo action returns an observable result. Tabs, theme controls, fields, menus, tooltips, workspace files, panel toggles, tree disclosure, split resize, all five tool tabs, the composer, and run details are browser exercised. CI and Pages publication run the source-quality, contrast, and browser gates. Screenshots are retained evidence, not pixel-diff baselines.
 
 ## 📸 Screenshots
 

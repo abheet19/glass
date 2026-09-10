@@ -2,11 +2,11 @@
    GLASS — components.css
    The single entry point for the whole component set. Imports primitives.css
    (the original seven: .glass/.card/.btn/.field/.chip/.state/.gauge) plus the
-   four files added for a broader gallery — forms, navigation, feedback, data
-   display — in dependency order. Requires src/tokens.css and one
+   five files added for broader product surfaces — forms, navigation, feedback,
+   data display, and workspace shells — in dependency order. Requires src/tokens.css and one
    src/themes/*.css to be loaded first; this file paints nothing without them.
 
-   Importing this file is equivalent to importing all five component files
+   Importing this file is equivalent to importing all six component files
    individually; use it when you want the whole set, or import only the ones
    you need (primitives.css alone still works exactly as before — nothing in
    it changed).
@@ -17,3 +17,4 @@
 @import "./navigation.css";
 @import "./feedback.css";
 @import "./data.css";
+@import "./workspace.css";

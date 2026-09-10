@@ -8,11 +8,13 @@
     "tabs implement roving focus, arrow keys, Home/End and connected panels",
     "tooltip works with focus and does not stay permanently visible",
     "native fields and state specimen buttons respond",
+    "workspace shell controls every panel, tab, tree, split and composer flow",
+    "accessible names, labels, IDs and local anchors are structurally complete",
     "reduced motion stops skeleton animation",
     "deep links select expected palette",
     "mobile layout contains overflow within intended scroll containers"
   ],
-  "count": 10,
+  "count": 12,
   "browserErrors": [],
   "scope": "Behavior and screenshots; contrast math is separately checked by npm run check. No pixel-baseline or consumer-app certification."
 }
