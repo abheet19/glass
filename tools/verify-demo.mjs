@@ -75,6 +75,8 @@ try {
     const checkbox = page.getByRole('checkbox', { name: 'Checkbox', exact: true });
     await checkbox.uncheck();
     assert.equal(await checkbox.isChecked(), false);
+    const choiceTargets = await page.locator('.checkbox, .radio, .switch').evaluateAll(labels => labels.map(label => label.getBoundingClientRect().height));
+    assert.ok(choiceTargets.every(height => height >= 24), `choice target heights: ${choiceTargets.join(', ')}`);
     for (const label of ['Primary', 'Quiet', 'Ghost', 'Glass']) {
       await page.locator('[data-sample-button]').filter({ hasText: new RegExp(`^${label}$`) }).click();
       assert.ok((await page.locator('#button-sample-status').innerText()).includes(label));
@@ -127,6 +129,12 @@ try {
       await page.locator('#workspace-editor-grid').evaluate(element => element.style.getPropertyValue('--workspace-primary-pane')),
       '63%',
     );
+    const dividerTargetWidth = await page.locator('#workspace-divider').evaluate(element => {
+      const box = element.getBoundingClientRect();
+      const after = getComputedStyle(element, '::after');
+      return box.width - Number.parseFloat(after.left) - Number.parseFloat(after.right);
+    });
+    assert.ok(dividerTargetWidth >= 24, `divider pointer target width: ${dividerTargetWidth}`);
 
     await page.locator('#workspace-prompt').fill('Verify the release');
     await page.locator('#workspace-composer').getByRole('button', { name: 'Run', exact: true }).click();
@@ -183,6 +191,12 @@ try {
     assert.equal(await page.locator('#workspace-demo').getAttribute('data-nav-collapsed'), 'true');
     await page.locator('#workspace-toggle-aside').click();
     assert.equal(await page.locator('#workspace-demo').getAttribute('data-aside-collapsed'), 'true');
+    const dividerTargetHeight = await page.locator('#workspace-divider').evaluate(element => {
+      const box = element.getBoundingClientRect();
+      const after = getComputedStyle(element, '::after');
+      return box.height - Number.parseFloat(after.top) - Number.parseFloat(after.bottom);
+    });
+    assert.ok(dividerTargetHeight >= 24, `mobile divider pointer target height: ${dividerTargetHeight}`);
     const stickyHeader = page.locator('body > .bar');
     await stickyHeader.evaluate(element => { element.style.visibility = 'hidden'; });
     await page.locator('#workspace-demo').screenshot({ path: path.join(out, 'glass-workspace-mobile.png') });

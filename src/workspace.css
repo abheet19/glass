@@ -248,7 +248,7 @@
 .workspace-divider::after {
   content: "";
   position: absolute;
-  inset: 0 calc(var(--sp-2) * -1);
+  inset: 0 calc(var(--sp-3) * -1);
 }
 
 .workspace-dock {
@@ -407,6 +407,6 @@
     grid-template-rows: minmax(9rem, 1fr) var(--sp-1) minmax(9rem, 1fr);
   }
   .workspace-divider { cursor: row-resize; }
-  .workspace-divider::after { inset: calc(var(--sp-2) * -1) 0; }
+  .workspace-divider::after { inset: calc(var(--sp-3) * -1) 0; }
   .workspace-statusbar { overflow-x: auto; white-space: nowrap; }
 }
