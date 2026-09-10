@@ -83,7 +83,7 @@ h2 { margin: 0; font-size: var(--fs-2); font-weight: 650; letter-spacing: -0.01e
 .sec-note { margin: 0; max-width: 66ch; color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
 .kicker {
   font-family: var(--font-mono); font-size: var(--fs-0); letter-spacing: .16em;
-  text-transform: uppercase; color: var(--ink-3);
+  text-transform: uppercase; color: var(--ink-2);
 }
 
 .grid { display: grid; gap: var(--sp-5); }
@@ -101,13 +101,13 @@ h2 { margin: 0; font-size: var(--fs-2); font-weight: 650; letter-spacing: -0.01e
 .ramp-swatch { height: 56px; }
 .ramp-meta { padding: var(--sp-2); background: var(--surface); }
 .ramp-name { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink); }
-.ramp-val { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); }
+.ramp-val { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
 
 /* ---- tables ------------------------------------------------------------- */
 .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface); }
 table { border-collapse: collapse; width: 100%; font-size: var(--fs-0); }
 th, td { text-align: left; padding: var(--sp-2) var(--sp-4); border-bottom: 1px solid var(--line); white-space: nowrap; }
-thead th { color: var(--ink-3); font-weight: 550; letter-spacing: .06em; text-transform: uppercase; font-size: var(--fs-0); }
+thead th { color: var(--ink-2); font-weight: 550; letter-spacing: .06em; text-transform: uppercase; font-size: var(--fs-0); }
 tbody tr:last-child td { border-bottom: 0; }
 td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
 td.tok { font-family: var(--font-mono); color: var(--ink-2); }
@@ -123,19 +123,19 @@ td.tok { font-family: var(--font-mono); color: var(--ink-2); }
 .gal-row:last-child { border-bottom: 0; }
 .gal-name { display: flex; flex-direction: column; gap: 2px; }
 .gal-title { font-weight: 600; color: var(--ink); font-size: var(--fs-1); }
-.gal-origin { font-size: var(--fs-0); color: var(--ink-3); }
+.gal-origin { font-size: var(--fs-0); color: var(--ink-2); }
 .strip { display: flex; height: 30px; border-radius: var(--r-1); overflow: hidden; border: 1px solid var(--line); }
 .strip > i { flex: 1; }
-.strip-label { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); margin-bottom: 4px; }
+.strip-label { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); margin-bottom: 4px; }
 
 /* ---- misc --------------------------------------------------------------- */
 .type-row { display: flex; align-items: baseline; gap: var(--sp-4); border-bottom: 1px solid var(--line); padding: var(--sp-3) 0; }
 .type-row:last-child { border-bottom: 0; }
-.type-tag { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); width: 6.5rem; flex: none; }
+.type-tag { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); width: 6.5rem; flex: none; }
 .radii { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
 .radii figure { margin: 0; text-align: center; }
 .radii .box { width: 76px; height: 56px; background: var(--raised); border: 1px solid var(--line); }
-.radii figcaption { margin-top: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-3); }
+.radii figcaption { margin-top: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
 .mono { font-family: var(--font-mono); }
 pre {
   margin: 0; padding: var(--sp-4); overflow-x: auto;
@@ -143,7 +143,7 @@ pre {
   font-family: var(--font-mono); font-size: var(--fs-0); line-height: var(--lh-2); color: var(--ink-2);
 }
 pre b { color: var(--accent); font-weight: 500; }
-footer { padding: var(--sp-8) 0; border-top: 1px solid var(--line); color: var(--ink-3); font-size: var(--fs-0); }
+footer { padding: var(--sp-8) 0; border-top: 1px solid var(--line); color: var(--ink-2); font-size: var(--fs-0); }
 footer a { color: var(--ink-2); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -523,9 +523,9 @@ footer a { color: var(--ink-2); }
 &lt;link rel="stylesheet" href="<b>src/themes/weft.css</b>"&gt;
 &lt;link rel="stylesheet" href="<b>src/primitives.css</b>"&gt;
 
-&lt;html <b>data-glass="weft"</b>&gt;            <span style="opacity:.6">&lt;!-- hue --&gt;</span>
+&lt;html <b>data-glass="weft"</b>&gt;            <span>&lt;!-- hue --&gt;</span>
 &lt;html data-glass="weft" <b>data-theme="light"</b>&gt;
-&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span style="opacity:.6">&lt;!-- no blur --&gt;</span></pre>
+&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span>&lt;!-- no blur --&gt;</span></pre>
       </div>
       <div class="card">
         <p class="kicker" style="margin:0 0 var(--sp-3)">verify</p>
@@ -533,9 +533,9 @@ footer a { color: var(--ink-2); }
   8 themes x 2 grounds = 16 palettes
   <span style="color:var(--ok)">PASS</span> — 814/814 assertions hold.
 
-<b>node scripts/contrast.mjs --verbose</b>   <span style="opacity:.6"># every pair</span>
-<b>node scripts/contrast.mjs --theme weft</b> <span style="opacity:.6"># one theme</span>
-<b>node scripts/contrast.mjs --emit-json</b>  <span style="opacity:.6"># rebuild tokens.json</span></pre>
+<b>node scripts/contrast.mjs --verbose</b>   <span># every pair</span>
+<b>node scripts/contrast.mjs --theme weft</b> <span># one theme</span>
+<b>node scripts/contrast.mjs --emit-json</b>  <span># rebuild tokens.json</span></pre>
       </div>
     </div>
   </section>
@@ -712,7 +712,7 @@ function renderBudget() {
       <td class="tok">${pair}</td>
       <td style="color:var(--ink-2);white-space:normal">${role}</td>
       <td class="num">${r.toFixed(2)}:1</td>
-      <td class="num" style="color:var(--ink-3)">${min.toFixed(1)}:1</td>
+      <td class="num" style="color:var(--ink-2)">${min.toFixed(1)}:1</td>
       <td class="verdict ${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>
     </tr>`;
   }).join('');
