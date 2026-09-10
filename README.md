@@ -2,6 +2,8 @@
 
 <br>
 
+<img src="brand/mark.svg" alt="Glass mark" width="112">
+
 # ◆ &nbsp;G L A S S
 
 ### **A theme owns hue. The system owns everything else.**

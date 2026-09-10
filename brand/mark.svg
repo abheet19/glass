@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Glass">
+  <title>Glass</title>
+  <defs>
+    <linearGradient id="pane-a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#72F1E6"/>
+      <stop offset="1" stop-color="#2878D8"/>
+    </linearGradient>
+    <linearGradient id="pane-b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8CA8FF"/>
+      <stop offset="1" stop-color="#B57AF2"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F4FFFD" stop-opacity=".78"/>
+      <stop offset=".65" stop-color="#F4FFFD" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#F4FFFD" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="#080B0F"/>
+  <!-- Two overlapping panes: one shared structure, different theme hues. -->
+  <rect x="45" y="43" width="122" height="166" rx="28" fill="#020407" transform="translate(10 10) rotate(-8 106 126)"/>
+  <rect x="89" y="47" width="122" height="166" rx="28" fill="#020407" transform="translate(10 10) rotate(8 150 130)"/>
+  <rect x="45" y="43" width="122" height="166" rx="28" fill="url(#pane-a)" opacity=".84" transform="rotate(-8 106 126)"/>
+  <rect x="89" y="47" width="122" height="166" rx="28" fill="url(#pane-b)" opacity=".78" transform="rotate(8 150 130)"/>
+  <path d="M66 69c27-15 52-17 76-8" fill="none" stroke="url(#shine)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M112 64c30-9 55-5 77 9" fill="none" stroke="#F4FFFD" stroke-opacity=".32" stroke-width="6" stroke-linecap="round"/>
+</svg>

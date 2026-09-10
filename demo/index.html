@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Glass — a design system extracted from eight projects</title>
 <meta name="description" content="oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose.">
+<link rel="icon" href="../brand/mark.svg" type="image/svg+xml">
 
 <!-- The system itself. Nothing else is loaded: no build step, no bundler, no
      CDN, no webfont. Open this file from disk and it works. -->
@@ -37,6 +38,7 @@
 }
 .bar-in { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: var(--sp-3); margin-right: auto; }
+.brand-mark { width: 34px; height: 34px; flex: none; border-radius: var(--r-1); }
 .brand-name {
   font-size: var(--fs-2); font-weight: 650; letter-spacing: .22em;
   line-height: 1; color: var(--ink);
@@ -161,16 +163,7 @@ footer a { color: var(--ink-2); }
 <header class="bar glass">
   <div class="wrap bar-in">
     <div class="brand">
-      <!-- Three planes — cast, flank, face — the construction the Zeno, Weft
-           and Vantage marks share. It takes its colour from the live tokens,
-           so it restyles itself with the theme. -->
-      <svg width="34" height="34" viewBox="0 0 64 64" role="img" aria-label="Glass">
-        <rect x="15" y="15" width="36" height="36" rx="9" transform="translate(5,5)" fill="var(--bg)"/>
-        <rect x="15" y="15" width="36" height="36" rx="9" transform="translate(2.5,2.5)" fill="var(--accent-2)"/>
-        <rect x="15" y="15" width="36" height="36" rx="9" fill="var(--accent)"/>
-        <rect x="15" y="15" width="36" height="36" rx="9" fill="none" stroke="var(--ink)" stroke-opacity=".45" stroke-width="1.5"/>
-        <path d="M22 41 L41 22" stroke="var(--on-accent)" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
-      </svg>
+      <img class="brand-mark" src="../brand/mark.svg" alt="">
       <span class="brand-name">GLASS</span>
       <span class="brand-sub" id="bar-sub">zeno · dark</span>
     </div>

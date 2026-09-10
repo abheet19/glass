@@ -53,8 +53,9 @@ jobs:
 
       - name: assemble _site
         run: |
-          mkdir -p _site/demo _site/src
+          mkdir -p _site/demo _site/src _site/brand
           cp -r src/. _site/src/
+          cp -r brand/. _site/brand/
           cp demo/index.html _site/demo/index.html
           cat > _site/index.html <<'HTML'
           <!doctype html>

@@ -47,6 +47,7 @@
     "src",
     "tailwind-preset.js",
     "scripts",
+    "brand",
     "README.md",
     "LICENSE"
   ],
