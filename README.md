@@ -35,9 +35,9 @@ that a script proves on every one of them.
 
 <div align="center">
 
-<img src="docs/demo/glass-demo.gif" alt="The Glass demo page cycling through all eight themes on both grounds, then the contrast budget recomputing live for each one — every row PASS." width="1000">
+<img src="docs/demo/glass-demo.gif" alt="The Glass demo cycling through all eight themes, recomputing the contrast budget, then exercising the responsive editor-and-agent workspace specimen." width="1000">
 
-<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure — then the same budget <code>scripts/contrast.mjs</code> asserts in CI, recomputed in the browser from the live tokens. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>.</sub>
+<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure; the same contrast budget CI asserts, recomputed from live tokens; then the responsive editor-and-agent workspace with real file and tool tabs. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>.</sub>
 
 <br>
 
@@ -583,8 +583,8 @@ Projects consume committed CSS or a local package reference, so a release is rep
 | Project | How it consumes glass | Verified |
 |---|---|---|
 | **[Zeno](https://github.com/abheet19/Zeno)** | `packages/daemon` depends on `@abheet19/glass` via a `file:` workspace reference. Its static-asset sync script exposes the installed CSS to the daemon without changing Zeno's own colour law. | The dependency/import boundary is real; current product behavior and test totals belong to Zeno's own verification artifact. |
-| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Current local source gate: 612 distinct Vitest + 28 Playwright cases. See [Weft's dated verification](https://github.com/abheet19/Weft/blob/main/docs/VERIFICATION.md) for the separate public-image SHA. |
-| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | Current local source gate: 825 distinct cases with configured coverage gates; see [Vantage's dated verification](https://github.com/abheet19/Vantage/blob/main/docs/VERIFICATION.md). |
+| **[Weft](https://weft-abheet.fly.dev)** | `packages/client` imports a committed, generated copy of `tokens.css` underneath Weft's own teal/indigo `:root` block. | Current release gate: 613 distinct Vitest cases + 33 Chromium cases. See [Weft's dated verification](https://github.com/abheet19/Weft/blob/main/docs/VERIFICATION.md) for the separate public-image SHA. |
+| **[Vantage](https://vantage-abheet.fly.dev)** | `apps/web` imports the same, underneath Vantage's own gold/ochre `:root` block. | Current release gate: 834 cases with configured coverage gates; see [Vantage's dated verification](https://github.com/abheet19/Vantage/blob/main/docs/VERIFICATION.md). |
 
 Weft and Vantage's Fly.io Docker builds run from each repo's own directory as build context, with
 no sibling repo reachable — so neither can take a live `file:`/npm link to a `glass` checked out
@@ -641,8 +641,9 @@ $ npm run record:demo                # tools/record-demo.mjs  → docs/demo/.fra
 $ python tools/assemble_gif.py       # Pillow                 → docs/demo/glass-demo.gif
 ```
 
-`record-demo.mjs` drives the page's own theme switcher and screenshots it at 1280 CSS px on a 2×
-device scale, so the downscale to 1000 px supersamples and the table text stays sharp.
+`record-demo.mjs` drives the page's theme switcher, contrast budget, and workspace controls, then
+screenshots them at 1280 CSS px on a 2× device scale. The downscale to 1000 px supersamples the
+UI so table and editor text stay sharp.
 `assemble_gif.py` quantises every frame against **one shared 256-colour palette with dithering
 off** — Floyd–Steinberg noise is uncorrelated between frames and destroys GIF's inter-frame
 compression on flat surfaces like these. The storyboard lives in the `board` array at the top of

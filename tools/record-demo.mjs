@@ -40,6 +40,9 @@ const board = [
   { theme: 'weft', ground: 'dark', at: 'budget', hold: 1300 },
   { theme: 'textify', ground: 'dark', at: 'budget', hold: 1300 },
   { theme: 'zeno', ground: 'dark', at: 'budget', hold: 1400 },
+  // beat 3 — the newest reusable surface: an editor-and-agent workspace.
+  { theme: 'zeno', ground: 'dark', at: 'workspace', hold: 1400 },
+  { theme: 'weft', ground: 'light', at: 'workspace', hold: 1400, action: 'workspace-tools' },
 ];
 
 const browser = await chromium.launch({ channel: process.env.GLASS_BROWSER_CHANNEL });
@@ -65,9 +68,13 @@ const CAP_MS = 1400;
 const SAMPLE_MS = 100;
 
 for (const [i, shot] of board.entries()) {
-  await page.evaluate(({ theme, ground, at }) => {
+  await page.evaluate(({ theme, ground, at, action }) => {
     document.querySelector(`[data-theme-btn="${theme}"]`).click();
     document.querySelector(`[data-ground="${ground}"]`).click();
+    if (action === 'workspace-tools') {
+      document.getElementById('workspace-file-tab-policy').click();
+      document.getElementById('workspace-dock-tab-terminal').click();
+    }
     if (at === 'top') window.scrollTo(0, 0);
     else {
       // Leave the sticky bar clear of the section heading.
