@@ -1,20 +1,23 @@
 {
   "url": "file:///D:/Code/glass/demo/index.html",
   "checks": [
-    "all eight themes on both grounds update selected controls and measured budget",
-    "keyboard theme activation retains focus after redraw",
-    "system ground follows preference and flat mode toggles off and on",
-    "gallery selection supports keyboard space",
-    "tabs implement roving focus, arrow keys, Home/End and connected panels",
-    "tooltip works with focus and does not stay permanently visible",
-    "native fields and state specimen buttons respond",
-    "workspace shell controls every panel, tab, tree, split and composer flow",
+    "onboarding walks accent + ground picks, enters the Studio, and is not shown again",
+    "all eight themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA",
+    "WCAG AA/AAA target changes the required minimum and the live pass count",
+    "roving tabindex, arrow keys, Home/End work across Library, Settings and Detail tabs",
+    "command palette opens, filters, runs an action by keyboard, and closes; shortcuts overlay opens and closes",
+    "sidebar navigation, mobile hamburger, and project rows carry real GitHub links",
+    "library search, category filter, and card-to-detail navigation with correct breadcrumbs",
+    "detail tabs render live tokens, escaped/copyable code, and computed accessibility rows",
+    "interactive specimens respond: switch, checkbox/radio, tabs, tooltip, menu, toast, modal",
+    "workspace pattern controls every panel, tab, tree, split and composer flow",
     "accessible names, labels, IDs and local anchors are structurally complete",
     "reduced motion stops skeleton animation",
-    "deep links select expected palette",
+    "restart-onboarding confirms with a real modal, and Cancel leaves state untouched",
+    "deep links select the expected accent, ground, transparency and screen",
     "mobile layout contains overflow within intended scroll containers"
   ],
-  "count": 12,
+  "count": 15,
   "browserErrors": [],
-  "scope": "Behavior and screenshots; contrast math is separately checked by npm run check. No pixel-baseline or consumer-app certification."
+  "scope": "Behavior and screenshots for the Glass Studio demo app; contrast math is separately checked by npm run check. No pixel-baseline or consumer-app certification."
 }

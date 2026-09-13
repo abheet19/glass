@@ -53,6 +53,10 @@ const page = await browser.newPage({
   reducedMotion: 'reduce',
 });
 await page.goto(page_url, { waitUntil: 'load' });
+// Fresh profile: skip the onboarding screen so the storyboard starts on the Studio shell itself.
+await page.locator('#obSkip').click();
+await page.locator('#sidebar [data-goto="settings"]').click();
+await page.locator('#settab-appearance').click();
 await page.waitForFunction(() => document.querySelectorAll('[data-theme-btn]').length === 8);
 
 await rm(outDir, { recursive: true, force: true });
@@ -67,19 +71,29 @@ const frames = [];
 const CAP_MS = 1400;
 const SAMPLE_MS = 100;
 
+// Studio screens: 'ramp'/'budget' live in Library → Foundations, 'workspace' in
+// Library → Patterns. Theme and ground stay set from Settings → Appearance
+// throughout, since switching screens does not reset the accent/ground state.
 for (const [i, shot] of board.entries()) {
   await page.evaluate(({ theme, ground, at, action }) => {
+    document.querySelector('#sidebar [data-goto="settings"]').click();
+    document.querySelector('#settab-appearance').click();
     document.querySelector(`[data-theme-btn="${theme}"]`).click();
     document.querySelector(`[data-ground="${ground}"]`).click();
+    document.querySelector('#sidebar [data-goto="library"]').click();
+    document.querySelector(at === 'workspace' ? '#libtab-patterns' : '#libtab-foundations').click();
     if (action === 'workspace-tools') {
-      document.getElementById('workspace-file-tab-policy').click();
+      document.getElementById('workspace-file-tab-forms').click();
       document.getElementById('workspace-dock-tab-terminal').click();
     }
-    if (at === 'top') window.scrollTo(0, 0);
-    else {
-      // Leave the sticky bar clear of the section heading.
-      const y = document.getElementById(at).getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, Math.max(0, y - 96));
+    const scrollTarget = at === 'ramp' ? '#ramp-strip' : at === 'budget' ? '#budget-rows' : null;
+    if (scrollTarget) {
+      const el = document.querySelector(scrollTarget);
+      const content = document.getElementById('content');
+      if (el && content) content.scrollTop = Math.max(0, el.getBoundingClientRect().top + content.scrollTop - 24);
+    } else {
+      const content = document.getElementById('content');
+      if (content) content.scrollTop = 0;
     }
   }, shot);
 

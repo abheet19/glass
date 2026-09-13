@@ -37,7 +37,7 @@ that a script proves on every one of them.
 
 <img src="docs/demo/glass-demo.gif" alt="The Glass demo cycling through all eight themes, recomputing the contrast budget, then exercising the responsive editor-and-agent workspace specimen." width="1000">
 
-<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure; the same contrast budget CI asserts, recomputed from live tokens; then the responsive editor-and-agent workspace with real file and tool tabs. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>.</sub>
+<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure; the same contrast budget CI asserts, recomputed from live tokens; then the responsive editor-and-agent workspace with real file and tool tabs. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>. <b>This frame predates the Studio app-shell redesign below</b> (onboarding, sidebar, library, settings, command palette) — it still shows every value it claims to, just inside the prior single-page layout, and is due for a re-capture.</sub>
 
 <br>
 
@@ -84,6 +84,7 @@ $ node scripts/contrast.mjs
 - [The contrast law](#-the-contrast-law)
 - [The components](#-the-components)
 - [Workspace shells](#workspace-shells)
+- [Glass Studio — the demo as an app](#-glass-studio--the-demo-as-an-app)
 - [Accessibility](#-accessibility)
 - [Project integrations](#-project-integrations)
 - [Screenshots](#-screenshots)
@@ -557,6 +558,34 @@ channels mean the status survives a greyscale print and a colour-vision differen
 
 ---
 
+## 🖥 Glass Studio — the demo as an app
+
+`demo/index.html` is no longer a single scrolling page. It is **Glass Studio**: an app shell built
+entirely from the six real component files above — the same primitives, the same tokens, no second
+design language — so the demo is both the reference and the dogfood.
+
+| Screen | What it is |
+|---|---|
+| **Onboarding** | Two steps, shown once (a `localStorage` flag, reset from the sidebar or the avatar menu): pick one of the eight real accents, then a ground. Both choices are the live `data-glass`/`data-theme` attributes, not a rehearsal. |
+| **Overview** | A hero, then four **live** stat tiles — pairs passing right now, components documented, themes on shared tokens, the active palette — each read out of the same `getComputedStyle` pipeline as the ramp and the budget, not typed numbers. |
+| **Library → Components** | A searchable, filterable grid of every real component (primitives, forms, navigation, feedback, data — 21 entries, always `COMPONENTS.length`, never hand-counted). Opening one goes to a **Detail** screen with Preview / Tokens / Code / Accessibility tabs — Tokens and Accessibility are computed live at the current theme, ground and WCAG target; Code is copyable. |
+| **Library → Foundations** | The ramp, the law (the same 15 pairs `scripts/contrast.mjs` checks, computed in the browser), type & radii, and the eight-theme gallery — unchanged in substance from the previous single-page layout, just organised as a tab. |
+| **Library → Patterns** | The workspace shell specimen, verbatim in behaviour (file tabs, dock tabs, tree disclosure, resizable split, composer) — just relocated off the main scroll and into its own pane. |
+| **Settings** | Appearance (ground, accent, reduce-transparency — a real `.switch` on a native checkbox), Accessibility (the **AA/AAA target**, a new live toggle: AAA raises text to 7:1 per WCAG 1.4.6; WCAG defines no stricter tier for non-text contrast, so graphic pairs hold at 3:1 either way — the copy says so rather than fudging a number), Projects (the eight source repositories, each a real `github.com/abheet19/<repo>` link — no fabricated version or sync-time), and Install (the actual, honest install paths: git clone, submodule, plain CSS, verify — this package is **not on npm**, and the panel never pretends otherwise). |
+
+A command palette (`⌘K` / `Ctrl+K`) and a shortcuts overlay (`?`) run the same actions the UI does —
+navigate, set an accent, cycle ground, toggle the WCAG target, recompute the live budget, copy the
+clone command, or jump to any component — nothing in the palette is a shortcut to a different code
+path than clicking would take. The sidebar's **Projects** list links out to all eight real
+repositories under [github.com/abheet19](https://github.com/abheet19), and the footer credits the
+author the same way every screen does.
+
+Consequence: this is one more consumer of the package, not a second one. If a token, a primitive or
+a pattern changes, the Studio changes with it, because it imports exactly the same eight stylesheets
+`Install and use` tells you to.
+
+---
+
 ## ♿ Accessibility
 
 Not a section at the end — it is the thing the package is for. Glass is a decoration, so **every one
@@ -602,16 +631,28 @@ ShieldAI and Textify also vendor committed Glass CSS with the MIT license. Their
 npm run check              # 814 numerical/structural assertions, 16 palettes
 npm install
 npx playwright install chromium
-npm run test:browser       # 12 groups covering themes, controls, workspace and 320 px layout
+npm run test:browser       # 15 groups covering onboarding, the Studio shell, the command
+                           # palette, the AA/AAA target, the library, the workspace pattern
+                           # and 320 px layout
 ```
 
-Every visible demo action returns an observable result. Tabs, theme controls, fields, menus, tooltips, workspace files, panel toggles, tree disclosure, split resize, all five tool tabs, the composer, and run details are browser exercised. CI and Pages publication run the source-quality, contrast, and browser gates. Screenshots are retained evidence, not pixel-diff baselines.
+Every visible demo action returns an observable result. Onboarding, the command palette and
+shortcuts overlay, all eight themes on both grounds at both WCAG targets, roving-tabindex tab
+strips, the library's search and category filters, component detail tabs, native form specimens,
+menus, tooltips, toasts, the confirm modal, workspace files, panel toggles, tree disclosure, split
+resize, all five tool tabs, the composer, and structural accessibility (no duplicate IDs, no
+unlabelled fields, no unnamed buttons, no broken anchors) are browser exercised. CI and Pages
+publication run the source-quality, contrast, and browser gates. Screenshots are retained evidence,
+not pixel-diff baselines.
 
 ## 📸 Screenshots
 
 The demo is a single self-contained file — no build step, no server, no network. It reads its own
 computed tokens back out of `getComputedStyle`, converts them with the same maths `contrast.mjs`
-uses, and **measures itself in front of you**. Switch theme or ground and every number recomputes.
+uses, and **measures itself in front of you**. Switch theme, ground or WCAG target anywhere in the
+Studio and every number recomputes. Fresh evidence captures of the current Studio shell (desktop,
+mobile, workspace pattern) are written by `npm run test:browser` to `docs/verification/` on every
+run — the two frames below are still the earlier single-page layout and are due for a re-capture.
 
 <div align="center">
 
@@ -627,7 +668,7 @@ uses, and **measures itself in front of you**. Switch theme or ground and every 
 
 </div>
 
-<div align="center"><sub><a href="demo/index.html">demo/index.html</a> — or <a href="https://abheet19.github.io/glass/demo/">open it live</a>. Deep-link a palette with <code>?glass=weft&amp;theme=light</code>.</sub></div>
+<div align="center"><sub><a href="demo/index.html">demo/index.html</a> — or <a href="https://abheet19.github.io/glass/demo/">open it live</a>. Deep-link a palette and a screen with <code>?glass=weft&amp;theme=light&amp;screen=library</code>.</sub></div>
 
 ### Recording the demo GIF
 
@@ -641,9 +682,13 @@ $ npm run record:demo                # tools/record-demo.mjs  → docs/demo/.fra
 $ python tools/assemble_gif.py       # Pillow                 → docs/demo/glass-demo.gif
 ```
 
-`record-demo.mjs` drives the page's theme switcher, contrast budget, and workspace controls, then
-screenshots them at 1280 CSS px on a 2× device scale. The downscale to 1000 px supersamples the
-UI so table and editor text stay sharp.
+`record-demo.mjs` drives the Studio's own controls — Settings → Appearance for theme and ground,
+Library → Foundations for the ramp and the live budget, Library → Patterns for the workspace —
+then screenshots them at 1280 CSS px on a 2× device scale. The downscale to 1000 px supersamples the
+UI so table and editor text stay sharp. The script's selectors were updated for the Studio shell;
+the hero GIF above still shows the prior single-page layout and needs a fresh `npm run record:demo`
++ `python tools/assemble_gif.py` pass to catch up (not part of `npm run validate`, so it does not
+gate CI or Pages).
 `assemble_gif.py` quantises every frame against **one shared 256-colour palette with dithering
 off** — Floyd–Steinberg noise is uncorrelated between frames and destroys GIF's inter-frame
 compression on flat surfaces like these. The storyboard lives in the `board` array at the top of

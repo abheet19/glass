@@ -13,7 +13,7 @@ eight seed values per theme + shared semantic tokens
   -> CSS cascade and accessibility modes
   -> primitives/forms/navigation/feedback/data/workspace sheets
   -> plain-HTML interactive demo and downstream products
-  -> source-quality + 814 contrast/structure assertions + 12 browser groups
+  -> source-quality + 814 contrast/structure assertions + 15 browser groups
   -> exact-SHA GitHub Pages release
 ```
 
@@ -29,7 +29,7 @@ eight seed values per theme + shared semantic tokens
 | `src/components.css` | single import for all six component sheets |
 | `scripts/contrast.mjs` | colour math, budgets, seed/ladder/state/variable/JSON laws |
 | `tools/quality.mjs`, `tools/verify-demo.mjs` | source hygiene and real-browser acceptance |
-| `demo/index.html` | all-control specimen and copyable integration reference |
+| `demo/index.html` | Glass Studio — an app shell (onboarding, sidebar, library, detail, settings, command palette) built from the same six stylesheets, all-control specimen and copyable integration reference |
 | `.github/workflows` | CI and exact-SHA Pages assembly/deployment |
 
 ## Invariants
@@ -43,7 +43,13 @@ eight seed values per theme + shared semantic tokens
 
 ## User flows
 
-Switch eight themes and three ground choices; toggle flat mode; inspect the live contrast budget; operate fields, buttons, menus, tabs, tooltips, feedback and data specimens; then exercise every workspace file, panel, disclosure, split, dock tab, and composer action on desktop and mobile.
+Onboard by picking an accent and a ground; navigate Overview, Library (Components / Foundations /
+Patterns) and Settings (Appearance / Accessibility / Projects / Install) from a persistent sidebar,
+or via a command palette (`⌘K`) and a shortcuts overlay (`?`); switch eight themes, three ground
+choices, flat mode, and the AA/AAA target, all recomputing the live contrast budget; open any
+component into a Detail screen with live Tokens and Accessibility tabs and copyable Code; operate
+fields, buttons, menus, tabs, tooltips, toasts, a confirm modal, and data specimens; then exercise
+every workspace file, panel, disclosure, split, dock tab, and composer action on desktop and mobile.
 
 ## Delivery and limits
 

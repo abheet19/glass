@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glass — a design system extracted from eight projects</title>
-<meta name="description" content="oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose.">
+<title>Glass Studio — a design system extracted from eight projects</title>
+<meta name="description" content="oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose. Browsable as an app: a library, a live accessibility budget, and the eight projects it ships to.">
 <link rel="icon" href="../brand/mark.svg" type="image/svg+xml">
 
 <!-- The system itself. Nothing else is loaded: no build step, no bundler, no
@@ -27,991 +27,1690 @@
 
 <style>
 /* Demo-only layout. Every value below is a token from the system; this page
-   introduces no colour, no radius, no duration and no font of its own. */
+   introduces no colour, no radius, no duration and no font of its own. Where
+   a real primitive already fits (.metric-card, .search-filter-bar,
+   .workspace-tree-item, .workspace-icon-button, .toast-region, .modal…) this
+   file reuses it rather than inventing a parallel one — the app you are
+   looking at is built from the same six files a consumer imports. */
 
-.wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--sp-6); }
-
-/* ---- the bar ------------------------------------------------------------ */
-.bar {
-  position: sticky; top: 0; z-index: 20;
-  border-radius: 0; border-width: 0 0 1px;
-  padding: var(--sp-3) 0;
-}
-.bar-in { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
-.brand { display: flex; align-items: center; gap: var(--sp-3); margin-right: auto; }
-.brand-mark { width: 34px; height: 34px; flex: none; border-radius: var(--r-1); }
-.brand-name {
-  font-size: var(--fs-2); font-weight: 650; letter-spacing: .22em;
-  line-height: 1; color: var(--ink);
-}
-.brand-sub { font-size: var(--fs-0); color: var(--ink-2); letter-spacing: .02em; }
-
-.seg {
-  display: inline-flex; gap: 2px; padding: 3px;
-  background: color-mix(in srgb, var(--ink) 7%, var(--surface));
-  border: 1px solid var(--line); border-radius: var(--r-1);
-}
-.seg .btn { border-color: transparent; background: transparent; color: var(--ink-2); }
-.seg .btn[aria-pressed="true"] { background: var(--raised); border-color: var(--line); color: var(--ink); }
-#flat[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-
-.swatch-btn {
-  display: inline-flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-1) var(--sp-3) var(--sp-1) var(--sp-2);
-}
-.dot { width: 11px; height: 11px; border-radius: var(--r-pill); flex: none; box-shadow: inset 0 0 0 1px oklch(0% 0 0 / .28); }
-.themes {
-  order: 2; flex: 1 0 100%;
-  display: flex; flex-wrap: wrap; gap: var(--sp-2);
-  padding-top: var(--sp-3); border-top: 1px solid var(--gl-edge);
-}
-
-/* ---- hero --------------------------------------------------------------- */
-.hero { padding: var(--sp-8) 0 var(--sp-7); }
-.display {
-  margin: 0 0 var(--sp-4);
-  font-size: var(--fs-3); line-height: var(--lh-1); font-weight: 680;
-  letter-spacing: -0.03em; color: var(--ink);
-}
-.display em { font-style: normal; color: var(--accent); }
-.lede { max-width: 62ch; margin: 0 0 var(--sp-5); color: var(--ink-2); font-size: var(--fs-2); line-height: var(--lh-3); }
-.hero-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
-
-/* ---- sections ----------------------------------------------------------- */
-section { padding: var(--sp-8) 0; border-top: 1px solid var(--line); }
-.sec-head { display: flex; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-6); }
-h2 { margin: 0; font-size: var(--fs-2); font-weight: 650; letter-spacing: -0.01em; color: var(--ink); }
-.sec-note { margin: 0; max-width: 66ch; color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
-.kicker {
-  font-family: var(--font-mono); font-size: var(--fs-0); letter-spacing: .16em;
-  text-transform: uppercase; color: var(--ink-2);
-}
-
-.grid { display: grid; gap: var(--sp-5); }
-.g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
-.g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.stack { display: flex; flex-direction: column; gap: var(--sp-4); }
-.row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
-
-/* ---- the ramp ----------------------------------------------------------- */
-.ramp { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: var(--sp-2); }
-.ramp-cell {
-  border: 1px solid var(--line); border-radius: var(--r-1); overflow: hidden;
-  display: flex; flex-direction: column;
-}
-.ramp-swatch { height: 56px; }
-.ramp-meta { padding: var(--sp-2); background: var(--surface); }
-.ramp-name { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink); }
-.ramp-val { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
-
-/* ---- tables ------------------------------------------------------------- */
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface); }
-table { border-collapse: collapse; width: 100%; font-size: var(--fs-0); }
-th, td { text-align: left; padding: var(--sp-2) var(--sp-4); border-bottom: 1px solid var(--line); white-space: nowrap; }
-thead th { color: var(--ink-2); font-weight: 550; letter-spacing: .06em; text-transform: uppercase; font-size: var(--fs-0); }
-tbody tr:last-child td { border-bottom: 0; }
-td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
-td.tok { font-family: var(--font-mono); color: var(--ink-2); }
-.verdict { font-family: var(--font-mono); font-weight: 600; }
-.verdict.pass { color: var(--ok); }
-.verdict.fail { color: var(--bad); }
-
-/* ---- gallery ------------------------------------------------------------ */
-.gal-row {
-  display: grid; grid-template-columns: minmax(150px, 1fr) 1fr 1fr; gap: var(--sp-4);
-  align-items: center; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--line);
-}
-.gal-row:last-child { border-bottom: 0; }
-.gal-name { display: flex; flex-direction: column; gap: 2px; }
-.gal-title { font-weight: 600; color: var(--ink); font-size: var(--fs-1); }
-.gal-origin { font-size: var(--fs-0); color: var(--ink-2); }
-.strip { display: flex; height: 30px; border-radius: var(--r-1); overflow: hidden; border: 1px solid var(--line); }
-.strip > i { flex: 1; }
-.strip-label { display: block; font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); margin-bottom: 4px; }
-
-/* ---- misc --------------------------------------------------------------- */
-.type-row { display: flex; align-items: baseline; gap: var(--sp-4); border-bottom: 1px solid var(--line); padding: var(--sp-3) 0; }
-.type-row:last-child { border-bottom: 0; }
-.type-tag { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); width: 6.5rem; flex: none; }
-.radii { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
-.radii figure { margin: 0; text-align: center; }
-.radii .box { width: 76px; height: 56px; background: var(--raised); border: 1px solid var(--line); }
-.radii figcaption { margin-top: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
-/* Dense 13.5px specimen labels use primary ink. This keeps the reference page
-   above 4.5:1 even in audit engines that quantize OKLCH secondary ink. */
-.ramp-val,
-thead th,
-#budget-rows td.num,
-.kicker,
-.type-tag,
-.radii figcaption,
-.gal-origin,
-.strip-label { color: var(--ink); }
-.mono { font-family: var(--font-mono); }
-pre {
-  margin: 0; padding: var(--sp-4); overflow-x: auto;
-  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2);
-  font-family: var(--font-mono); font-size: var(--fs-0); line-height: var(--lh-2); color: var(--ink-2);
-}
-pre b { color: var(--accent); font-weight: 500; }
-footer { padding: var(--sp-8) 0; border-top: 1px solid var(--line); color: var(--ink-2); font-size: var(--fs-0); }
-footer a { color: var(--ink-2); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-@media (max-width: 720px) {
-  .gal-row { grid-template-columns: 1fr; }
-  .wrap { padding: 0 var(--sp-4); }
-}
+[role="tabpanel"][hidden] { display: none; }
 .tooltip-trigger .tooltip { visibility: hidden; }
 .tooltip-trigger:hover .tooltip, .tooltip-trigger:focus-visible .tooltip { visibility: visible; }
-[role="tabpanel"][hidden] { display: none; }
+
+/* ---- app shell ------------------------------------------------------------ */
+.studio { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.topbar {
+  flex: none; z-index: var(--z-dropdown);
+  display: flex; align-items: center; gap: var(--sp-3);
+  height: calc(var(--target-min) + var(--sp-5));
+  padding: 0 var(--sp-5);
+  border-bottom: 1px solid var(--gl-edge);
+  background: var(--gl-fill);
+  -webkit-backdrop-filter: var(--gl-blur); backdrop-filter: var(--gl-blur);
+}
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 650; letter-spacing: .04em; color: var(--ink); }
+.brand-mark { width: 26px; height: 26px; flex: none; border-radius: var(--r-1); }
+.brand-tag {
+  font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2);
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 0 var(--sp-2); margin-left: 2px;
+}
+.hamburger { display: none; }
+.cmdk-trigger {
+  flex: 1 1 auto; min-width: 0; max-width: 26rem; margin: 0 auto 0 var(--sp-5);
+  display: flex; align-items: center; gap: var(--sp-2);
+  min-height: calc(var(--target-min) - 4px); padding: 0 var(--sp-3); border-radius: var(--r-1);
+  background: var(--bg); border: 1px solid var(--line); color: var(--ink-2); font-size: var(--fs-0);
+  text-align: left; cursor: pointer;
+}
+.cmdk-trigger:hover { border-color: var(--accent); color: var(--ink); }
+.cmdk-trigger svg { width: 15px; height: 15px; flex: none; }
+.cmdk-trigger span.grow { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kbd {
+  font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2);
+  border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; background: var(--surface); line-height: 1.6;
+}
+.top-actions { display: flex; align-items: center; gap: var(--sp-1); margin-left: auto; }
+.avatar-wrap { position: relative; }
+.menu-anchor { position: absolute; top: calc(100% + var(--sp-2)); right: 0; z-index: var(--z-dropdown); width: 15rem; padding: var(--sp-1); }
+
+/* ---- shell body: sidebar + content ---------------------------------------- */
+.shell-body { flex: 1 1 auto; display: flex; min-height: 0; }
+.sidebar {
+  width: 15.5rem; flex: none; min-height: 0; overflow-y: auto; overflow-x: hidden;
+  border-right: 1px solid var(--gl-edge); background: var(--gl-fill);
+  -webkit-backdrop-filter: var(--gl-blur); backdrop-filter: var(--gl-blur);
+  padding: var(--sp-4) var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-5);
+}
+.nav-label {
+  display: block; margin: 0 var(--sp-2) var(--sp-1);
+  font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.nav-group { display: flex; flex-direction: column; gap: 2px; }
+.nav-item svg { width: 15px; height: 15px; flex: none; }
+.nav-item[aria-current="page"] { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--ink); }
+.nav-item[aria-current="page"] svg { color: var(--accent); }
+.nav-badge {
+  margin-left: auto; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-2);
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-pill); padding: 0 7px;
+}
+.proj-row { justify-content: flex-start; }
+.proj-dot { width: 9px; height: 9px; border-radius: var(--r-pill); flex: none; background: var(--dot); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot) 22%, transparent); }
+.proj-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1 1 auto; }
+.proj-name { font-size: var(--fs-0); font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proj-sub { font-size: .7rem; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proj-link {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: var(--r-1); color: var(--ink-3);
+}
+.proj-link:hover { color: var(--ink); background: var(--raised); }
+.proj-link svg { width: 12px; height: 12px; }
+.sidebar-footer { margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--gl-edge); display: flex; flex-direction: column; gap: var(--sp-2); }
+.footer-link { display: flex; align-items: center; gap: var(--sp-2); background: none; border: none; color: var(--ink-2); font-size: var(--fs-0); font-weight: 600; padding: var(--sp-1) var(--sp-2); border-radius: var(--r-1); cursor: pointer; text-align: left; }
+.footer-link:hover { color: var(--ink); background: var(--raised); }
+.footer-link svg { width: 13px; height: 13px; flex: none; }
+.eco-badge { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); padding: 0 var(--sp-2); }
+.eco-badge a { color: var(--ink-2); }
+.eco-badge a:hover { color: var(--accent); }
+
+.content { flex: 1 1 auto; min-width: 0; min-height: 0; overflow-y: auto; }
+.screen { padding: var(--sp-6) var(--sp-6) var(--sp-8); max-width: 68rem; margin: 0 auto; }
+.screen-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-5); }
+.sec-label { display: flex; align-items: center; gap: var(--sp-2); margin: var(--sp-6) 0 var(--sp-3); font-family: var(--font-mono); font-size: var(--fs-0); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; }
+.sec-label:first-child { margin-top: 0; }
+
+/* ---- overview -------------------------------------------------------------- */
+.hero-card { position: relative; overflow: hidden; margin-bottom: var(--sp-6); }
+.hero-title { max-width: 32ch; margin-top: var(--sp-3); }
+.hero-title em { font-style: normal; color: var(--accent); }
+.spec-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-5); }
+.quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+.quick-card { display: flex; flex-direction: column; gap: var(--sp-2); text-align: left; cursor: pointer; }
+.quick-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.quick-card svg { width: 18px; height: 18px; color: var(--accent); }
+.quick-card b { font-size: var(--fs-1); color: var(--ink); }
+.quick-card span.qc-note { font-size: var(--fs-0); color: var(--ink-2); }
+.credit-line { font-size: var(--fs-0); color: var(--ink-3); text-align: center; padding: var(--sp-6) 0 0; }
+
+/* ---- library: filter/grid --------------------------------------------------- */
+.chip-row { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+.chip-filter { cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); }
+.chip-filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: var(--sp-4); }
+.comp-card { display: flex; flex-direction: column; gap: var(--sp-3); text-align: left; cursor: pointer; }
+.comp-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.comp-preview {
+  height: 74px; border-radius: var(--r-1); background: var(--bg); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-2); padding: var(--sp-2); overflow: hidden;
+}
+.comp-name { font-family: var(--font-mono); font-weight: 650; font-size: var(--fs-1); color: var(--ink); }
+.comp-blurb { font-size: var(--fs-0); color: var(--ink-2); line-height: var(--lh-2); flex: 1; margin: 0; }
+.comp-foot { display: flex; align-items: center; justify-content: space-between; padding-top: var(--sp-2); border-top: 1px solid var(--line); }
+.comp-file { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+.mini-btn { min-height: auto; height: 22px; padding: 0 var(--sp-2); font-size: .68rem; }
+.mini-field { width: 100%; height: 24px; }
+.mini-chip { height: 18px; font-size: .62rem; padding: 0 6px; }
+
+/* ---- detail ----------------------------------------------------------------- */
+.detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); margin: var(--sp-3) 0 var(--sp-4); flex-wrap: wrap; }
+.detail-title { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.detail-title h1 { font-family: var(--font-mono); font-size: var(--fs-3); font-weight: 650; margin: 0; color: var(--ink); }
+.detail-cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--sp-5); align-items: start; }
+.panel-label { display: block; margin-bottom: var(--sp-3); font-size: var(--fs-0); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); font-weight: 650; }
+.preview-stage {
+  min-height: 13rem; border-radius: var(--r-2); border: 1px solid var(--line);
+  background: var(--bg); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--sp-4); padding: var(--sp-5);
+}
+.token-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) 0; border-top: 1px solid var(--line); font-size: var(--fs-0); }
+.token-row:first-child { border-top: none; }
+.token-name { font-family: var(--font-mono); color: var(--ink-2); }
+.token-val { font-family: var(--font-mono); font-weight: 600; color: var(--ink); white-space: nowrap; }
+.copy-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-2); }
+pre.code-block { margin: 0; padding: var(--sp-4); overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2); font-family: var(--font-mono); font-size: var(--fs-0); line-height: var(--lh-2); color: var(--ink-2); }
+pre.code-block .tag { color: var(--accent); }
+
+/* ---- settings ---------------------------------------------------------------- */
+.settings-grid { display: flex; flex-direction: column; gap: var(--sp-4); }
+.seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: var(--r-1); background: var(--bg); border: 1px solid var(--line); }
+.seg .btn { border-color: transparent; background: transparent; color: var(--ink-2); }
+.seg .btn[aria-pressed="true"] { background: var(--raised); border-color: var(--line); color: var(--ink); }
+.seg3 { display: flex; gap: var(--sp-2); }
+.seg3 .opt-tile { flex: 1; }
+.opt-tile { display: block; text-align: left; padding: var(--sp-3); border-radius: var(--r-1); border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.opt-tile[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+.opt-tile b { display: block; font-size: var(--fs-1); color: var(--ink); }
+.opt-tile span { display: block; font-size: var(--fs-0); color: var(--ink-2); margin-top: 2px; }
+.swatch-grid { display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-3); }
+.swatch-dot { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+.swatch-dot[aria-pressed="true"] { border-color: var(--ink); }
+.swatch-dot .check { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; color: #0a0d12; }
+.swatch-dot[aria-pressed="true"] .check { opacity: 1; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-1) 0; }
+.switch-copy b { display: block; font-size: var(--fs-1); font-weight: 650; color: var(--ink); }
+.switch-copy span { font-size: var(--fs-0); color: var(--ink-2); }
+.gauge-card { display: flex; align-items: center; gap: var(--sp-5); }
+.gauge-card .gauge { flex: 1 1 auto; }
+.gauge-big { font-family: var(--font-mono); font-size: var(--fs-2); color: var(--ink); flex: none; min-width: 4.5rem; text-align: right; }
+
+/* ---- onboarding --------------------------------------------------------------- */
+.onboarding:not([hidden]) { min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; padding: var(--sp-6); max-width: 52rem; margin: 0 auto; }
+.ob-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-7); }
+.ob-progress { display: flex; gap: var(--sp-1); }
+.ob-dot { width: 24px; height: 4px; border-radius: 3px; background: var(--line); }
+.ob-dot.active { background: var(--accent); }
+.ob-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); margin-top: var(--sp-6); }
+.accent-tile { display: flex; flex-direction: column; gap: var(--sp-2); text-align: left; position: relative; cursor: pointer; }
+.accent-tile .swatch { width: 100%; height: 40px; border-radius: var(--r-1); }
+.accent-tile[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+.accent-tile .check { position: absolute; top: var(--sp-2); right: var(--sp-2); width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: flex; align-items: center; justify-content: center; opacity: 0; }
+.accent-tile[aria-pressed="true"] .check { opacity: 1; }
+.ground-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); margin-top: var(--sp-6); }
+.ground-tile { text-align: left; cursor: pointer; }
+.ground-tile[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ground-mock { height: 84px; border-radius: var(--r-1); margin-bottom: var(--sp-3); display: flex; gap: var(--sp-1); padding: var(--sp-2); }
+.ground-mock .m-side { width: 22%; border-radius: 5px; }
+.ground-mock .m-main { flex: 1; border-radius: 5px; }
+.ob-foot { margin-top: auto; padding-top: var(--sp-6); display: flex; align-items: center; justify-content: space-between; }
+
+/* ---- command palette + shortcuts (built on real .modal-scrim / .modal) ------- */
+.palette { width: min(34rem, 100%); max-height: 66vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.palette-input-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-4); border-bottom: 1px solid var(--line); flex: none; }
+.palette-input-row svg { width: 16px; height: 16px; color: var(--ink-3); flex: none; }
+.palette-input-row input { flex: 1; background: none; border: none; font: inherit; font-size: var(--fs-1); color: var(--ink); }
+.palette-input-row input:focus { outline: none; }
+.palette-list { overflow-y: auto; padding: var(--sp-2); }
+.palette-section { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 650; padding: var(--sp-2) var(--sp-3) 4px; }
+.palette-item { display: flex; align-items: center; gap: var(--sp-3); width: 100%; }
+.palette-item .p-sub { margin-left: auto; font-size: .74rem; color: var(--ink-3); font-weight: 500; }
+.palette-item[data-active="true"] { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.palette-empty { padding: var(--sp-6); text-align: center; color: var(--ink-3); font-size: var(--fs-0); }
+.shortcuts-modal { width: min(28rem, 100%); }
+.shortcut-row { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-2) 0; border-top: 1px solid var(--line); }
+.shortcut-row:first-child { border-top: none; }
+.shortcut-keys { display: flex; gap: 4px; }
+
+/* ---- responsive --------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed; left: 0; top: calc(var(--target-min) + var(--sp-5)); bottom: 0; z-index: var(--z-modal);
+    transform: translateX(-100%); transition: transform var(--t-slow) var(--ease); box-shadow: var(--gl-shadow);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .hamburger { display: inline-grid; }
+  .cmdk-trigger { margin-left: 0; }
+  .detail-cols { grid-template-columns: 1fr; }
+  .ob-grid { grid-template-columns: repeat(2, 1fr); }
+  .ground-grid { grid-template-columns: 1fr; }
+  .screen { padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+}
+@media (max-width: 640px) {
+  .brand-tag { display: none; }
+  .cmdk-trigger .kbd { display: none; }
+  .seg3 { flex-direction: column; }
+}
 </style>
 </head>
 
 <body class="glass-page glass-atmosphere">
 
-<!-- ===================================================================== -->
-<header class="bar glass">
-  <div class="wrap bar-in">
-    <div class="brand">
-      <img class="brand-mark" src="../brand/mark.svg" alt="">
-      <span class="brand-name">GLASS</span>
-      <span class="brand-sub" id="bar-sub">zeno · dark</span>
+<!-- ===================== ONBOARDING ===================== -->
+<section class="onboarding" id="screen-onboarding" hidden>
+  <div class="ob-top">
+    <div class="brand"><img class="brand-mark" src="../brand/mark.svg" alt="">glass</div>
+    <button class="btn btn-ghost" id="obSkip">Skip setup →</button>
+  </div>
+
+  <div id="obStep1">
+    <p class="kicker">Step 1 of 2</p>
+    <h1 class="display" style="font-size:var(--fs-3);margin-top:var(--sp-2)">Pick the hue that's you.</h1>
+    <p class="lede">Every accent below is a real theme this system ships — Zeno's crimson, Weft's teal, Vantage's gold and five more. Each shares the exact lightness ladder; only the hue rotates. Change it later from Settings.</p>
+    <div class="ob-grid" id="obAccentGrid"></div>
+  </div>
+
+  <div id="obStep2" hidden>
+    <p class="kicker">Step 2 of 2</p>
+    <h1 class="display" style="font-size:var(--fs-3);margin-top:var(--sp-2)">Light, dark, or your OS?</h1>
+    <p class="lede">The ladder inverts between grounds rather than mirroring — <span class="mono">--raised</span> is the brightest plane on light and the dimmest on dark. Switch it anytime from the top bar.</p>
+    <div class="ground-grid" id="obGroundGrid">
+      <button class="ground-tile card glass" data-ob-ground="dark" aria-pressed="false">
+        <div class="ground-mock" style="background:#0a0d12"><div class="m-side" style="background:rgba(255,255,255,.06)"></div><div class="m-main" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"></div></div>
+        <b>Dark</b><span>Deep canvas, glowing glass edges.</span>
+      </button>
+      <button class="ground-tile card glass" data-ob-ground="system" aria-pressed="false">
+        <div class="ground-mock" style="background:linear-gradient(90deg,#0a0d12 50%,#f4f6f8 50%)"><div class="m-side" style="background:rgba(255,255,255,.08)"></div><div class="m-main" style="background:linear-gradient(90deg,rgba(255,255,255,.05) 50%,#fff 50%);border:1px solid rgba(16,24,34,.1)"></div></div>
+        <b>System</b><span>Follows your OS appearance, live.</span>
+      </button>
+      <button class="ground-tile card glass" data-ob-ground="light" aria-pressed="false">
+        <div class="ground-mock" style="background:#eef1f4"><div class="m-side" style="background:rgba(16,24,34,.06)"></div><div class="m-main" style="background:#fff;border:1px solid rgba(16,24,34,.08)"></div></div>
+        <b>Light</b><span>Frosted panels on daylight white.</span>
+      </button>
     </div>
+  </div>
 
-    <div class="themes" id="themes" role="group" aria-label="Theme"></div>
-
-    <div class="seg" role="group" aria-label="Ground">
-      <button class="btn" data-ground="dark"   aria-pressed="false">Dark</button>
-      <button class="btn" data-ground="system" aria-pressed="true">System</button>
-      <button class="btn" data-ground="light"  aria-pressed="false">Light</button>
+  <div class="ob-foot">
+    <div class="ob-progress"><span class="ob-dot active" id="obDot1"></span><span class="ob-dot" id="obDot2"></span></div>
+    <div style="display:flex;gap:var(--sp-3)">
+      <button class="btn" id="obBack" disabled>Back</button>
+      <button class="btn btn-primary" id="obNext">Continue</button>
     </div>
+  </div>
+</section>
 
-    <button class="btn" id="flat" aria-pressed="false" title="Sets data-flat=&quot;1&quot; on :root — the manual escape hatch from tokens.css §3">
-      Reduce transparency
+<!-- ===================== SHELL ===================== -->
+<div class="studio" id="studio">
+  <header class="topbar">
+    <button class="workspace-icon-button hamburger" id="hamburgerBtn" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="2.5" y1="5.5" x2="17.5" y2="5.5"/><line x1="2.5" y1="10" x2="17.5" y2="10"/><line x1="2.5" y1="14.5" x2="17.5" y2="14.5"/></svg>
     </button>
-  </div>
-</header>
-
-<main class="wrap">
-
-  <!-- =================================================================== -->
-  <div class="hero">
-    <p class="kicker">a personal design system</p>
-    <h1 class="display">Eight projects had already<br>converged. <em>This is the extraction.</em></h1>
-    <p class="lede">
-      Weft and Vantage were shipping byte-identical glass values, radii, motion and theme triad
-      without sharing a stylesheet. Zeno had independently built a colour law where every value
-      carries its measured contrast ratio and a script fails the build if it drifts. Five side
-      projects were saying the same three things in a vocabulary I had improvised. So: one grammar,
-      eight themes, and a budget that runs on all sixteen palettes in CI.
-    </p>
-    <div class="hero-chips">
-      <span class="chip chip-accent">oklch, not hex</span>
-      <span class="chip">dark-first · three-way triad</span>
-      <span class="chip">8 themes × 2 grounds</span>
-      <span class="chip chip-mono" id="assert-count">814 assertions</span>
-      <span class="chip">WCAG 2.2 AA, measured</span>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <section id="ramp">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">01 — the ramp</p>
-        <h2>A theme owns hue. The system owns everything else.</h2>
-      </div>
-      <p class="sec-note">
-        Every swatch below is read live out of <span class="mono">getComputedStyle</span> and
-        measured in this page, right now, against the plane it is allowed to sit on. Switch theme
-        or ground in the bar and the numbers recompute. The lightness of each step is identical in
-        all eight themes — only the hue rotates.
-      </p>
-    </div>
-    <div class="ramp" id="ramp-strip"></div>
-  </section>
-
-  <!-- =================================================================== -->
-  <section id="budget">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">02 — the law</p>
-        <h2>Machine-verified, not asserted</h2>
-      </div>
-      <p class="sec-note">
-        The same pairs <span class="mono">scripts/contrast.mjs</span> asserts in CI, computed here
-        in the browser from the live tokens. <span class="mono">plane</span> is
-        <span class="mono">--raised</span>, the lightest opaque surface text may land on;
-        <span class="mono">glass</span> is <span class="mono">--gl-worst</span>, the worst realistic
-        composite behind a pane. If a row ever reads FAIL, the build is already red.
-      </p>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <thead>
-          <tr><th>Pair</th><th>Role</th><th>Measured</th><th>Minimum</th><th>Result</th></tr>
-        </thead>
-        <tbody id="budget-rows"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- =================================================================== -->
-  <section id="primitives">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">03 — primitives</p>
-        <h2>Seven, and no more</h2>
-      </div>
-      <p class="sec-note">
-        <span class="mono">.glass .card .btn .field .chip .state .gauge</span> — every one of them
-        drawn entirely from tokens. The a11y fallbacks are live: press
-        <b>Reduce transparency</b> in the bar and every pane on this page drops its blur for the
-        opaque <span class="mono">--raised</span> plane, which is a surface the budget already
-        measures.
-      </p>
-    </div>
-
-    <div class="grid g2">
-      <div class="glass" style="padding: var(--sp-5)">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">.glass · .glass-inner</p>
-        <h3 class="card-title">The material</h3>
-        <p class="card-note" style="margin-bottom: var(--sp-4)">
-          A tint, a real blur with a saturation lift, a 1px edge that makes the pane an object, and
-          the specular line that says which way the light is.
-        </p>
-        <div class="glass-inner">
-          <span class="mono" style="font-size: var(--fs-0); color: var(--ink)">
-            glass has no fixed luminance — a label needs a plate
-          </span>
+    <div class="brand"><img class="brand-mark" src="../brand/mark.svg" alt="">glass<span class="brand-tag">Studio</span></div>
+    <button class="cmdk-trigger" id="openPaletteBtn">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="17" y1="17" x2="13.2" y2="13.2"/></svg>
+      <span class="grow">Search components, actions, projects…</span>
+      <span class="kbd">⌘K</span>
+    </button>
+    <div class="top-actions">
+      <button class="workspace-icon-button" id="shortcutsBtn" data-tip="Keyboard shortcuts" aria-label="Show keyboard shortcuts" title="Keyboard shortcuts (?)">
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="15" height="10" rx="2"/><line x1="6" y1="8.3" x2="6" y2="8.3"/><line x1="9" y1="8.3" x2="9" y2="8.3"/><line x1="12" y1="8.3" x2="12" y2="8.3"/><line x1="6" y1="11.5" x2="12" y2="11.5"/></svg>
+      </button>
+      <button class="workspace-icon-button" id="groundToggleBtn" aria-label="Toggle ground" title="Cycle ground (G)"></button>
+      <div class="avatar-wrap">
+        <button class="avatar" id="avatarBtn" aria-haspopup="true" aria-expanded="false" aria-controls="avatarMenu">AS</button>
+        <div class="menu glass menu-anchor" id="avatarMenu" hidden>
+          <button class="menu-item" data-goto="settings">Settings</button>
+          <button class="menu-item" id="menuRestart">Restart onboarding</button>
+          <hr class="menu-sep">
+          <label class="switch" style="display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-0)">
+            <input type="checkbox" id="flatToggleMenu"> Reduce transparency
+          </label>
+          <hr class="menu-sep">
+          <p style="margin:0;padding:var(--sp-2) var(--sp-3);font-family:var(--font-mono);font-size:.7rem;color:var(--ink-3)">glass · MIT<br>Abheet Singh Isher</p>
         </div>
       </div>
+    </div>
+  </header>
 
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">.btn</p>
-        <h3 class="card-title">Four weights, one shape</h3>
-        <p class="card-note" style="margin-bottom: var(--sp-4)">
-          Minimum target size is enforced by the primitive, not left to the caller (SC 2.5.8).
-        </p>
-        <div class="row">
-          <button class="btn btn-primary" data-sample-button>Primary</button>
-          <button class="btn" data-sample-button>Quiet</button>
-          <button class="btn btn-ghost" data-sample-button>Ghost</button>
-          <button class="btn btn-glass" data-sample-button>Glass</button>
-          <button class="btn" disabled>Disabled</button><span id="button-sample-status" role="status"></span>
-        </div>
+  <div class="shell-body">
+    <nav class="sidebar" id="sidebar" aria-label="Studio navigation">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <button class="workspace-tree-item nav-item" data-goto="overview" aria-current="page">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 10 4l7 6.5"/><path d="M5 9v7h10V9"/></svg>
+          Overview
+        </button>
+        <button class="workspace-tree-item nav-item" data-goto="library">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"/></svg>
+          Library <span class="nav-badge" id="libCountBadge"></span>
+        </button>
+        <button class="workspace-tree-item nav-item" data-goto="settings">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="17" y2="6"/><circle cx="12" cy="6" r="1.7" fill="currentColor" stroke="none"/><line x1="3" y1="14" x2="17" y2="14"/><circle cx="8" cy="14" r="1.7" fill="currentColor" stroke="none"/></svg>
+          Settings
+        </button>
       </div>
+      <div class="nav-group">
+        <span class="nav-label">Projects</span>
+        <div id="projList"></div>
+      </div>
+      <div class="sidebar-footer">
+        <button class="footer-link" id="footerRestart">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a6 6 0 1 1-1.8-4.3"/><polyline points="16 3 16 6.5 12.5 6.5"/></svg>
+          Restart setup
+        </button>
+        <p class="eco-badge">glass · MIT · <a href="https://github.com/abheet19" target="_blank" rel="noopener">github.com/abheet19</a></p>
+      </div>
+    </nav>
 
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">.field</p>
-        <h3 class="card-title">Recessed, on both grounds</h3>
-        <div class="stack" style="margin-top: var(--sp-4)">
+    <main class="content" id="content">
+      <!-- ============ OVERVIEW ============ -->
+      <section class="screen" id="screen-overview" role="tabpanel" aria-labelledby="nav-overview">
+        <div class="card glass hero-card">
+          <p class="kicker">a personal design system, browsed as an app</p>
+          <h1 class="display hero-title">Eight projects had already converged. <em>This is the extraction.</em></h1>
+          <p class="lede">Weft and Vantage were shipping byte-identical glass values, radii, motion and theme triad without sharing a stylesheet. Zeno had independently built a colour law where every value carries its measured contrast ratio and a script fails the build if it drifts. So: one grammar, eight themes, and a budget that runs on all sixteen palettes in CI — and, on this page, on whichever one you are looking at right now.</p>
+          <div class="spec-row">
+            <span class="chip chip-accent">oklch, not hex</span>
+            <span class="chip">dark-first · three-way triad</span>
+            <span class="chip">8 themes × 2 grounds</span>
+            <span class="chip chip-mono">814 assertions · CI</span>
+            <span class="chip">WCAG 2.2, measured</span>
+          </div>
+        </div>
+
+        <p class="sec-label">Live on this page, right now</p>
+        <div class="metric-grid">
+          <div class="card glass metric-card">
+            <span class="metric-card-label">Live pairs passing</span>
+            <span class="metric-card-value" id="statPairs">—</span>
+            <span class="gauge" style="margin-top:4px"><span class="gauge-fill" id="statPairsGauge"></span></span>
+          </div>
+          <div class="card glass metric-card">
+            <span class="metric-card-label">Components documented</span>
+            <span class="metric-card-value" id="statComponents">—</span>
+            <span class="card-note">across 6 real stylesheets, 1 pattern</span>
+          </div>
+          <div class="card glass metric-card">
+            <span class="metric-card-label">Themes on shared tokens</span>
+            <span class="metric-card-value">8 / 8</span>
+            <span class="card-note">none left on an old vocabulary</span>
+          </div>
+          <div class="card glass metric-card">
+            <span class="metric-card-label">Active palette</span>
+            <span class="metric-card-value" id="statPalette" style="font-size:var(--fs-1)">—</span>
+            <span class="card-note" id="statWcagNote">WCAG AA</span>
+          </div>
+        </div>
+
+        <p class="sec-label">Jump back in</p>
+        <div class="quick-grid">
+          <button class="card glass quick-card" data-goto="library" data-lib-tab="components">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"/></svg>
+            <b>Browse the library</b><span class="qc-note">Every real component across primitives, forms, navigation, feedback and data.</span>
+          </button>
+          <button class="card glass quick-card" data-goto="library" data-lib-tab="foundations">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 16.5 8 6l4 6 2-3 3 7.5"/></svg>
+            <b>Read the ramp &amp; the law</b><span class="qc-note">The lightness ladder every theme shares, and the pairs that guard it — computed live.</span>
+          </button>
+          <button class="card glass quick-card" id="overviewRecomputeBtn">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10.5 8 14.5 16 5.5"/></svg>
+            <b>Recompute the live budget</b><span class="qc-note">Re-reads every token out of getComputedStyle right now and reports the real count.</span>
+          </button>
+          <button class="card glass quick-card" data-goto="settings">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="17" y2="6"/><circle cx="12" cy="6" r="1.7" fill="currentColor" stroke="none"/><line x1="3" y1="14" x2="17" y2="14"/><circle cx="8" cy="14" r="1.7" fill="currentColor" stroke="none"/></svg>
+            <b>Open settings</b><span class="qc-note">Ground, accent, WCAG target, reduced transparency, and the eight projects glass ships to.</span>
+          </button>
+        </div>
+
+        <p class="credit-line">Extracted from <b>Zeno · Weft · Vantage · ShieldAI · Textify · HealthFlow · Smart-Rephraser-Lite · AI-Detector-Web-Extension</b> — MIT licensed. <a href="https://github.com/abheet19/glass" target="_blank" rel="noopener">github.com/abheet19/glass</a></p>
+      </section>
+
+      <!-- ============ LIBRARY ============ -->
+      <section class="screen" id="screen-library" hidden>
+        <div class="screen-head">
           <div>
-            <label class="field-label" for="f1">Project</label>
-            <input class="field" id="f1" value="glass" />
+            <h1 class="display" style="font-size:var(--fs-2)">Library</h1>
+            <p class="stat-line" id="libStatLine" style="margin:6px 0 0;font-family:var(--font-mono);font-size:var(--fs-0);color:var(--ink-2)"></p>
           </div>
-          <div>
-            <label class="field-label" for="f2">Token</label>
-            <input class="field field-mono" id="f2" placeholder="--accent-2" />
-          </div>
-          <div>
-            <label class="field-label" for="f3">Invalid state</label>
-            <input class="field" id="f3" aria-invalid="true" value="#C81E33" />
-          </div>
+          <nav class="tabs" role="tablist" aria-label="Library section" id="libTabs">
+            <button class="tab" role="tab" id="libtab-components" aria-controls="libPane-components" aria-selected="true" tabindex="0">Components</button>
+            <button class="tab" role="tab" id="libtab-foundations" aria-controls="libPane-foundations" aria-selected="false" tabindex="-1">Foundations</button>
+            <button class="tab" role="tab" id="libtab-patterns" aria-controls="libPane-patterns" aria-selected="false" tabindex="-1">Patterns</button>
+          </nav>
         </div>
-      </div>
 
-      <div class="card card-raised">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">.state · .chip</p>
-        <h3 class="card-title">Four channels, of which colour is one</h3>
-        <p class="card-note" style="margin-bottom: var(--sp-4)">
-          A fill, a key bar, a glyph and a word. Print this in greyscale and the status still reads —
-          the four fills are held apart in luminance, and the script fails if any two collapse.
-        </p>
-        <div class="row" style="margin-bottom: var(--sp-4)">
-          <span class="state state-ok state-text"></span>
-          <span class="state state-warn state-text"></span>
-          <span class="state state-bad state-text"></span>
-          <span class="state state-info state-text"></span>
-        </div>
-        <div class="row">
-          <span class="chip">neutral</span>
-          <span class="chip chip-accent">accent</span>
-          <span class="chip chip-mono">--r-pill</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">.gauge</p>
-        <h3 class="card-title">A quantity, and only when it is known</h3>
-        <p class="card-note" style="margin-bottom: var(--sp-4)">
-          There is no indeterminate spinner in this package. A spinner is an animation that claims
-          to be information; if the progress is not known, say so in words.
-        </p>
-        <div class="stack">
-          <div><div class="gauge-row"><span>Coverage</span><span class="gauge-value">86%</span></div>
-               <div class="gauge"><span class="gauge-fill" style="width:86%"></span></div></div>
-          <div class="gauge-ok"><div class="gauge-row"><span>Passing</span><span class="gauge-value">814/814</span></div>
-               <div class="gauge"><span class="gauge-fill" style="width:100%"></span></div></div>
-          <div class="gauge-warn"><div class="gauge-row"><span>Budget headroom</span><span class="gauge-value">31%</span></div>
-               <div class="gauge"><span class="gauge-fill" style="width:31%"></span></div></div>
-          <div class="gauge-bad"><div class="gauge-row"><span>Themes on the old vocabulary</span><span class="gauge-value">0/8</span></div>
-               <div class="gauge"><span class="gauge-fill" style="width:4%"></span></div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">type · radii</p>
-        <h3 class="card-title">The scale</h3>
-        <div style="margin-top: var(--sp-3)">
-          <div class="type-row"><span class="type-tag">--fs-3</span><span style="font-size:var(--fs-3);line-height:var(--lh-1);font-weight:650;letter-spacing:-.03em">Display</span></div>
-          <div class="type-row"><span class="type-tag">--fs-2</span><span style="font-size:var(--fs-2);font-weight:600">Section title</span></div>
-          <div class="type-row"><span class="type-tag">--fs-1</span><span style="font-size:var(--fs-1)">Body copy, the default</span></div>
-          <div class="type-row"><span class="type-tag">--fs-0</span><span style="font-size:var(--fs-0);color:var(--ink-2)">Meta, chips and table cells</span></div>
-          <div class="type-row"><span class="type-tag">--font-mono</span><span class="mono" style="font-size:var(--fs-0)">0123456789 · oklch(78% .125 22.2)</span></div>
-        </div>
-        <div class="radii" style="margin-top: var(--sp-5)">
-          <figure><div class="box" style="border-radius:var(--r-1)"></div><figcaption>--r-1</figcaption></figure>
-          <figure><div class="box" style="border-radius:var(--r-2)"></div><figcaption>--r-2</figcaption></figure>
-          <figure><div class="box" style="border-radius:var(--r-3)"></div><figcaption>--r-3</figcaption></figure>
-          <figure><div class="box" style="border-radius:var(--r-pill)"></div><figcaption>--r-pill</figcaption></figure>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================== -->
-  <section id="components">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">04 — the extended set</p>
-        <h2>Forms, navigation, feedback, data</h2>
-      </div>
-      <p class="sec-note">
-        Four more files, same rule: <span class="mono">src/forms.css src/navigation.css
-        src/feedback.css src/data.css</span>, every declaration reading from the tokens above —
-        no new colour anywhere below. <span class="mono">src/components.css</span> imports all
-        five component files (the original seven primitives plus this set) as one entry point.
-      </p>
-    </div>
-
-    <div class="grid g2">
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">forms.css</p>
-        <h3 class="card-title">Textarea, select, checkbox, radio, switch</h3>
-        <div class="stack" style="margin-top: var(--sp-4)">
-          <div class="field-group">
-            <label class="field-label" for="d-ta">Notes</label>
-            <textarea class="field" id="d-ta" rows="2">A textarea is .field, extended.</textarea>
+        <div id="libPane-components" role="tabpanel" aria-labelledby="libtab-components">
+          <div class="search-filter-bar" style="margin-bottom:var(--sp-5)">
+            <label class="field" style="flex:1 1 14rem">
+              <span class="sr">Filter components</span>
+              <input type="text" id="libSearch" placeholder="Filter components…">
+            </label>
+            <div class="chip-row" id="catChips"></div>
           </div>
-          <div class="field-group">
-            <label class="field-label" for="d-sel">Theme</label>
-            <select class="field" id="d-sel">
-              <option>zeno</option><option>weft</option><option>vantage</option>
-            </select>
+          <div class="comp-grid" id="compGrid"></div>
+          <p class="table-empty" id="gridEmpty" hidden>No components match "<span id="gridEmptyTerm"></span>".</p>
+        </div>
+
+        <div id="libPane-foundations" role="tabpanel" aria-labelledby="libtab-foundations" hidden>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">01 · The ramp</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Every swatch is read live out of <span class="mono">getComputedStyle</span>, right now, against the plane it is allowed to sit on. Switch theme or ground and the numbers recompute.</p>
+          <div class="ramp" id="ramp-strip" style="margin-bottom:var(--sp-6)"></div>
+
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">02 · The law</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The same pairs <span class="mono">scripts/contrast.mjs</span> asserts in CI, computed here in the browser from the live tokens at the active WCAG target. <span class="mono">plane</span> is <span class="mono">--raised</span>; <span class="mono">glass</span> is <span class="mono">--gl-worst</span>, the worst realistic composite behind a pane.</p>
+          <div class="tablewrap" style="margin-bottom:var(--sp-6)">
+            <table>
+              <thead><tr><th>Pair</th><th>Role</th><th>Measured</th><th>Minimum</th><th>Result</th></tr></thead>
+              <tbody id="budget-rows"></tbody>
+            </table>
           </div>
-          <div class="field-group">
-            <label class="field-label" for="d-err">Required field</label>
-            <input class="field" id="d-err" aria-invalid="true" value="" />
-            <p class="field-error-text">This field is required.</p>
+
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">03 · Type &amp; radii</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The scale every screen in this app draws from.</p>
+          <div class="card grid g2" style="margin-bottom:var(--sp-6)">
+            <div>
+              <div class="type-row"><span class="type-tag">--fs-3</span><span style="font-size:var(--fs-3);line-height:var(--lh-1);font-weight:650;letter-spacing:-.03em">Display</span></div>
+              <div class="type-row"><span class="type-tag">--fs-2</span><span style="font-size:var(--fs-2);font-weight:600">Section title</span></div>
+              <div class="type-row"><span class="type-tag">--fs-1</span><span style="font-size:var(--fs-1)">Body copy, the default</span></div>
+              <div class="type-row"><span class="type-tag">--fs-0</span><span style="font-size:var(--fs-0);color:var(--ink-2)">Meta, chips and cells</span></div>
+              <div class="type-row"><span class="type-tag">--font-mono</span><span class="mono" style="font-size:var(--fs-0)">0123456789</span></div>
+            </div>
+            <div class="radii">
+              <figure><div class="box" style="border-radius:var(--r-1)"></div><figcaption>--r-1 · 8px</figcaption></figure>
+              <figure><div class="box" style="border-radius:var(--r-2)"></div><figcaption>--r-2 · 12px</figcaption></figure>
+              <figure><div class="box" style="border-radius:var(--r-3)"></div><figcaption>--r-3 · 16px</figcaption></figure>
+              <figure><div class="box" style="border-radius:var(--r-pill)"></div><figcaption>--r-pill</figcaption></figure>
+            </div>
           </div>
-          <div class="row">
-            <label class="checkbox"><input type="checkbox" checked /> Checkbox</label>
-            <label class="radio"><input type="radio" name="d-r" checked /> Radio</label>
-            <label class="switch"><input type="checkbox" checked /> Switch</label>
+
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">04 · The eight, at a glance</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Each theme file is eight numbers — the ground's hue and chroma, and a hue plus per-ground chroma for each accent. Click a row to wear it.</p>
+          <div class="tablewrap" id="gallery-rows"></div>
+        </div>
+
+        <div id="libPane-patterns" role="tabpanel" aria-labelledby="libtab-patterns" hidden>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">05 · Workspace shell</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">A responsive editor and agent shell built from the same semantic roles: toggleable panels, file and dock tabs, a split view, tree disclosure, a command composer, run disclosure, and a status line. The pattern every one of the eight projects docks its own tools into.</p>
+
+          <div class="workspace-frame" id="workspace-demo" data-nav-collapsed="false" data-aside-collapsed="false">
+            <header class="workspace-titlebar">
+              <div class="workspace-toolbar-group">
+                <button class="workspace-icon-button" id="workspace-toggle-nav" type="button" aria-label="Toggle project explorer" aria-controls="workspace-sidebar" aria-expanded="true">☰</button>
+                <strong>glass / src</strong>
+              </div>
+              <div class="workspace-toolbar-group" data-align="end">
+                <span class="chip chip-mono">main</span>
+                <button class="workspace-icon-button" id="workspace-toggle-aside" type="button" aria-label="Toggle assistant panel" aria-controls="workspace-aside" aria-expanded="true">✦</button>
+              </div>
+            </header>
+
+            <div class="workspace-body">
+              <aside class="workspace-sidebar" id="workspace-sidebar" aria-label="Project explorer">
+                <div class="workspace-panel-header"><span>Explorer</span><span>6 files</span></div>
+                <ul class="workspace-tree">
+                  <li><button class="workspace-tree-item" type="button" aria-current="page" data-workspace-file="tokens">tokens.css</button></li>
+                  <li><button class="workspace-tree-item" type="button" data-workspace-file="primitives">primitives.css</button></li>
+                  <li><button class="workspace-tree-item" type="button" data-workspace-file="forms">forms.css</button></li>
+                  <li><button class="workspace-tree-item" type="button" data-workspace-file="navigation">navigation.css</button></li>
+                  <li><button class="workspace-tree-item" type="button" data-workspace-file="feedback">feedback.css</button></li>
+                  <li><button class="workspace-tree-item" type="button" data-workspace-file="data">data.css</button></li>
+                </ul>
+              </aside>
+
+              <div class="workspace-main">
+                <div class="workspace-editor">
+                  <div class="workspace-tabstrip" role="tablist" aria-label="Open files">
+                    <button class="workspace-tab" id="workspace-file-tab-tokens" type="button" role="tab" aria-selected="true" aria-controls="workspace-file-panel-tokens" tabindex="0">tokens.css</button>
+                    <button class="workspace-tab" id="workspace-file-tab-primitives" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-primitives" tabindex="-1">primitives.css</button>
+                    <button class="workspace-tab" id="workspace-file-tab-forms" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-forms" tabindex="-1">forms.css</button>
+                  </div>
+                  <div class="workspace-editor-grid" id="workspace-editor-grid">
+                    <div class="workspace-pane">
+                      <pre id="workspace-file-panel-tokens" role="tabpanel" aria-labelledby="workspace-file-tab-tokens">:root {
+  --r-2: 12px;
+  --blur: 14px;
+}
+
+.btn-primary {
+  background: var(--accent);
+}</pre>
+                      <pre id="workspace-file-panel-primitives" role="tabpanel" aria-labelledby="workspace-file-tab-primitives" hidden>.glass {
+  background: var(--gl-fill);
+  backdrop-filter: var(--gl-blur);
+  border: 1px solid var(--gl-edge);
+}</pre>
+                      <pre id="workspace-file-panel-forms" role="tabpanel" aria-labelledby="workspace-file-tab-forms" hidden>.field:focus {
+  border-color: var(--accent);
+  outline: none;
+}</pre>
+                    </div>
+                    <button class="workspace-divider" id="workspace-divider" type="button" role="separator" aria-label="Resize editor panes" aria-orientation="vertical" aria-valuemin="35" aria-valuemax="75" aria-valuenow="58"></button>
+                    <div class="workspace-pane" aria-label="Preview pane">
+                      <p class="kicker">Preview</p>
+                      <div class="state state-ok state-text"></div>
+                      <p class="card-note">One token, one plane, one measured ratio.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <section class="workspace-dock" aria-label="Developer tools">
+                  <div class="workspace-tabstrip" role="tablist" aria-label="Developer tool views">
+                    <button class="workspace-tab" id="workspace-dock-tab-problems" type="button" role="tab" aria-selected="true" aria-controls="workspace-dock-panel-problems" tabindex="0">Problems</button>
+                    <button class="workspace-tab" id="workspace-dock-tab-output" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-output" tabindex="-1">Output</button>
+                    <button class="workspace-tab" id="workspace-dock-tab-debug" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-debug" tabindex="-1">Debug Console</button>
+                    <button class="workspace-tab" id="workspace-dock-tab-terminal" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-terminal" tabindex="-1">Terminal</button>
+                    <button class="workspace-tab" id="workspace-dock-tab-ports" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-ports" tabindex="-1">Ports</button>
+                  </div>
+                  <div class="workspace-dock-content" id="workspace-dock-panel-problems" role="tabpanel" aria-labelledby="workspace-dock-tab-problems">No problems detected.</div>
+                  <div class="workspace-dock-content" id="workspace-dock-panel-output" role="tabpanel" aria-labelledby="workspace-dock-tab-output" hidden>Checks are ready.</div>
+                  <div class="workspace-dock-content" id="workspace-dock-panel-debug" role="tabpanel" aria-labelledby="workspace-dock-tab-debug" hidden>Debug console is idle.</div>
+                  <div class="workspace-dock-content" id="workspace-dock-panel-terminal" role="tabpanel" aria-labelledby="workspace-dock-tab-terminal" hidden>PS D:\Code\glass&gt;</div>
+                  <div class="workspace-dock-content" id="workspace-dock-panel-ports" role="tabpanel" aria-labelledby="workspace-dock-tab-ports" hidden>No forwarded ports.</div>
+                </section>
+              </div>
+
+              <aside class="workspace-aside" id="workspace-aside" aria-label="Assistant session">
+                <div class="workspace-panel-header"><span>Session</span><span class="state state-info state-text"></span></div>
+                <details class="thinking-disclosure">
+                  <summary>Run details</summary>
+                  <p>Sanitized checkpoints and tool outcomes belong here; private model reasoning does not.</p>
+                </details>
+                <form class="command-composer" id="workspace-composer">
+                  <label class="sr" for="workspace-prompt">Ask the assistant</label>
+                  <textarea id="workspace-prompt" placeholder="Ask anything, @ to mention, / for actions"></textarea>
+                  <div class="command-composer-actions">
+                    <span>Local · reviewed actions</span>
+                    <button class="btn btn-primary" type="submit">Run</button>
+                  </div>
+                  <span id="workspace-composer-status" role="status"></span>
+                </form>
+              </aside>
+            </div>
+
+            <footer class="workspace-statusbar">
+              <span id="wsStatusLine">main · 0 errors · 0 warnings</span>
+              <span>Ln 1, Col 1 · UTF-8 · CSS</span>
+            </footer>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--sp-4)">
+            <button class="btn" id="inspectPatternBtn">Inspect this pattern in the Library →</button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">navigation.css</p>
-        <h3 class="card-title">Tabs, breadcrumbs, menu</h3><p id="menu-sample-status" role="status">Menu actions are visual specimens; they do not modify data.</p>
-        <nav class="tabs" role="tablist" aria-label="Component example" style="margin-bottom: var(--sp-4)">
-          <button id="sample-tab-overview" class="tab" role="tab" aria-controls="sample-panel-overview" aria-selected="true" tabindex="0">Overview</button>
-          <button id="sample-tab-tokens" class="tab" role="tab" aria-controls="sample-panel-tokens" aria-selected="false" tabindex="-1">Tokens</button>
-          <button id="sample-tab-themes" class="tab" role="tab" aria-controls="sample-panel-themes" aria-selected="false" tabindex="-1">Themes</button>
-        </nav>
-        <p id="sample-panel-overview" role="tabpanel" aria-labelledby="sample-tab-overview">CSS defines the appearance; this demo adds the tab interaction. Use arrow keys, Home or End.</p>
-        <p id="sample-panel-tokens" role="tabpanel" aria-labelledby="sample-tab-tokens" hidden>Tokens name a shared role: surface, ink, spacing, focus and motion.</p>
-        <p id="sample-panel-themes" role="tabpanel" aria-labelledby="sample-tab-themes" hidden>Choose a hue above. The system keeps its spacing and contrast rules.</p>
-        <ol class="breadcrumbs" style="margin-bottom: var(--sp-4)">
-          <li><a href="#ramp">glass</a></li>
-          <li><a href="#components">demo</a></li>
-          <li aria-current="page">components</li>
+      <!-- ============ DETAIL ============ -->
+      <section class="screen" id="screen-detail" hidden>
+        <ol class="breadcrumbs">
+          <li><button data-goto="library">Library</button></li>
+          <li><span id="crumbCat"></span></li>
+          <li aria-current="page"><span id="crumbName"></span></li>
         </ol>
-        <div class="glass-inner" style="padding: var(--sp-2)">
-          <ul class="menu" style="position: static; width: 100%; box-sizing: border-box;">
-            <li><button class="menu-item" data-menu-sample="Duplicate">Duplicate</button></li>
-            <li><button class="menu-item" data-menu-sample="Rename">Rename</button></li>
-            <li><hr class="menu-sep"></li>
-            <li><button class="menu-item menu-item-danger" data-menu-sample="Delete">Delete</button></li>
-          </ul>
+        <div class="detail-head">
+          <div class="detail-title">
+            <h1 id="detailName"></h1>
+            <span class="chip chip-mono" id="detailFileChip"></span>
+          </div>
+          <button class="btn" data-goto="library">← Back to library</button>
         </div>
-      </div>
+        <p class="lede" id="detailBlurb" style="margin-bottom:var(--sp-5)"></p>
+        <nav class="tabs" role="tablist" aria-label="Component detail" id="detailTabs" style="margin-bottom:var(--sp-5)">
+          <button class="tab" role="tab" id="dtab-preview" aria-selected="true" tabindex="0">Preview</button>
+          <button class="tab" role="tab" id="dtab-tokens" aria-selected="false" tabindex="-1">Tokens</button>
+          <button class="tab" role="tab" id="dtab-code" aria-selected="false" tabindex="-1">Code</button>
+          <button class="tab" role="tab" id="dtab-a11y" aria-selected="false" tabindex="-1">Accessibility</button>
+        </nav>
+        <div id="detailBody"></div>
+      </section>
 
-      <div class="card card-raised">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">feedback.css</p>
-        <h3 class="card-title">Toast, tooltip, skeleton</h3>
-        <div class="stack" style="margin-top: var(--sp-4)">
-          <div class="toast toast-ok" style="position: static;">
-            <span class="toast-icon">&#10003;</span>
-            <div class="toast-body">
-              <p class="toast-title">Saved</p>
-              <p class="toast-message">814/814 assertions still hold.</p>
-            </div>
-          </div>
-          <div class="row" style="align-items: center;">
-            <button class="btn tooltip-trigger" style="position: relative;" aria-describedby="sample-tooltip">
-              Hover or focus for tooltip
-              <span id="sample-tooltip" role="tooltip" class="tooltip" style="position: absolute; bottom: calc(100% + 6px); left: 0;">A small opaque label, never glass.</span>
-            </button>
-          </div>
-          <div class="stack" style="gap: var(--sp-2)">
-            <span class="skeleton skeleton-title"></span>
-            <span class="skeleton skeleton-text"></span>
-            <span class="skeleton skeleton-text" style="width: 80%"></span>
+      <!-- ============ SETTINGS ============ -->
+      <section class="screen" id="screen-settings" hidden>
+        <div class="screen-head">
+          <div>
+            <h1 class="display" style="font-size:var(--fs-2)">Settings</h1>
+            <p class="lede">Appearance, accessibility targets, and the eight projects glass ships to.</p>
           </div>
         </div>
-      </div>
+        <nav class="tabs" role="tablist" aria-label="Settings section" id="setTabs" style="margin-bottom:var(--sp-5)">
+          <button class="tab" role="tab" id="settab-appearance" aria-controls="setPane-appearance" aria-selected="true" tabindex="0">Appearance</button>
+          <button class="tab" role="tab" id="settab-a11y" aria-controls="setPane-a11y" aria-selected="false" tabindex="-1">Accessibility</button>
+          <button class="tab" role="tab" id="settab-projects" aria-controls="setPane-projects" aria-selected="false" tabindex="-1">Projects</button>
+          <button class="tab" role="tab" id="settab-install" aria-controls="setPane-install" aria-selected="false" tabindex="-1">Install</button>
+        </nav>
 
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">data.css</p>
-        <h3 class="card-title">Table, badge, avatar</h3><p>Illustrative table data. The live measured ratios are in the contrast budget above.</p>
-        <div class="table-wrap" style="margin-bottom: var(--sp-4)">
-          <table class="table table-striped">
-            <thead><tr><th>Theme</th><th data-numeric="true">Example ratio</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>zeno</td><td data-numeric="true">8.42:1</td><td><span class="badge badge-ok">pass</span></td></tr>
-              <tr><td>weft</td><td data-numeric="true">14.21:1</td><td><span class="badge badge-ok">pass</span></td></tr>
-              <tr><td>vantage</td><td data-numeric="true">7.90:1</td><td><span class="badge badge-ok">pass</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="row" style="align-items: center;">
-          <div class="avatar">AI</div>
-          <div class="avatar-group">
-            <span class="avatar avatar-sm">Z</span>
-            <span class="avatar avatar-sm">W</span>
-            <span class="avatar avatar-sm avatar-fallback">V</span>
-          </div>
-          <span class="badge badge-accent">New</span>
-          <span class="badge-dot badge-bad"></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- =================================================================== -->
-  <section id="workspace">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">05 — workspace patterns</p>
-        <h2>Native-feeling shells without a framework lock-in</h2>
-      </div>
-      <p class="sec-note">
-        A responsive editor and agent shell built from the same semantic roles: toggleable panels,
-        file and dock tabs, a split view, tree disclosure, a command composer, run disclosure, and
-        a status line. The CSS owns layout and states; products own data and execution.
-      </p>
-    </div>
-
-    <div class="workspace-frame" id="workspace-demo" data-nav-collapsed="false" data-aside-collapsed="false">
-      <header class="workspace-titlebar">
-        <div class="workspace-toolbar-group">
-          <button class="workspace-icon-button" id="workspace-toggle-nav" type="button" aria-label="Toggle project explorer" aria-controls="workspace-sidebar" aria-expanded="true">☰</button>
-          <strong>Project / src</strong>
-        </div>
-        <div class="workspace-toolbar-group" data-align="end">
-          <span class="chip chip-mono">main</span>
-          <button class="workspace-icon-button" id="workspace-toggle-aside" type="button" aria-label="Toggle assistant panel" aria-controls="workspace-aside" aria-expanded="true">✦</button>
-        </div>
-      </header>
-
-      <div class="workspace-body">
-        <aside class="workspace-sidebar" id="workspace-sidebar" aria-label="Project explorer">
-          <div class="workspace-panel-header"><span>Explorer</span><span>3 files</span></div>
-          <ul class="workspace-tree">
-            <li>
-              <button class="workspace-tree-item" id="workspace-tree-toggle" type="button" aria-expanded="true" aria-controls="workspace-tree-src">src</button>
-              <ul id="workspace-tree-src">
-                <li><button class="workspace-tree-item" type="button" aria-current="page" data-workspace-file="main">main.ts</button></li>
-                <li><button class="workspace-tree-item" type="button" data-workspace-file="policy">policy.ts</button></li>
-              </ul>
-            </li>
-            <li><button class="workspace-tree-item" type="button" data-workspace-file="readme">README.md</button></li>
-          </ul>
-        </aside>
-
-        <div class="workspace-main">
-          <div class="workspace-editor">
-            <div class="workspace-tabstrip" role="tablist" aria-label="Open files">
-              <button class="workspace-tab" id="workspace-file-tab-main" type="button" role="tab" aria-selected="true" aria-controls="workspace-file-panel-main" tabindex="0">main.ts</button>
-              <button class="workspace-tab" id="workspace-file-tab-policy" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-policy" tabindex="-1">policy.ts</button>
-              <button class="workspace-tab" id="workspace-file-tab-readme" type="button" role="tab" aria-selected="false" aria-controls="workspace-file-panel-readme" tabindex="-1">README.md</button>
-            </div>
-            <div class="workspace-editor-grid" id="workspace-editor-grid">
-              <div class="workspace-pane">
-                <pre id="workspace-file-panel-main" role="tabpanel" aria-labelledby="workspace-file-tab-main">const receipt = await kernel.decide(proposal);
-if (receipt.effect === "allow") await executor.run(receipt);</pre>
-                <pre id="workspace-file-panel-policy" role="tabpanel" aria-labelledby="workspace-file-tab-policy" hidden>export const policy = definePolicy({
-  destructive: "ask",
-  network: "bounded"
-});</pre>
-                <pre id="workspace-file-panel-readme" role="tabpanel" aria-labelledby="workspace-file-tab-readme" hidden># Project
-
-A deterministic agent workspace with reviewable actions.</pre>
-              </div>
-              <button class="workspace-divider" id="workspace-divider" type="button" role="separator" aria-label="Resize editor panes" aria-orientation="vertical" aria-valuemin="35" aria-valuemax="75" aria-valuenow="58"></button>
-              <div class="workspace-pane" aria-label="Preview pane">
-                <p class="kicker">Preview</p>
-                <div class="state state-ok state-text"></div>
-                <p class="card-note">One proposal, one deterministic decision, one receipt.</p>
-              </div>
+        <div id="setPane-appearance" role="tabpanel" aria-labelledby="settab-appearance" class="settings-grid">
+          <div class="card glass">
+            <span class="panel-label">Ground — dark, light, or system</span>
+            <div class="seg" role="group" aria-label="Ground" id="groundSeg">
+              <button class="btn" data-ground="dark" aria-pressed="false">Dark</button>
+              <button class="btn" data-ground="system" aria-pressed="true">System</button>
+              <button class="btn" data-ground="light" aria-pressed="false">Light</button>
             </div>
           </div>
-
-          <section class="workspace-dock" aria-label="Developer tools">
-            <div class="workspace-tabstrip" role="tablist" aria-label="Developer tool views">
-              <button class="workspace-tab" id="workspace-dock-tab-problems" type="button" role="tab" aria-selected="true" aria-controls="workspace-dock-panel-problems" tabindex="0">Problems</button>
-              <button class="workspace-tab" id="workspace-dock-tab-output" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-output" tabindex="-1">Output</button>
-              <button class="workspace-tab" id="workspace-dock-tab-debug" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-debug" tabindex="-1">Debug Console</button>
-              <button class="workspace-tab" id="workspace-dock-tab-terminal" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-terminal" tabindex="-1">Terminal</button>
-              <button class="workspace-tab" id="workspace-dock-tab-ports" type="button" role="tab" aria-selected="false" aria-controls="workspace-dock-panel-ports" tabindex="-1">Ports</button>
+          <div class="card glass">
+            <span class="panel-label">Accent — one of eight real themes</span>
+            <div class="swatch-grid" id="settingsAccentRow"></div>
+          </div>
+          <div class="card glass">
+            <div class="switch-row">
+              <div class="switch-copy"><b>Reduce transparency</b><span>Turns off backdrop blur across every glass surface — the manual escape hatch from tokens.css.</span></div>
+              <label class="switch"><input type="checkbox" id="flatToggle"></label>
             </div>
-            <div class="workspace-dock-content" id="workspace-dock-panel-problems" role="tabpanel" aria-labelledby="workspace-dock-tab-problems">No problems detected.</div>
-            <div class="workspace-dock-content" id="workspace-dock-panel-output" role="tabpanel" aria-labelledby="workspace-dock-tab-output" hidden>Checks are ready.</div>
-            <div class="workspace-dock-content" id="workspace-dock-panel-debug" role="tabpanel" aria-labelledby="workspace-dock-tab-debug" hidden>Debug console is idle.</div>
-            <div class="workspace-dock-content" id="workspace-dock-panel-terminal" role="tabpanel" aria-labelledby="workspace-dock-tab-terminal" hidden>PS D:\Code\Project&gt;</div>
-            <div class="workspace-dock-content" id="workspace-dock-panel-ports" role="tabpanel" aria-labelledby="workspace-dock-tab-ports" hidden>No forwarded ports.</div>
-          </section>
+          </div>
         </div>
 
-        <aside class="workspace-aside" id="workspace-aside" aria-label="Assistant session">
-          <div class="workspace-panel-header"><span>Session</span><span class="state state-info state-text"></span></div>
-          <details class="thinking-disclosure">
-            <summary>Run details</summary>
-            <p>Sanitized checkpoints and tool outcomes belong here; private model reasoning does not.</p>
-          </details>
-          <form class="command-composer" id="workspace-composer">
-            <label class="sr" for="workspace-prompt">Ask the assistant</label>
-            <textarea id="workspace-prompt" placeholder="Ask anything, @ to mention, / for actions"></textarea>
-            <div class="command-composer-actions">
-              <span>Local · reviewed actions</span>
-              <button class="btn btn-primary" type="submit">Run</button>
+        <div id="setPane-a11y" role="tabpanel" aria-labelledby="settab-a11y" class="settings-grid" hidden>
+          <div class="card glass">
+            <span class="panel-label">WCAG target</span>
+            <p class="lede" style="margin:0 0 var(--sp-3)">AAA raises the text minimum to 7:1 (WCAG 1.4.6). WCAG defines no stricter tier for non-text/UI contrast, so graphic and focus-ring pairs stay at the AA 3:1 minimum either way.</p>
+            <div class="seg3" role="group" aria-label="WCAG target" id="wcagSeg">
+              <button class="opt-tile" data-wcag="AA" aria-pressed="true"><b>AA</b><span>4.5:1 text · 3:1 graphic — the shipped default</span></button>
+              <button class="opt-tile" data-wcag="AAA" aria-pressed="false"><b>AAA</b><span>7:1 text · 3:1 graphic — stricter, a few will flip</span></button>
             </div>
-            <span id="workspace-composer-status" role="status"></span>
-          </form>
-        </aside>
-      </div>
+          </div>
+          <div class="card glass gauge-card">
+            <div style="flex:1">
+              <b style="font-size:var(--fs-1)" id="passGaugeLabel">— / — pairs passing</b>
+              <div class="gauge" style="margin-top:var(--sp-2)"><span class="gauge-fill" id="passGaugeFill"></span></div>
+              <p class="card-note" style="margin-top:var(--sp-2)">at the current ground and WCAG target, recomputed live</p>
+            </div>
+            <span class="gauge-big" id="passGaugeText">—%</span>
+          </div>
+        </div>
 
-      <footer class="workspace-statusbar">
-        <span>main · 0 errors · 0 warnings</span>
-        <span>Ln 1, Col 1 · UTF-8 · TypeScript</span>
-      </footer>
+        <div id="setPane-projects" role="tabpanel" aria-labelledby="settab-projects" hidden>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The eight source projects, honestly: their role and the hue they contributed. No fabricated version or sync status — the working link is real, everything else is what this repository's own README documents.</p>
+          <div class="table-wrap card glass" style="padding:0">
+            <table class="table">
+              <thead><tr><th>Project</th><th>Role</th><th>Hue</th><th></th></tr></thead>
+              <tbody id="projTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="setPane-install" role="tabpanel" aria-labelledby="settab-install" hidden>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Glass is not published to npm — every path below is real and in production use by Zeno, Weft or Vantage today.</p>
+          <div class="card glass" style="margin-bottom:var(--sp-4)">
+            <div class="copy-row"><span class="panel-label" style="margin:0">Clone and verify</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="git clone https://github.com/abheet19/glass.git&#10;node glass/scripts/contrast.mjs">Copy</button></div>
+            <pre class="code-block">git clone https://github.com/abheet19/glass.git
+node glass/scripts/contrast.mjs      <span class="tag"># prove it before you trust it</span></pre>
+          </div>
+          <div class="card glass" style="margin-bottom:var(--sp-4)">
+            <div class="copy-row"><span class="panel-label" style="margin:0">Git submodule</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="git submodule add https://github.com/abheet19/glass.git vendor/glass">Copy</button></div>
+            <pre class="code-block">git submodule add https://github.com/abheet19/glass.git vendor/glass</pre>
+          </div>
+          <div class="card glass" style="margin-bottom:var(--sp-4)">
+            <div class="copy-row"><span class="panel-label" style="margin:0">Plain CSS import</span><button class="btn btn-ghost btn-sm copy-btn" data-copy='&lt;link rel="stylesheet" href="src/tokens.css"&gt;&#10;&lt;link rel="stylesheet" href="src/themes/weft.css"&gt;&#10;&lt;link rel="stylesheet" href="src/primitives.css"&gt;'>Copy</button></div>
+            <pre class="code-block">&lt;link rel="stylesheet" href="src/tokens.css"&gt;
+&lt;link rel="stylesheet" href="src/themes/weft.css"&gt;
+&lt;link rel="stylesheet" href="src/primitives.css"&gt;
+
+&lt;html <span class="tag">data-glass="weft"</span>&gt;            <span style="color:var(--ink-3)"># hue</span>
+&lt;html data-glass="weft" <span class="tag">data-theme="light"</span>&gt;
+&lt;html data-glass="weft" <span class="tag">data-flat="1"</span>&gt;  <span style="color:var(--ink-3)"># no blur</span></pre>
+          </div>
+          <div class="card glass">
+            <div class="copy-row"><span class="panel-label" style="margin:0">Verify</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="node scripts/contrast.mjs --verbose&#10;node scripts/contrast.mjs --theme weft&#10;node scripts/contrast.mjs --emit-json">Copy</button></div>
+            <pre class="code-block">node scripts/contrast.mjs --verbose    <span style="color:var(--ink-3)"># every pair</span>
+node scripts/contrast.mjs --theme weft <span style="color:var(--ink-3)"># one theme</span>
+node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuild tokens.json</span></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== COMMAND PALETTE (real .modal-scrim / .modal) ===================== -->
+<div class="modal-scrim" id="paletteOverlay" hidden>
+  <div class="modal glass palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette-input-row">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="17" y1="17" x2="13.2" y2="13.2"/></svg>
+      <label class="sr" for="paletteInput">Search components, actions, projects</label>
+      <input type="text" id="paletteInput" placeholder="Search components, actions, projects…" autocomplete="off">
+      <span class="kbd">esc</span>
     </div>
-  </section>
+    <div class="palette-list" id="paletteList"></div>
+  </div>
+</div>
 
-  <!-- =================================================================== -->
-  <section id="gallery">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">06 — the eight</p>
-        <h2>One grammar, eight hues</h2>
-      </div>
-      <p class="sec-note">
-        Each theme file is eight numbers: the ground's hue and chroma, and the hue plus a per-ground
-        chroma for each accent. No structural token is in scope inside a theme, so a theme cannot
-        break the ladder. The strips below are resolved live from those eight numbers. Click a row to
-        wear it.
-      </p>
+<!-- ===================== SHORTCUTS ===================== -->
+<div class="modal-scrim" id="shortcutsOverlay" hidden>
+  <div class="modal glass shortcuts-modal" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <h2 class="modal-title" id="shortcutsTitle">Keyboard shortcuts</h2>
+    <div class="modal-body">
+      <div class="shortcut-row"><span>Open command palette</span><span class="shortcut-keys"><span class="kbd">⌘</span><span class="kbd">K</span></span></div>
+      <div class="shortcut-row"><span>Show this list</span><span class="shortcut-keys"><span class="kbd">?</span></span></div>
+      <div class="shortcut-row"><span>Cycle ground (dark ⇄ system ⇄ light)</span><span class="shortcut-keys"><span class="kbd">G</span></span></div>
+      <div class="shortcut-row"><span>Go to Overview</span><span class="shortcut-keys"><span class="kbd">1</span></span></div>
+      <div class="shortcut-row"><span>Go to Library</span><span class="shortcut-keys"><span class="kbd">2</span></span></div>
+      <div class="shortcut-row"><span>Go to Settings</span><span class="shortcut-keys"><span class="kbd">3</span></span></div>
+      <div class="shortcut-row"><span>Close any overlay</span><span class="shortcut-keys"><span class="kbd">esc</span></span></div>
     </div>
-    <div class="tablewrap" id="gallery-rows"></div>
-  </section>
+    <div class="modal-actions"><button class="btn btn-primary" id="shortcutsClose">Close</button></div>
+  </div>
+</div>
 
-  <!-- =================================================================== -->
-  <section id="use">
-    <div class="sec-head">
-      <div>
-        <p class="kicker">07 — how to use it</p>
-        <h2>Three CSS files and an attribute</h2>
-      </div>
-    </div>
-    <div class="grid g2">
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">plain css</p>
-<pre>&lt;link rel="stylesheet" href="<b>src/tokens.css</b>"&gt;
-&lt;link rel="stylesheet" href="<b>src/themes/weft.css</b>"&gt;
-&lt;link rel="stylesheet" href="<b>src/primitives.css</b>"&gt;
+<!-- ===================== GENERIC CONFIRM MODAL ===================== -->
+<div class="modal-scrim" id="modalScrim" hidden>
+  <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
 
-&lt;html <b>data-glass="weft"</b>&gt;            <span style="color:var(--ink)">&lt;!-- hue --&gt;</span>
-&lt;html data-glass="weft" <b>data-theme="light"</b>&gt;
-&lt;html data-glass="weft" <b>data-flat="1"</b>&gt;  <span style="color:var(--ink)">&lt;!-- no blur --&gt;</span></pre>
-      </div>
-      <div class="card">
-        <p class="kicker" style="margin:0 0 var(--sp-3)">verify</p>
-<pre><b>node scripts/contrast.mjs</b>
-  8 themes x 2 grounds = 16 palettes
-  <span style="color:var(--ok)">PASS</span> — 814/814 assertions hold.
-
-<b>node scripts/contrast.mjs --verbose</b>   <span style="color:var(--ink)"># every pair</span>
-<b>node scripts/contrast.mjs --theme weft</b> <span style="color:var(--ink)"># one theme</span>
-<b>node scripts/contrast.mjs --emit-json</b>  <span style="color:var(--ink)"># rebuild tokens.json</span></pre>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="wrap">
-  <p>
-    Built by <a href="https://github.com/abheet19">Abheet Singh Isher</a> ·
-    <a href="https://github.com/abheet19/glass">github.com/abheet19/glass</a> · MIT.
-    Extracted from Zeno, Weft, Vantage, ShieldAI, Textify, HealthFlow,
-    Smart-Rephraser-Lite and AI-Detector-Web-Extension. Not published to npm.
-  </p>
-  <p>This page loads no font, no script and no stylesheet from the network. Open it from disk and it is complete.</p>
-</footer>
+<div class="toast-region" id="toastStack" aria-live="polite"></div>
 
 <script>
 /* ==========================================================================
-   The page audits itself.
+   Glass Studio — the demo audits itself.
 
-   Nothing about the palette is duplicated here. Every value is read back out
-   of the live cascade with getComputedStyle, converted from oklch with the
-   same maths scripts/contrast.mjs uses, and measured in front of you. If the
-   CSS changes, this page changes with it; there is no second copy to drift.
+   Nothing about the palette is duplicated here. Every colour value is read
+   back out of the live cascade with getComputedStyle, converted from oklch
+   with the same maths scripts/contrast.mjs uses, and measured in front of
+   you. If the CSS changes, this page changes with it; there is no second
+   copy to drift. Static facts (radii, spacing, motion durations) are the
+   same numbers tokens.css declares — they do not vary by theme, so they are
+   not recomputed, only printed.
    ========================================================================== */
+(function () {
+'use strict';
+var $ = function (s, c) { return (c || document).querySelector(s); };
+var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+var html = document.documentElement;
 
-const THEMES = [
-  ['zeno',     'crimson',          'Zeno · agent suite'],
-  ['weft',     'teal + indigo',    'Weft · CRDT editor'],
-  ['vantage',  'gold + ochre',     'Vantage · analytics'],
-  ['shield',   'steel blue',       'ShieldAI · privacy'],
-  ['textify',  'copper',           'Textify · summariser'],
-  ['health',   'clinical emerald', 'HealthFlow · clinical'],
-  ['rephrase', 'violet + orchid',  'Smart-Rephraser-Lite'],
-  ['detect',   'rose',             'AI-Detector extension'],
-];
+var ICONS = {
+  check: '<svg viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10.5 8 14.5 16 5.5"/></svg>',
+  chev: '<svg viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 7.5 10 12.5 15 7.5"/></svg>',
+  copy: '<svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="6.5" y="6.5" width="10" height="11" rx="1.6"/><path d="M4.5 13.5h-1A1.5 1.5 0 0 1 2 12V3.5A1.5 1.5 0 0 1 3.5 2H12a1.5 1.5 0 0 1 1.5 1.5v1"/></svg>',
+  sun: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="3.6"/><line x1="10" y1="1.6" x2="10" y2="3.4"/><line x1="10" y1="16.6" x2="10" y2="18.4"/><line x1="1.6" y1="10" x2="3.4" y2="10"/><line x1="16.6" y1="10" x2="18.4" y2="10"/><line x1="4.3" y1="4.3" x2="5.5" y2="5.5"/><line x1="14.5" y1="14.5" x2="15.7" y2="15.7"/><line x1="4.3" y1="15.7" x2="5.5" y2="14.5"/><line x1="14.5" y1="5.5" x2="15.7" y2="4.3"/></svg>',
+  moon: '<svg viewBox="0 0 20 20" fill="currentColor" stroke="none"><path d="M15.5 12.4A7 7 0 1 1 7.6 4.5a5.6 5.6 0 0 0 7.9 7.9Z"/></svg>',
+  auto: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 3v14a7 7 0 0 0 0-14Z" fill="currentColor" stroke="none"/></svg>'
+};
 
-const html = document.documentElement;
-
-/* ---- colour maths, identical to scripts/contrast.mjs -------------------- */
-const linToSrgb = c => (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055) * 255;
-
+/* ---------------- colour maths, identical to scripts/contrast.mjs -------- */
+var linToSrgb = function (c) { return (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055) * 255; };
 function oklchToLin(L, C, H) {
-  const h = H * Math.PI / 180, a = C * Math.cos(h), b = C * Math.sin(h);
-  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
-  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
-  const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+  var h = H * Math.PI / 180, a = C * Math.cos(h), b = C * Math.sin(h);
+  var l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  var m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  var s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+  var l = Math.pow(l_, 3), m = Math.pow(m_, 3), s = Math.pow(s_, 3);
   return [
     4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
     -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-    -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
   ];
 }
-const inGamut = lin => lin.every(c => c >= -1e-5 && c <= 1 + 1e-5);
+function inGamut(lin) { return lin.every(function (c) { return c >= -1e-5 && c <= 1 + 1e-5; }); }
 function oklchToRgb(L, C, H) {
-  let lin = oklchToLin(L, C, H);
+  var lin = oklchToLin(L, C, H);
   if (!inGamut(lin)) {
-    let lo = 0, hi = C;
-    for (let i = 0; i < 28; i++) { const m = (lo + hi) / 2; if (inGamut(oklchToLin(L, m, H))) lo = m; else hi = m; }
+    var lo = 0, hi = C;
+    for (var i = 0; i < 28; i++) { var m = (lo + hi) / 2; if (inGamut(oklchToLin(L, m, H))) lo = m; else hi = m; }
     lin = oklchToLin(L, lo, H);
   }
-  return lin.map(c => linToSrgb(Math.min(1, Math.max(0, c))));
+  return lin.map(function (c) { return linToSrgb(Math.min(1, Math.max(0, c))); });
 }
-const lum = rgb => {
-  const [r, g, b] = rgb.map(c8 => { const c = c8 / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-const ratio = (a, b) => { const x = lum(a), y = lum(b); const [hi, lo] = x > y ? [x, y] : [y, x]; return (hi + 0.05) / (lo + 0.05); };
-const hex = rgb => '#' + rgb.map(c => Math.round(Math.min(255, Math.max(0, c))).toString(16).padStart(2, '0').toUpperCase()).join('');
-const over = (c, bd) => (c.a >= 1 ? c.rgb : c.rgb.map((v, i) => v * c.a + bd[i] * (1 - c.a)));
+function lum(rgb) {
+  var vals = rgb.map(function (c8) { var c = c8 / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); });
+  return 0.2126 * vals[0] + 0.7152 * vals[1] + 0.0722 * vals[2];
+}
+function ratio(a, b) { var x = lum(a), y = lum(b); var hi = x > y ? x : y, lo = x > y ? y : x; return (hi + 0.05) / (lo + 0.05); }
+function hex(rgb) { return '#' + rgb.map(function (c) { return Math.round(Math.min(255, Math.max(0, c))).toString(16).padStart(2, '0').toUpperCase(); }).join(''); }
+function over(c, bd) { return c.a >= 1 ? c.rgb : c.rgb.map(function (v, i) { return v * c.a + bd[i] * (1 - c.a); }); }
 
-/* Parse whatever the browser hands back for a custom property: an oklch()
-   after var() substitution, a color-mix() of two of them, or a plain rgb(). */
 function splitTop(str, sep) {
-  const out = []; let d = 0, buf = '';
-  for (const ch of str) {
+  var out = [], d = 0, buf = '';
+  for (var i = 0; i < str.length; i++) {
+    var ch = str[i];
     if (ch === '(') d++; else if (ch === ')') d--;
     if (ch === sep && d === 0) { out.push(buf); buf = ''; continue; }
     buf += ch;
   }
   out.push(buf);
-  return out.map(s => s.trim()).filter(Boolean);
+  return out.map(function (s) { return s.trim(); }).filter(Boolean);
 }
-
 function parseColor(v) {
   v = String(v).trim();
-  let m = v.match(/^rgba?\(([^)]+)\)$/i);
+  var m = v.match(/^rgba?\(([^)]+)\)$/i);
   if (m) {
-    const p = m[1].split(/[\s,/]+/).filter(Boolean).map(parseFloat);
+    var p = m[1].split(/[\s,/]+/).filter(Boolean).map(parseFloat);
     return { rgb: [p[0], p[1], p[2]], a: p.length > 3 ? p[3] : 1 };
   }
   m = v.match(/^oklch\(\s*([\s\S]+?)\s*\)$/i);
   if (m) {
-    const [body, alpha] = splitTop(m[1], '/');
-    const parts = body.split(/\s+/).filter(Boolean);
-    const num = (t, scale) => (String(t).trim().endsWith('%') ? parseFloat(t) / 100 * scale : parseFloat(t));
-    return { rgb: oklchToRgb(num(parts[0], 1), num(parts[1], 0.4), num(parts[2].replace(/deg$/i, ''), 360)),
-             a: alpha === undefined ? 1 : num(alpha, 1) };
+    var parts2 = splitTop(m[1], '/');
+    var body = parts2[0], alpha = parts2[1];
+    var parts = body.split(/\s+/).filter(Boolean);
+    var num = function (t, scale) { return String(t).trim().slice(-1) === '%' ? parseFloat(t) / 100 * scale : parseFloat(t); };
+    return {
+      rgb: oklchToRgb(num(parts[0], 1), num(parts[1], 0.4), num(parts[2].replace(/deg$/i, ''), 360)),
+      a: alpha === undefined ? 1 : num(alpha, 1)
+    };
   }
   m = v.match(/^color-mix\(\s*in\s+srgb\s*,([\s\S]+)\)$/i);
   if (m) {
-    const parts = splitTop(m[1], ',').map(p => {
-      const pm = p.match(/^([\s\S]+?)\s+([\d.]+)%$/);
+    var parts3 = splitTop(m[1], ',').map(function (p) {
+      var pm = p.match(/^([\s\S]+?)\s+([\d.]+)%$/);
       return pm ? { c: pm[1].trim(), p: parseFloat(pm[2]) } : { c: p.trim(), p: null };
     });
-    const [x, y] = parts;
+    var x = parts3[0], y = parts3[1];
     if (x.p === null && y.p === null) { x.p = 50; y.p = 50; }
     else if (x.p === null) x.p = 100 - y.p; else if (y.p === null) y.p = 100 - x.p;
-    const wx = x.p / (x.p + y.p), wy = y.p / (x.p + y.p);
-    const cx = x.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(x.c);
-    const cy = y.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(y.c);
-    const a = cx.a * wx + cy.a * wy;
-    return { rgb: a === 0 ? [0, 0, 0] : [0, 1, 2].map(i => (cx.rgb[i] * cx.a * wx + cy.rgb[i] * cy.a * wy) / a), a };
+    var wx = x.p / (x.p + y.p), wy = y.p / (x.p + y.p);
+    var cx = x.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(x.c);
+    var cy = y.c === 'transparent' ? { rgb: [0, 0, 0], a: 0 } : parseColor(y.c);
+    var a = cx.a * wx + cy.a * wy;
+    return { rgb: a === 0 ? [0, 0, 0] : [0, 1, 2].map(function (i) { return (cx.rgb[i] * cx.a * wx + cy.rgb[i] * cy.a * wy) / a; }), a: a };
   }
   return { rgb: [128, 128, 128], a: 1 };
 }
 
-const TOKENS = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3',
-                '--accent', '--accent-2', '--on-accent', '--ok', '--warn', '--bad', '--info', '--gl-worst'];
+var TOKENS = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3',
+  '--accent', '--accent-2', '--on-accent', '--ok', '--warn', '--bad', '--info', '--gl-worst'];
 
-/* Read one palette by borrowing the root element for a synchronous moment.
-   No paint happens between the two writes, so nothing flickers. */
 function readPalette(theme, ground) {
-  const g0 = html.dataset.glass, t0 = html.dataset.theme;
+  var g0 = html.dataset.glass, t0 = html.dataset.theme;
   html.dataset.glass = theme;
   if (ground) html.dataset.theme = ground; else delete html.dataset.theme;
-  const cs = getComputedStyle(html);
-  const out = {};
-  for (const t of TOKENS) out[t] = parseColor(cs.getPropertyValue(t));
+  var cs = getComputedStyle(html);
+  var out = {};
+  for (var i = 0; i < TOKENS.length; i++) out[TOKENS[i]] = parseColor(cs.getPropertyValue(TOKENS[i]));
   html.dataset.glass = g0;
   if (t0) html.dataset.theme = t0; else delete html.dataset.theme;
   return out;
 }
-
-const flat = p => Object.fromEntries(TOKENS.map(t => [t, over(p[t], p['--bg'].rgb)]));
-
-/* ---- 01 · the ramp ------------------------------------------------------ */
-const RAMP = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3', '--accent', '--accent-2'];
-
-function renderRamp() {
-  const p = flat(readPalette(html.dataset.glass, html.dataset.theme || null));
-  document.getElementById('ramp-strip').innerHTML = RAMP.map(t => `
-    <div class="ramp-cell">
-      <div class="ramp-swatch" style="background:${hex(p[t])}"></div>
-      <div class="ramp-meta"><span class="ramp-name">${t}</span><span class="ramp-val">${hex(p[t])}</span></div>
-    </div>`).join('');
+function flatPalette(p) {
+  var out = {};
+  for (var i = 0; i < TOKENS.length; i++) { var t = TOKENS[i]; out[t] = over(p[t], p['--bg'].rgb); }
+  return out;
 }
+function effectiveGround() {
+  if (state.ground !== 'system') return state.ground;
+  try { return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; } catch (e) { return 'dark'; }
+}
+function reqFor(kind) { if (kind === 'text') return state.wcag === 'AAA' ? 7.0 : 4.5; return 3.0; }
 
-/* ---- 02 · the budget ---------------------------------------------------- */
-const PAIRS = [
-  ['--ink on --raised', 'body text · worst opaque plane', '--ink', '--raised', 4.5],
-  ['--ink on --gl-worst', 'body text · worst glass', '--ink', '--gl-worst', 4.5],
-  ['--ink-2 on --raised', 'secondary text', '--ink-2', '--raised', 4.5],
-  ['--ink-2 on --gl-worst', 'secondary text on glass', '--ink-2', '--gl-worst', 4.5],
-  ['--ink-3 on --raised', 'graphic only — never text', '--ink-3', '--raised', 3.0],
-  ['--accent on --raised', 'accent as text', '--accent', '--raised', 4.5],
-  ['--accent on --gl-worst', 'accent as text on glass', '--accent', '--gl-worst', 4.5],
-  ['--accent-2 on --raised', 'secondary accent as text', '--accent-2', '--raised', 4.5],
-  ['--accent-2 on --gl-worst', 'graphic only on glass', '--accent-2', '--gl-worst', 3.0],
-  ['--on-accent on --accent', '.btn-primary label', '--on-accent', '--accent', 4.5],
-  ['--ok on --raised', 'state as text', '--ok', '--raised', 4.5],
-  ['--warn on --raised', 'state as text', '--warn', '--raised', 4.5],
-  ['--bad on --raised', 'state as text', '--bad', '--raised', 4.5],
-  ['--info on --raised', 'state as text', '--info', '--raised', 4.5],
-  ['--bad on --gl-worst', 'state glyph on glass', '--bad', '--gl-worst', 3.0],
+/* ---------------- data ---------------- */
+var THEMES = [
+  ['zeno', 'crimson', 'Zeno · agent suite'],
+  ['weft', 'teal + indigo', 'Weft · CRDT editor'],
+  ['vantage', 'gold + ochre', 'Vantage · analytics'],
+  ['shield', 'steel blue', 'ShieldAI · privacy'],
+  ['textify', 'copper', 'Textify · summariser'],
+  ['health', 'clinical emerald', 'HealthFlow · clinical'],
+  ['rephrase', 'violet + orchid', 'Smart-Rephraser-Lite'],
+  ['detect', 'rose', 'AI-Detector-Web-Extension']
+];
+var HEX = { zeno: '#C81E33', weft: '#2ED3C6', vantage: '#F2B23E', shield: '#4F8EF7', textify: '#E0954D', health: '#3ECF8E', rephrase: '#7C4DFF', detect: '#E8496C' };
+var PROJECTS = [
+  { theme: 'zeno', repo: 'Zeno', name: 'Zeno', role: 'Local-first agent orchestrator' },
+  { theme: 'weft', repo: 'Weft', name: 'Weft', role: 'Real-time CRDT editor' },
+  { theme: 'vantage', repo: 'Vantage', name: 'Vantage', role: 'Analytics + MCP workspace' },
+  { theme: 'shield', repo: 'ShieldAI', name: 'ShieldAI', role: 'Privacy-preserving ML tool' },
+  { theme: 'textify', repo: 'Textify', name: 'Textify', role: 'Document summariser' },
+  { theme: 'health', repo: 'HealthFlow', name: 'HealthFlow', role: 'Clinical care-coordination workflow' },
+  { theme: 'rephrase', repo: 'Smart-Rephraser-Lite', name: 'Smart Rephraser Lite', role: 'Rewriting extension' },
+  { theme: 'detect', repo: 'AI-Detector-Web-Extension', name: 'AI Detector', role: 'Browser detection extension' }
+];
+var PAIRS = [
+  ['--ink on --raised', 'body text · worst opaque plane', 'text', '--ink', '--raised'],
+  ['--ink on --gl-worst', 'body text · worst glass', 'text', '--ink', '--gl-worst'],
+  ['--ink-2 on --raised', 'secondary text', 'text', '--ink-2', '--raised'],
+  ['--ink-2 on --gl-worst', 'secondary text on glass', 'text', '--ink-2', '--gl-worst'],
+  ['--ink-3 on --raised', 'graphic only — never text', 'ui', '--ink-3', '--raised'],
+  ['--accent on --raised', 'accent as text', 'text', '--accent', '--raised'],
+  ['--accent on --gl-worst', 'accent as text on glass', 'text', '--accent', '--gl-worst'],
+  ['--accent-2 on --raised', 'secondary accent as text', 'text', '--accent-2', '--raised'],
+  ['--accent-2 on --gl-worst', 'graphic only on glass', 'ui', '--accent-2', '--gl-worst'],
+  ['--on-accent on --accent', '.btn-primary label', 'text', '--on-accent', '--accent'],
+  ['--ok on --raised', 'state as text', 'text', '--ok', '--raised'],
+  ['--warn on --raised', 'state as text', 'text', '--warn', '--raised'],
+  ['--bad on --raised', 'state as text', 'text', '--bad', '--raised'],
+  ['--info on --raised', 'state as text', 'text', '--info', '--raised'],
+  ['--bad on --gl-worst', 'state glyph on glass', 'ui', '--bad', '--gl-worst']
 ];
 
+function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+
+var COMPONENTS = [
+  { id: 'glass', name: '.glass', cat: 'primitive', file: 'primitives.css',
+    blurb: 'The base surface every panel inherits — a translucent tint, a real blur with a saturation lift, a 1px edge that makes the pane an object, and a top inner highlight standing in for a light source.',
+    tokens: [['--gl-fill', 'color'], ['--gl-edge', 'color'], ['--gl-blur', 'static', 'blur(14px) saturate(1.4)'], ['--r-3', 'static', '16px']],
+    code: '<div class="glass" style="padding:var(--sp-5)">\n  …\n</div>',
+    rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst'], ['--ink-2 on --gl-worst', 'text', '--ink-2', '--gl-worst']] },
+  { id: 'card', name: '.card / .card-raised', cat: 'primitive', file: 'primitives.css',
+    blurb: '.glass\u2019s opaque sibling — the workhorse container for long-form text. .card is --surface; .card-raised is --raised, the lightest opaque plane text may land on and the backdrop every text ceiling in this system is measured against.',
+    tokens: [['--surface', 'color'], ['--raised', 'color'], ['--r-2', 'static', '12px'], ['--sp-5', 'static', '20px padding']],
+    code: '<div class="card">\n  <h3 class="card-title">Title</h3>\n  <p class="card-note">Body copy…</p>\n</div>',
+    rows: [['--ink on --raised', 'text', '--ink', '--raised'], ['--ink-2 on --raised', 'text', '--ink-2', '--raised']] },
+  { id: 'btn', name: '.btn', cat: 'primitive', file: 'primitives.css',
+    blurb: 'Three weights — quiet (default), Primary, Ghost — plus Glass, each keeping the 24px --target-min hit area enforced by the primitive itself (WCAG 2.2 SC 2.5.8), not left to the caller.',
+    tokens: [['--target-min', 'static', '24px min height'], ['--r-1', 'static', '8px'], ['--t-fast', 'static', '120ms']],
+    code: '<button class="btn btn-primary">Publish</button>\n<button class="btn btn-ghost">Cancel</button>\n<button class="btn" disabled>Disabled</button>',
+    rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent'], ['--ink on --raised', 'text', '--ink', '--raised']] },
+  { id: 'field', name: '.field', cat: 'primitive', file: 'primitives.css',
+    blurb: 'A recessed input — the same class styles a native <input>, <textarea> and <select>. A 2px accent focus ring, an explicit :invalid/aria-invalid border, and a placeholder that never doubles as the only label.',
+    tokens: [['--focus-w', 'static', '2px'], ['--focus-off', 'static', '2px'], ['--bad', 'color']],
+    code: '<label class="field-label" for="p">Project</label>\n<input class="field" id="p" value="glass">',
+    rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
+  { id: 'chip', name: '.chip', cat: 'primitive', file: 'primitives.css',
+    blurb: 'A neutral label — never a status. .chip-accent carries the brand; .chip-mono sets the number/code face. If you want a status, that is .state, which carries four channels instead of one.',
+    tokens: [['--r-pill', 'static', '999px'], ['--accent', 'color']],
+    code: '<span class="chip">neutral</span>\n<span class="chip chip-accent">accent</span>',
+    rows: [['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'state', name: '.state', cat: 'primitive', file: 'primitives.css',
+    blurb: 'A status in four channels, of which colour is one: a fill, a left key bar, a glyph and a word — rendered from --st-glyph/--st-label so the markup never hand-types out of sync. Print this in greyscale and it still reads.',
+    tokens: [['--ok', 'color'], ['--warn', 'color'], ['--bad', 'color'], ['--info', 'color']],
+    code: '<span class="state state-ok state-text"></span>\n<span class="state state-bad state-text"></span>',
+    rows: [['--ok on --raised', 'text', '--ok', '--raised'], ['--bad on --raised', 'text', '--bad', '--raised']] },
+  { id: 'gauge', name: '.gauge', cat: 'primitive', file: 'primitives.css',
+    blurb: 'A determinate bar, and only a bar — there is deliberately no indeterminate spinner in this package. A spinner is an animation that claims to be information; if the amount is not known, say so in words.',
+    tokens: [['--accent', 'color'], ['--line', 'color'], ['--t-slow', 'static', '400ms fill transition']],
+    code: '<div class="gauge"><span class="gauge-fill" style="width:86%"></span></div>',
+    rows: [['--accent on --line (graphic)', 'ui', '--accent', '--line']] },
+  { id: 'field-group', name: '.field-group', cat: 'forms', file: 'forms.css',
+    blurb: 'The label / input / hint / error stack every form field needs, at an 8px rhythm. .field-error-text carries its own leading glyph so an error is never colour-only.',
+    tokens: [['--ink-2', 'color'], ['--bad', 'color'], ['--fs-0', 'static', 'hint size']],
+    code: '<div class="field-group">\n  <label class="field-label" for="n">Project name</label>\n  <input class="field" id="n">\n  <p class="field-hint">Lowercase, no spaces.</p>\n</div>',
+    rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg'], ['--bad on --bg', 'text', '--bad', '--bg']] },
+  { id: 'checkbox', name: '.checkbox', cat: 'forms', file: 'forms.css',
+    blurb: 'A native <input type="checkbox"> restyled as an 18px recessed box with a check glyph, not a fill alone — the mark survives greyscale and a missed border-radius, and keyboard/screen-reader behaviour stays native.',
+    tokens: [['--accent', 'color'], ['--r-1', 'static', '8px, radio uses --r-pill']],
+    code: '<label class="checkbox"><input type="checkbox" checked> Synced to workspace</label>',
+    rows: [['--on-accent on --accent', 'ui', '--on-accent', '--accent']] },
+  { id: 'radio', name: '.radio', cat: 'forms', file: 'forms.css',
+    blurb: 'The circular sibling of .checkbox for exclusive choice — same box, same focus ring, a dot instead of a tick.',
+    tokens: [['--accent', 'color'], ['--focus', 'color']],
+    code: '<label class="radio"><input type="radio" name="wcag" checked> AA</label>',
+    rows: [['--on-accent on --accent', 'ui', '--on-accent', '--accent']] },
+  { id: 'switch', name: '.switch', cat: 'forms', file: 'forms.css',
+    blurb: 'A native checkbox styled as a track and knob, powering Reduce transparency in this very app. Real form semantics, not a div pretending to be one.',
+    tokens: [['--accent', 'color'], ['--t-base', 'static', '220ms slide']],
+    code: '<label class="switch"><input type="checkbox" checked> Reduce transparency</label>',
+    rows: [['--accent on --line (graphic)', 'ui', '--accent', '--line']] },
+  { id: 'tabs', name: '.tabs', cat: 'nav', file: 'navigation.css',
+    blurb: 'A segmented tablist with roving tabindex, arrow-key/Home/End navigation and connected tabpanels — the exact pattern driving Library, Detail and Settings navigation in this app.',
+    tokens: [['--accent', 'color'], ['--r-1', 'static', '8px tab radius']],
+    code: '<div role="tablist">\n  <button role="tab" aria-selected="true">Preview</button>\n  <button role="tab" aria-selected="false">Code</button>\n</div>',
+    rows: [['--ink on --raised (active tab)', 'text', '--ink', '--raised']] },
+  { id: 'breadcrumbs', name: '.breadcrumbs', cat: 'nav', file: 'navigation.css',
+    blurb: 'A trail of muted links ending in a bold aria-current="page" node — this exact component sits atop every Detail screen in this app.',
+    tokens: [['--ink-2', 'color'], ['--ink', 'color']],
+    code: '<ol class="breadcrumbs">\n  <li><button>Library</button></li>\n  <li aria-current="page">.btn</li>\n</ol>',
+    rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg'], ['--ink on --bg', 'text', '--ink', '--bg']] },
+  { id: 'menu', name: '.menu', cat: 'nav', file: 'navigation.css',
+    blurb: 'A floating glass dropdown, keyed to tokens.css\u2019s --z-dropdown so it never hides under a tooltip or a toast. .menu-item-danger marks a destructive row without relying on colour alone. Powers the avatar menu in this app\u2019s own top bar.',
+    tokens: [['--z-dropdown', 'static', '300'], ['--bad', 'color']],
+    code: '<div class="menu glass">\n  <button class="menu-item">Duplicate</button>\n  <button class="menu-item menu-item-danger">Delete</button>\n</div>',
+    rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
+  { id: 'toast', name: '.toast-region / .toast', cat: 'feedback', file: 'feedback.css',
+    blurb: 'A transient, opaque notification — opaque like .state, because a toast must be readable over whatever is behind it and glass has no fixed luminance to measure against. Every copy action and the Recompute action in this app fires one.',
+    tokens: [['--z-toast', 'static', '500'], ['--t-base', 'static', '220ms enter']],
+    code: '<div class="toast-region">\n  <div class="toast toast-ok">\n    <span class="toast-icon">✓</span>\n    <div class="toast-body"><p class="toast-title">Saved</p></div>\n  </div>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface']] },
+  { id: 'modal', name: '.modal-scrim / .modal', cat: 'feedback', file: 'feedback.css',
+    blurb: 'An opaque scrim under a glass dialog — the one surface allowed to suspend everything behind it, sitting above toast, tooltip and menu in the stacking order tokens.css declares. This exact pair renders the command palette and the confirm dialog in this app.',
+    tokens: [['--z-modal', 'static', '600'], ['--gl-fill', 'color']],
+    code: '<div class="modal-scrim">\n  <div class="modal glass">\n    <h2 class="modal-title">Restart onboarding?</h2>\n    <div class="modal-actions">…</div>\n  </div>\n</div>',
+    rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
+  { id: 'tooltip', name: '.tooltip', cat: 'feedback', file: 'feedback.css',
+    blurb: 'A small opaque label, never glass — too small a plane for a blur to read as anything but noise. Uses --on-accent/--bg, the same inverse-ink pair .btn-primary\u2019s label uses, guaranteeing contrast on any surface without a new token.',
+    tokens: [['--on-accent', 'color'], ['--bg', 'color'], ['--z-tooltip', 'static', '400']],
+    code: '<button aria-describedby="tip">Hover or focus</button>\n<span id="tip" role="tooltip" class="tooltip">A small opaque label.</span>',
+    rows: [['--bg on --on-accent', 'text', '--bg', '--on-accent']] },
+  { id: 'skeleton', name: '.skeleton', cat: 'feedback', file: 'feedback.css',
+    blurb: 'A shimmering placeholder, not a spinner — the same principle .gauge applies to a determinate quantity, applied here to indeterminate content. Flashes for ~260ms whenever this app opens a Detail screen.',
+    tokens: [['--line', 'color'], ['--t-slow', 'static', '1.6s sweep, off under reduced motion']],
+    code: '<span class="skeleton skeleton-title"></span>\n<span class="skeleton skeleton-text"></span>',
+    rows: [] },
+  { id: 'table', name: '.table', cat: 'data', file: 'data.css',
+    blurb: 'A sticky-header, striped data table with tabular numerals — drives the Law table, the Projects table and the eight-theme gallery in this app.',
+    tokens: [['--surface', 'color'], ['--line', 'color']],
+    code: '<table class="table table-striped">\n  <thead><tr><th>Theme</th></tr></thead>\n</table>',
+    rows: [['--ink on --raised (row hover)', 'text', '--ink', '--raised']] },
+  { id: 'badge', name: '.badge', cat: 'data', file: 'data.css',
+    blurb: 'A compact numeric badge for counts — the number beside Library in the sidebar is this component, always computed from the live component list rather than typed by hand.',
+    tokens: [['--accent', 'color'], ['--on-accent', 'color']],
+    code: '<span class="badge badge-accent">New</span>',
+    rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent']] },
+  { id: 'avatar', name: '.avatar', cat: 'data', file: 'data.css',
+    blurb: 'Initials on an accent gradient, with -sm/-lg sizes and an -fallback state for a missing image — used for the workspace member in this app\u2019s own top bar.',
+    tokens: [['--accent', 'color'], ['--accent-2', 'color']],
+    code: '<div class="avatar">AS</div>',
+    rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent']] }
+];
+var PATTERN = { id: 'workspace', name: 'Workspace shell', cat: 'pattern', file: 'workspace.css',
+  blurb: 'The three-pane editor-and-agent pattern — explorer, split editor with a resizable divider, a five-tab dock, and a command composer — every one of the eight source projects docks its own tools into.',
+  tokens: [['--z-dropdown', 'static', '300 (mobile overlay panels)'], ['--r-3', 'static', '16px frame']],
+  code: '<div class="workspace-frame">\n  <header class="workspace-titlebar">…</header>\n  <div class="workspace-body">…</div>\n</div>',
+  rows: [['--ink on --bg', 'text', '--ink', '--bg']] };
+var ALL_COMPONENTS = COMPONENTS.concat([PATTERN]);
+var CATS = [['all', 'All'], ['primitive', 'Primitives'], ['forms', 'Forms'], ['nav', 'Navigation'], ['feedback', 'Feedback'], ['data', 'Data']];
+var CAT_LABEL = { primitive: 'Primitives', forms: 'Forms', nav: 'Navigation', feedback: 'Feedback', data: 'Data', pattern: 'Patterns' };
+
+/* ---------------- state ---------------- */
+var state = { screen: 'overview', accent: 'zeno', ground: 'system', flat: false, wcag: 'AA', libTab: 'components', detailId: null, search: '', cat: 'all', obStep: 1 };
+
+/* ---------------- toast ---------------- */
+function toast(msg, kind) {
+  var stack = $('#toastStack');
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + (kind || 'ok');
+  t.setAttribute('role', 'status');
+  t.innerHTML = '<span class="toast-icon">' + (kind === 'bad' ? '✕' : '✓') + '</span><div class="toast-body"><p class="toast-message" style="margin:0">' + esc(msg) + '</p></div>';
+  stack.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2600);
+}
+function copyText(text, label) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      var p = navigator.clipboard.writeText(text);
+      if (p && typeof p.catch === 'function') p.catch(function () {});
+    }
+  } catch (e) {}
+  toast(label || 'Copied to clipboard');
+}
+
+/* ---------------- generic modal ---------------- */
+function openModal(opts) {
+  lastFocus = document.activeElement;
+  $('#modalTitle').textContent = opts.title;
+  $('#modalBody').innerHTML = opts.body;
+  var actions = $('#modalActions'); actions.innerHTML = '';
+  (opts.actions || []).forEach(function (a) {
+    var b = document.createElement('button');
+    b.className = 'btn' + (a.primary ? ' btn-primary' : '');
+    b.textContent = a.label;
+    b.onclick = function () { closeModal(); if (a.onClick) a.onClick(); };
+    actions.appendChild(b);
+  });
+  $('#modalScrim').hidden = false;
+  document.body.dataset.modalOpen = '1';
+}
+function closeModal() { $('#modalScrim').hidden = true; delete document.body.dataset.modalOpen; returnFocus(); }
+$('#modalScrim').addEventListener('click', function (e) { if (e.target === $('#modalScrim')) closeModal(); });
+
+/* ---------------- theming ---------------- */
+function applyTheme() {
+  html.dataset.glass = state.accent;
+  if (state.ground === 'system') delete html.dataset.theme; else html.dataset.theme = state.ground;
+  if (state.flat) html.dataset.flat = '1'; else delete html.dataset.flat;
+
+  $$('[data-ground]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.ground === state.ground)); });
+  var gbtn = $('#groundToggleBtn');
+  gbtn.innerHTML = state.ground === 'dark' ? ICONS.moon : (state.ground === 'light' ? ICONS.sun : ICONS.auto);
+  gbtn.title = 'Ground: ' + state.ground + ' (press G to cycle)';
+
+  $('#flatToggle').checked = state.flat;
+  $('#flatToggleMenu').checked = state.flat;
+
+  $$('#settingsAccentRow [data-theme-btn]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeBtn === state.accent)); });
+  $$('#obAccentGrid [data-ob-accent]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.obAccent === state.accent)); });
+  $$('#wcagSeg [data-wcag]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.wcag === state.wcag)); });
+
+  refreshLiveNumbers();
+}
+function setAccent(id) { state.accent = id; applyTheme(); toast('Accent set to ' + id); }
+function setGround(g) { state.ground = g; applyTheme(); }
+function cycleGround() { setGround(state.ground === 'dark' ? 'light' : (state.ground === 'light' ? 'system' : 'dark')); }
+function setFlat(on) { state.flat = on; applyTheme(); }
+function setWcag(w) { state.wcag = w; applyTheme(); }
+
+/* ---------------- live numbers (ramp / budget / gallery / overview) ------- */
+function renderRamp() {
+  var order = ['--bg', '--surface', '--raised', '--line', '--ink', '--ink-2', '--ink-3', '--accent', '--accent-2'];
+  var p = flatPalette(readPalette(state.accent, state.ground === 'system' ? null : state.ground));
+  $('#ramp-strip').innerHTML = order.map(function (t) {
+    return '<div class="ramp-cell"><div class="ramp-swatch" style="background:' + hex(p[t]) + '"></div>' +
+      '<div class="ramp-meta"><span class="ramp-name">' + t + '</span><span class="ramp-val">' + hex(p[t]) + '</span></div></div>';
+  }).join('');
+}
+function computePairs(rows) {
+  var p = flatPalette(readPalette(state.accent, state.ground === 'system' ? null : state.ground));
+  return rows.map(function (row) {
+    var r = ratio(p[row[row.length - 2]], p[row[row.length - 1]]);
+    var kind = row.length === 5 ? row[2] : row[1];
+    var req = reqFor(kind);
+    return { label: row[0], kind: kind, measured: r, required: req, pass: r >= req };
+  });
+}
+function stateBadge(pass) {
+  return '<span class="state ' + (pass ? 'state-ok' : 'state-bad') + ' state-text"></span>';
+}
 function renderBudget() {
-  const p = flat(readPalette(html.dataset.glass, html.dataset.theme || null));
-  document.getElementById('budget-rows').innerHTML = PAIRS.map(([pair, role, fg, bg, min]) => {
-    const r = ratio(p[fg], p[bg]);
-    const ok = r >= min;
-    return `<tr>
-      <td class="tok">${pair}</td>
-      <td style="color:var(--ink-2);white-space:normal">${role}</td>
-      <td class="num">${r.toFixed(2)}:1</td>
-      <td class="num" style="color:var(--ink-2)">${min.toFixed(1)}:1</td>
-      <td class="verdict ${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>
-    </tr>`;
+  var computed = computePairs(PAIRS);
+  $('#budget-rows').innerHTML = computed.map(function (c) {
+    return '<tr><td class="tok">' + c.label.split(' on ')[0] + ' on ' + c.label.split(' on ')[1] + '</td>' +
+      '<td style="color:var(--ink-2);white-space:normal">' + PAIRS.filter(function (r) { return r[0] === c.label; })[0][1] + '</td>' +
+      '<td class="num">' + c.measured.toFixed(2) + ':1</td>' +
+      '<td class="num" style="color:var(--ink-2)">' + c.required.toFixed(1) + ':1</td>' +
+      '<td>' + stateBadge(c.pass) + '</td></tr>';
   }).join('');
+  return computed;
 }
-
-/* ---- 04 · the gallery --------------------------------------------------- */
-const STRIP = ['--bg', '--surface', '--raised', '--ink-2', '--ink', '--accent', '--accent-2'];
-
 function renderGallery() {
-  document.getElementById('gallery-rows').innerHTML = THEMES.map(([id, hue, origin]) => {
-    const strips = ['dark', 'light'].map(g => {
-      const p = flat(readPalette(id, g));
-      return `<div><span class="strip-label">${g}</span><div class="strip">${
-        STRIP.map(t => `<i style="background:${hex(p[t])}" title="${t} ${hex(p[t])}"></i>`).join('')
-      }</div></div>`;
+  var strip = ['--bg', '--surface', '--raised', '--ink-2', '--ink', '--accent', '--accent-2'];
+  $('#gallery-rows').innerHTML = THEMES.map(function (t) {
+    var id = t[0], hue = t[1], origin = t[2];
+    var strips = ['dark', 'light'].map(function (g) {
+      var p = flatPalette(readPalette(id, g));
+      return '<div><span class="strip-label">' + g + '</span><div class="strip">' +
+        strip.map(function (tok) { return '<i style="background:' + hex(p[tok]) + '" title="' + tok + ' ' + hex(p[tok]) + '"></i>'; }).join('') + '</div></div>';
     }).join('');
-    return `<div class="gal-row" role="button" tabindex="0" data-pick="${id}">
-      <div class="gal-name"><span class="gal-title">${id} · ${hue}</span><span class="gal-origin">${origin}</span></div>
-      ${strips}
-    </div>`;
+    return '<div class="gal-row" role="button" tabindex="0" data-pick="' + id + '">' +
+      '<div class="gal-name"><span class="gal-title">' + id + ' · ' + hue + '</span><span class="gal-origin">' + origin + '</span></div>' + strips + '</div>';
   }).join('');
-  for (const el of document.querySelectorAll('[data-pick]')) {
-    const go = () => setTheme(el.dataset.pick);
+  $$('[data-pick]').forEach(function (el) {
+    var go = function () { setAccent(el.dataset.pick); };
     el.addEventListener('click', go);
-    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
-  }
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
 }
-
-/* ---- the switcher ------------------------------------------------------- */
-function renderThemeButtons() {
-  const host = document.getElementById('themes');
-  const focusedTheme = document.activeElement?.dataset.themeBtn;
-  host.innerHTML = THEMES.map(([id, hue]) => {
-    const p = flat(readPalette(id, html.dataset.theme || null));
-    return `<button class="btn swatch-btn" data-theme-btn="${id}" aria-pressed="false" title="${id} — ${hue}">
-      <span class="dot" style="background:linear-gradient(135deg, ${hex(p['--accent'])}, ${hex(p['--accent-2'])})"></span>${id}</button>`;
-  }).join('');
-  for (const el of host.querySelectorAll('[data-theme-btn]')) {
-    el.addEventListener('click', () => setTheme(el.dataset.themeBtn));
-  }
-  if (focusedTheme) host.querySelector(`[data-theme-btn="${focusedTheme}"]`)?.focus();
-}
-
-function setTheme(id) { html.dataset.glass = id; refresh(); }
-
-function setGround(g) {
-  if (g === 'system') delete html.dataset.theme; else html.dataset.theme = g;
-  refresh();
-}
-
-for (const el of document.querySelectorAll('[data-ground]')) {
-  el.addEventListener('click', () => setGround(el.dataset.ground));
-}
-
-document.getElementById('flat').addEventListener('click', e => {
-  const on = html.dataset.flat === '1';
-  if (on) delete html.dataset.flat; else html.dataset.flat = '1';
-  e.currentTarget.setAttribute('aria-pressed', String(!on));
-});
-
-function refresh() {
-  const theme = html.dataset.glass;
-  const ground = html.dataset.theme
-    || (matchMedia('(prefers-color-scheme: light)').matches ? 'light (system)' : 'dark (system)');
-  document.getElementById('bar-sub').textContent = `${theme} · ${ground}`;
-  for (const el of document.querySelectorAll('[data-theme-btn]')) {
-    el.setAttribute('aria-pressed', String(el.dataset.themeBtn === theme));
-  }
-  for (const el of document.querySelectorAll('[data-ground]')) {
-    el.setAttribute('aria-pressed', String(el.dataset.ground === (html.dataset.theme || 'system')));
-  }
+function refreshLiveNumbers() {
+  var computed = renderBudget();
   renderRamp();
-  renderBudget();
-  renderThemeButtons();
-  for (const el of document.querySelectorAll('[data-theme-btn]')) {
-    el.setAttribute('aria-pressed', String(el.dataset.themeBtn === theme));
-  }
+  var passing = computed.filter(function (c) { return c.pass; }).length;
+  $('#statPairs').textContent = passing + ' / ' + computed.length;
+  $('#statPairsGauge').style.width = Math.round(passing / computed.length * 100) + '%';
+  $('#statComponents').textContent = String(ALL_COMPONENTS.length);
+  $('#statPalette').textContent = state.accent + ' · ' + effectiveGround();
+  $('#statWcagNote').textContent = 'WCAG ' + state.wcag;
+  $('#libCountBadge').textContent = String(COMPONENTS.length);
+  $('#libStatLine').textContent = COMPONENTS.length + ' components · 1 pattern · 6 files · ' + passing + '/' + computed.length + ' live pairs passing';
+  var pct = Math.round(passing / computed.length * 100);
+  $('#passGaugeFill').style.width = pct + '%';
+  $('#passGaugeText').textContent = pct + '%';
+  $('#passGaugeLabel').textContent = passing + ' / ' + computed.length + ' pairs passing';
+  if (!$('#screen-detail').hidden) renderDetailBody();
 }
 
-/* Deep links: ?glass=weft&theme=light — handy for sharing a specific palette,
-   and for the scripted screenshots in docs/screenshots. */
-{
-  const q = new URLSearchParams(location.search);
-  const g = q.get('glass');
-  const t = q.get('theme');
-  if (g && THEMES.some(([id]) => id === g)) html.dataset.glass = g;
-  if (t === 'light' || t === 'dark') html.dataset.theme = t;
-  if (q.get('flat') === '1') { html.dataset.flat = '1'; document.getElementById('flat').setAttribute('aria-pressed', 'true'); }
+/* ---------------- screen router ---------------- */
+function setScreen(name) {
+  state.screen = name;
+  ['overview', 'library', 'detail', 'settings'].forEach(function (s) { $('#screen-' + s).hidden = (s !== name); });
+  $$('.nav-item[data-goto]').forEach(function (b) { b.toggleAttribute('aria-current', b.dataset.goto === name); if (b.dataset.goto === name) b.setAttribute('aria-current', 'page'); });
+  $('#sidebar').classList.remove('open');
+  $('#hamburgerBtn').setAttribute('aria-expanded', 'false');
+  $('#content').scrollTop = 0;
 }
 
-
-
-function wireTabList(tablist) {
-  const tabs = [...tablist.querySelectorAll(':scope > [role="tab"]')];
-  const select = (tab, moveFocus = true) => {
-    for (const item of tabs) {
-      const active = item === tab;
+/* ---------------- tab engine (shared) ------------------------------------ */
+function wireTabs(tablist, onActivate) {
+  var tabs = $$(':scope > [role="tab"]', tablist);
+  function select(tab, moveFocus) {
+    tabs.forEach(function (item) {
+      var active = item === tab;
       item.setAttribute('aria-selected', String(active));
       item.tabIndex = active ? 0 : -1;
-      const panel = document.getElementById(item.getAttribute('aria-controls'));
-      if (panel) panel.hidden = !active;
-    }
-    if (moveFocus) tab.focus();
+    });
+    if (moveFocus !== false) tab.focus();
+    onActivate(tab);
+  }
+  tabs.forEach(function (tab, index) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (e) {
+      var dest = { ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 };
+      if (e.key in dest) { e.preventDefault(); select(tabs[dest[e.key]]); }
+    });
+  });
+  return { tabs: tabs, select: select };
+}
+
+/* ---------------- library: components grid -------------------------------- */
+function renderCatChips() {
+  var row = $('#catChips'); row.innerHTML = '';
+  CATS.forEach(function (c) {
+    var b = document.createElement('button');
+    b.className = 'chip chip-filter'; b.type = 'button';
+    b.setAttribute('aria-pressed', String(state.cat === c[0]));
+    b.textContent = c[1];
+    b.onclick = function () { state.cat = c[0]; renderCatChips(); renderGrid(); };
+    row.appendChild(b);
+  });
+}
+function miniPreview(c) {
+  var m = {
+    glass: '<div class="glass" style="width:70%;height:70%;border-radius:8px"></div>',
+    card: '<div class="card" style="width:76%;height:76%;padding:8px;font-size:.6rem;color:var(--ink-2)">Card body</div>',
+    btn: '<button class="btn btn-primary mini-btn">Primary</button><button class="btn mini-btn">Ghost</button>',
+    field: '<div class="field mini-field" style="display:flex;align-items:center;padding-left:8px;color:var(--ink)" aria-hidden="true">glass</div>',
+    chip: '<span class="chip mini-chip">Draft</span><span class="chip chip-accent mini-chip">Synced</span>',
+    state: '<span class="state state-ok state-text"></span>',
+    gauge: '<div class="gauge" style="width:70%"><span class="gauge-fill" style="width:70%"></span></div>',
+    'field-group': '<div style="width:80%"><span class="field-label" style="font-size:.6rem">Notes</span><div class="field mini-field" aria-hidden="true"></div></div>',
+    checkbox: '<div class="checkbox" aria-hidden="true" style="font-size:.62rem;pointer-events:none"><span class="opt-box" style="width:15px;height:15px;border-radius:4px;border:1.5px solid var(--accent);background:var(--accent);display:inline-block;vertical-align:middle;margin-right:6px"></span>Synced</div>',
+    radio: '<div class="radio" aria-hidden="true" style="font-size:.62rem;pointer-events:none"><span class="opt-box" style="width:15px;height:15px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent);display:inline-block;vertical-align:middle;margin-right:6px"></span>AA</div>',
+    switch: '<span class="mini-switch" aria-hidden="true" style="display:inline-block;width:28px;height:16px;border-radius:999px;background:var(--accent);position:relative"><span style="position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--on-accent)"></span></span>',
+    tabs: '<span class="tab" style="background:var(--raised);font-size:.62rem" aria-selected="true">Preview</span><span class="tab" style="font-size:.62rem">Code</span>',
+    breadcrumbs: '<span style="font-size:.62rem;color:var(--ink-3)">Library / <b style="color:var(--ink)">.btn</b></span>',
+    menu: '<div style="font-size:.6rem;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:4px 8px">Settings ⋯</div>',
+    toast: '<div style="font-size:.6rem;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:8px;padding:5px 9px">✓ Copied</div>',
+    modal: '<div style="width:70%;height:60%;background:var(--gl-fill);border:1px solid var(--gl-edge);border-radius:8px"></div>',
+    tooltip: '<span style="font-size:.66rem;border-bottom:1px dotted var(--ink-3)">hover me</span>',
+    skeleton: '<div style="width:76%;display:flex;flex-direction:column;gap:5px"><span class="skeleton" style="height:8px;width:80%"></span><span class="skeleton" style="height:8px;width:55%"></span></div>',
+    table: '<div style="font-size:.55rem;width:80%"><div style="display:flex;justify-content:space-between;color:var(--ink-3);border-bottom:1px solid var(--line);padding-bottom:3px"><span>Row</span><span>Val</span></div></div>',
+    badge: '<span class="badge badge-accent">19</span>',
+    avatar: '<div class="avatar" style="width:30px;height:30px;font-size:.6rem">AS</div>',
+    workspace: '<div style="display:flex;gap:3px;width:80%;height:70%"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div><div style="flex:1;background:var(--surface);border-radius:4px"></div></div>'
   };
-  for (const [index, tab] of tabs.entries()) {
-    tab.addEventListener('click', () => select(tab));
-    tab.addEventListener('keydown', event => {
-      const destinations = {
-        ArrowRight: (index + 1) % tabs.length,
-        ArrowLeft: (index + tabs.length - 1) % tabs.length,
-        Home: 0,
-        End: tabs.length - 1,
-      };
-      if (event.key in destinations) {
-        event.preventDefault();
-        select(tabs[destinations[event.key]]);
-      }
+  return m[c.id] || '<span class="chip">' + c.name + '</span>';
+}
+function renderGrid() {
+  var grid = $('#compGrid'); grid.innerHTML = '';
+  var term = state.search.trim().toLowerCase();
+  var list = COMPONENTS.filter(function (c) {
+    if (state.cat !== 'all' && c.cat !== state.cat) return false;
+    if (term && c.name.toLowerCase().indexOf(term) < 0 && c.blurb.toLowerCase().indexOf(term) < 0) return false;
+    return true;
+  });
+  $('#gridEmpty').hidden = list.length > 0;
+  $('#gridEmptyTerm').textContent = state.search;
+  list.forEach(function (c) {
+    var card = document.createElement('button');
+    card.type = 'button'; card.className = 'comp-card card glass';
+    card.innerHTML = '<div class="comp-preview">' + miniPreview(c) + '</div>' +
+      '<div><p class="comp-name" style="margin:0 0 4px">' + esc(c.name) + '</p><p class="comp-blurb">' + esc(c.blurb) + '</p></div>' +
+      '<div class="comp-foot"><span class="comp-file">' + esc(c.file) + '</span>' + stateBadge(true) + '</div>';
+    card.onclick = function () { openDetail(c.id); };
+    grid.appendChild(card);
+  });
+}
+
+/* ---------------- library tab pane ---------------------------------------- */
+var libTabs;
+function initLibTabs() {
+  libTabs = wireTabs($('#libTabs'), function (tab) {
+    var key = tab.id.replace('libtab-', '');
+    state.libTab = key;
+    ['components', 'foundations', 'patterns'].forEach(function (k) { $('#libPane-' + k).hidden = (k !== key); });
+    if (key === 'foundations') { renderRamp(); renderBudget(); renderGallery(); }
+  });
+}
+function goLibTab(key) {
+  var tab = $('#libtab-' + key);
+  if (tab) libTabs.select(tab);
+}
+
+/* ---------------- detail --------------------------------------------------- */
+function findComp(id) { for (var i = 0; i < ALL_COMPONENTS.length; i++) if (ALL_COMPONENTS[i].id === id) return ALL_COMPONENTS[i]; return null; }
+function openDetail(id) {
+  state.detailId = id;
+  setScreen('detail');
+  var c = findComp(id);
+  $('#crumbCat').textContent = CAT_LABEL[c.cat] || c.cat;
+  $('#crumbName').textContent = c.name;
+  $('#detailName').textContent = c.name;
+  $('#detailFileChip').textContent = c.file;
+  $('#detailBlurb').textContent = c.blurb;
+  detailTabs.select($('#dtab-preview'), false);
+  $('#detailBody').innerHTML = '<span class="skeleton skeleton-title" style="margin-bottom:8px"></span><span class="skeleton skeleton-text"></span>';
+  setTimeout(renderDetailBody, 180);
+}
+function bigPreview(c) {
+  var big = {
+    btn: '<div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:center">' +
+      '<button class="btn btn-primary">Publish</button><button class="btn btn-glass">Glass</button>' +
+      '<button class="btn btn-ghost">Cancel</button><button class="btn" disabled>Disabled</button></div>',
+    field: '<div style="display:flex;gap:var(--sp-5);flex-wrap:wrap"><div class="field-group" style="width:220px">' +
+      '<label class="field-label" for="dp-f1">Project</label><input class="field" id="dp-f1" value="glass"></div>' +
+      '<div class="field-group" style="width:220px"><label class="field-label" for="dp-f2">Invalid state</label>' +
+      '<input class="field" id="dp-f2" aria-invalid="true" value="#C81E33"><p class="field-error-text">Not text-safe on --raised.</p></div></div>',
+    'field-group': '<div class="field-group" style="width:260px"><label class="field-label" for="dp-fg">Project name</label>' +
+      '<input class="field" id="dp-fg" placeholder="lowercase-no-spaces"><p class="field-hint">Lowercase, no spaces.</p></div>',
+    switch: '<label class="switch" style="display:flex;align-items:center;gap:var(--sp-3)"><input type="checkbox" id="dp-switch"> Reduce transparency (specimen only)</label>',
+    checkbox: '<div style="display:flex;flex-direction:column;gap:var(--sp-2)">' +
+      '<label class="checkbox"><input type="checkbox" checked> Sync on save</label>' +
+      '<label class="checkbox"><input type="checkbox"> Verify before publish</label></div>',
+    radio: '<div style="display:flex;flex-direction:column;gap:var(--sp-2)">' +
+      '<label class="radio"><input type="radio" name="dp-r" checked> AA</label>' +
+      '<label class="radio"><input type="radio" name="dp-r"> AAA</label></div>',
+    tabs: '<div><div role="tablist" class="tabs" id="dpTabs">' +
+      '<button role="tab" class="tab" aria-selected="true" tabindex="0" data-dp="overview">Overview</button>' +
+      '<button role="tab" class="tab" aria-selected="false" tabindex="-1" data-dp="tokens">Tokens</button></div>' +
+      '<p class="card-note" id="dpTabBody" style="margin-top:var(--sp-3)">A theme owns hue. The system owns everything else.</p></div>',
+    breadcrumbs: '<ol class="breadcrumbs"><li><button>glass</button></li><li><button>demo</button></li><li aria-current="page">components</li></ol>',
+    menu: '<div style="position:relative;display:inline-block"><button class="btn" id="dpMenuBtn" aria-haspopup="true" aria-expanded="false">Row actions ⋯</button>' +
+      '<div class="menu glass" id="dpMenu" style="position:absolute;top:110%;left:0;width:11rem" hidden>' +
+      '<button class="menu-item">Duplicate</button><button class="menu-item">Rename</button><hr class="menu-sep">' +
+      '<button class="menu-item menu-item-danger">Delete</button></div></div>' +
+      '<p class="card-note" style="margin-top:var(--sp-3)">Visual specimen — these actions do not modify data.</p>',
+    gauge: '<div style="display:flex;gap:var(--sp-6);flex-wrap:wrap;width:100%">' +
+      '<div style="flex:1;min-width:180px"><div class="gauge-row"><span>Coverage</span><span class="gauge-value">86%</span></div><div class="gauge"><span class="gauge-fill" style="width:86%"></span></div></div>' +
+      '<div style="flex:1;min-width:180px" class="gauge-ok"><div class="gauge-row"><span>Passing</span><span class="gauge-value">100%</span></div><div class="gauge"><span class="gauge-fill" style="width:100%"></span></div></div></div>',
+    table: '<div class="table-wrap" style="width:100%"><table class="table table-striped"><thead><tr><th>Theme</th><th data-numeric="true">Ratio</th></tr></thead>' +
+      '<tbody><tr><td>zeno</td><td data-numeric="true">8.42:1</td></tr><tr><td>weft</td><td data-numeric="true">14.21:1</td></tr></tbody></table></div>',
+    badge: '<div style="display:flex;gap:var(--sp-3);align-items:center"><span class="badge badge-accent">New</span><span class="badge badge-ok">Pass</span><span class="badge-dot badge-bad"></span></div>',
+    avatar: '<div style="display:flex;gap:var(--sp-3);align-items:center"><div class="avatar">AS</div><div class="avatar-group"><span class="avatar avatar-sm">Z</span><span class="avatar avatar-sm">W</span><span class="avatar avatar-sm avatar-fallback">V</span></div></div>',
+    toast: '<button class="btn" id="dpToastBtn">Trigger toast</button>',
+    modal: '<button class="btn" id="dpModalBtn">Open example modal</button>',
+    tooltip: '<button class="btn" aria-describedby="dp-tip" style="position:relative">Hover or focus<span id="dp-tip" role="tooltip" class="tooltip" style="position:absolute;bottom:calc(100% + 6px);left:0">Rendered from the .tooltip class.</span></button>',
+    skeleton: '<div style="width:100%;display:flex;flex-direction:column;gap:6px"><span class="skeleton skeleton-title"></span><span class="skeleton skeleton-text"></span><span class="skeleton skeleton-text" style="width:70%"></span></div>',
+    workspace: '<p class="card-note">The full pattern lives in <button class="btn btn-sm" id="dpGotoPattern">Library → Patterns</button></p>'
+  };
+  return big[c.id] || ('<div style="transform:scale(1.6)">' + miniPreview(c) + '</div>');
+}
+function renderDetailBody() {
+  var c = findComp(state.detailId); if (!c) return;
+  var body = $('#detailBody');
+  var active = $('#detailTabs [aria-selected="true"]');
+  var tab = active ? active.id.replace('dtab-', '') : 'preview';
+  if (tab === 'preview') {
+    body.innerHTML = '<div class="preview-stage">' + bigPreview(c) + '</div>';
+    wireDetailPreview(c);
+  } else if (tab === 'tokens') {
+    var p = flatPalette(readPalette(state.accent, state.ground === 'system' ? null : state.ground));
+    body.innerHTML = '<div class="card glass">' + c.tokens.map(function (t) {
+      var val = t[1] === 'color' ? hex(p[t[0]]) : t[2];
+      return '<div class="token-row"><span class="token-name">' + t[0] + '</span><span class="token-val">' + val + '</span></div>';
+    }).join('') + '</div>';
+  } else if (tab === 'code') {
+    body.innerHTML = '<div class="card glass"><div class="copy-row"><span class="panel-label" style="margin:0">Usage</span>' +
+      '<button class="btn btn-ghost btn-sm" id="detailCopyBtn">' + ICONS.copy + ' Copy</button></div>' +
+      '<pre class="code-block">' + esc(c.code) + '</pre></div>';
+    $('#detailCopyBtn').onclick = function () { copyText(c.code, 'Copied ' + c.name + ' snippet'); };
+  } else if (tab === 'a11y') {
+    if (!c.rows.length) {
+      body.innerHTML = '<div class="card glass"><p class="card-note" style="margin:0">' + c.name + ' paints no text of its own to measure — it is a layout or motion primitive. Its child content is measured under whichever component (.state, .field, .card) renders it.</p></div>';
+      return;
+    }
+    var computed = computePairs(c.rows);
+    var rowsHtml = computed.map(function (r) {
+      return '<tr><td>' + r.label + '</td><td>' + (r.kind === 'text' ? 'Text' : 'UI') + '</td>' +
+        '<td class="mono num">' + r.measured.toFixed(2) + ':1</td><td class="mono num" style="color:var(--ink-2)">' + r.required.toFixed(1) + ':1</td>' +
+        '<td>' + stateBadge(r.pass) + '</td></tr>';
+    }).join('');
+    body.innerHTML = '<div class="tablewrap"><table><thead><tr><th>Pair</th><th>Kind</th><th>Measured</th><th>Minimum</th><th>Result</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' +
+      '<p class="lede" style="margin-top:var(--sp-4)">Evaluated at <b style="color:var(--ink)">' + effectiveGround() + '</b> ground, WCAG <b style="color:var(--ink)">' + state.wcag + '</b>, live.</p>';
+  }
+}
+function wireDetailPreview(c) {
+  var root = $('#detailBody');
+  if (c.id === 'toast') { var tb = $('#dpToastBtn', root); if (tb) tb.onclick = function () { toast('This is a .toast component'); }; }
+  if (c.id === 'modal') {
+    var mb = $('#dpModalBtn', root);
+    if (mb) mb.onclick = function () {
+      openModal({ title: 'Example modal', body: '<p>A glass panel over an opaque scrim — the one surface allowed to suspend everything behind it.</p>',
+        actions: [{ label: 'Cancel' }, { label: 'Confirm', primary: true, onClick: function () { toast('Confirmed'); } }] });
+    };
+  }
+  if (c.id === 'menu') {
+    var mBtn = $('#dpMenuBtn', root), menu = $('#dpMenu', root);
+    if (mBtn) mBtn.onclick = function (e) { e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; mBtn.setAttribute('aria-expanded', String(open)); };
+  }
+  if (c.id === 'tabs') {
+    var dpTabs = $('#dpTabs', root);
+    if (dpTabs) wireTabs(dpTabs, function (tab) {
+      $('#dpTabBody', root).textContent = tab.dataset.dp === 'tokens'
+        ? 'Every swatch is read live out of getComputedStyle, right now, against the plane it is allowed to sit on.'
+        : 'A theme owns hue. The system owns everything else.';
     });
   }
-  return { tabs, select };
+  if (c.id === 'workspace') {
+    var gp = $('#dpGotoPattern', root);
+    if (gp) gp.onclick = function () { setScreen('library'); goLibTab('patterns'); };
+  }
 }
+var detailTabs = null;
+function initDetailTabs() { detailTabs = wireTabs($('#detailTabs'), function () { renderDetailBody(); }); }
 
-const tablists = [...document.querySelectorAll('[role="tablist"]')].map(wireTabList);
-const fileTabs = tablists.find(({ tabs }) => tabs.some(tab => tab.id === 'workspace-file-tab-main'));
-for (const button of document.querySelectorAll('[data-workspace-file]')) {
-  button.addEventListener('click', () => {
-    const target = fileTabs?.tabs.find(tab => tab.id === `workspace-file-tab-${button.dataset.workspaceFile}`);
-    if (target) fileTabs.select(target);
+/* ---------------- settings -------------------------------------------------- */
+function renderSettingsAccent() {
+  var row = $('#settingsAccentRow'); row.innerHTML = '';
+  THEMES.forEach(function (t) {
+    var id = t[0];
+    var d = document.createElement('button');
+    d.type = 'button'; d.className = 'swatch-dot'; d.dataset.themeBtn = id;
+    d.setAttribute('aria-pressed', String(state.accent === id));
+    d.title = id; d.style.background = HEX[id];
+    d.innerHTML = '<span class="check">' + ICONS.check + '</span>';
+    d.onclick = function () { setAccent(id); };
+    row.appendChild(d);
+  });
+}
+function renderProjTable() {
+  var body = $('#projTable'); body.innerHTML = '';
+  var listWrap = $('#projList'); listWrap.innerHTML = '';
+  PROJECTS.forEach(function (p) {
+    var url = 'https://github.com/abheet19/' + p.repo;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="display:flex;align-items:center;gap:8px"><span class="proj-dot" style="--dot:' + HEX[p.theme] + '"></span>' + p.name + '</td>' +
+      '<td>' + p.role + '</td><td class="mono-cell">' + p.theme + '</td>' +
+      '<td><a class="btn btn-ghost btn-sm" href="' + url + '" target="_blank" rel="noopener">GitHub ↗</a></td>';
+    body.appendChild(tr);
+
+    var row = document.createElement('div');
+    row.className = 'workspace-tree-item proj-row';
+    row.style.cssText = 'display:flex;align-items:center;gap:8px';
+    row.innerHTML = '<button class="btn-ghost" data-set-accent="' + p.theme + '" style="all:unset;display:flex;align-items:center;gap:8px;flex:1;min-width:0;cursor:pointer">' +
+      '<span class="proj-dot" style="--dot:' + HEX[p.theme] + '"></span><span class="proj-text"><span class="proj-name">' + p.name + '</span><span class="proj-sub">' + p.role + '</span></span></button>' +
+      '<a class="proj-link" href="' + url + '" target="_blank" rel="noopener" aria-label="Open ' + p.name + ' on GitHub">' +
+      '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3"/><path d="M11 4h5v5"/><path d="M9 11 16 4"/></svg></a>';
+    listWrap.appendChild(row);
+  });
+  $$('[data-set-accent]').forEach(function (b) { b.onclick = function () { setAccent(b.dataset.setAccent); }; });
+}
+var setTabsCtl;
+function initSetTabs() {
+  setTabsCtl = wireTabs($('#setTabs'), function (tab) {
+    var key = tab.id.replace('settab-', '');
+    ['appearance', 'a11y', 'projects', 'install'].forEach(function (k) { $('#setPane-' + k).hidden = (k !== key); });
   });
 }
 
-const workspace = document.getElementById('workspace-demo');
-for (const [buttonId, attribute] of [
-  ['workspace-toggle-nav', 'data-nav-collapsed'],
-  ['workspace-toggle-aside', 'data-aside-collapsed'],
-]) {
-  const button = document.getElementById(buttonId);
-  button.addEventListener('click', () => {
-    const collapsed = workspace.getAttribute(attribute) === 'true';
-    workspace.setAttribute(attribute, String(!collapsed));
-    button.setAttribute('aria-expanded', String(collapsed));
+/* ---------------- onboarding ------------------------------------------------ */
+function renderOnboardingAccents() {
+  var wrap = $('#obAccentGrid'); wrap.innerHTML = '';
+  PROJECTS.forEach(function (p) {
+    var t = document.createElement('button');
+    t.type = 'button'; t.className = 'accent-tile card glass'; t.dataset.obAccent = p.theme;
+    t.setAttribute('aria-pressed', String(state.accent === p.theme));
+    t.innerHTML = '<span class="check">' + ICONS.check + '</span><span class="swatch" style="background:' + HEX[p.theme] + '"></span><b>' + p.theme + '</b><span style="font-size:var(--fs-0);color:var(--ink-2)">' + p.name + ' · ' + p.role + '</span>';
+    t.onclick = function () { setAccent(p.theme); renderOnboardingAccents(); };
+    wrap.appendChild(t);
   });
 }
+function renderOnboardingStep() {
+  $('#obStep1').hidden = state.obStep !== 1;
+  $('#obStep2').hidden = state.obStep !== 2;
+  $('#obDot2').classList.toggle('active', state.obStep === 2);
+  $('#obBack').disabled = state.obStep === 1;
+  $('#obNext').textContent = state.obStep === 2 ? 'Enter Studio' : 'Continue';
+  $$('.ground-tile').forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.obGround === state.ground)); });
+}
+function finishOnboarding() {
+  try { localStorage.setItem('glass-onboarded', '1'); } catch (e) {}
+  $('#screen-onboarding').hidden = true;
+  $('#studio').style.display = 'flex';
+  setScreen('overview');
+  toast('Welcome to glass');
+}
+function startOnboarding() {
+  state.obStep = 1;
+  $('#screen-onboarding').hidden = false;
+  $('#studio').style.display = 'none';
+  renderOnboardingStep();
+}
 
-document.getElementById('workspace-tree-toggle').addEventListener('click', event => {
-  const expanded = event.currentTarget.getAttribute('aria-expanded') === 'true';
-  event.currentTarget.setAttribute('aria-expanded', String(!expanded));
-  document.getElementById('workspace-tree-src').hidden = expanded;
+/* ---------------- command palette ------------------------------------------ */
+var PALETTE_ITEMS = [];
+function buildPalette() {
+  PALETTE_ITEMS = [
+    { sec: 'Navigate', label: 'Go to Overview', sub: '1', run: function () { setScreen('overview'); } },
+    { sec: 'Navigate', label: 'Go to Library', sub: '2', run: function () { setScreen('library'); } },
+    { sec: 'Navigate', label: 'Go to Settings', sub: '3', run: function () { setScreen('settings'); } },
+    { sec: 'Navigate', label: 'Restart onboarding', sub: '', run: startOnboarding },
+    { sec: 'Actions', label: 'Cycle ground (dark ⇄ system ⇄ light)', sub: 'G', run: cycleGround },
+    { sec: 'Actions', label: state.flat ? 'Restore transparency' : 'Reduce transparency', sub: 'toggle', run: function () { setFlat(!state.flat); } },
+    { sec: 'Actions', label: state.wcag === 'AA' ? 'Raise WCAG target to AAA' : 'Lower WCAG target to AA', sub: 'a11y', run: function () { setWcag(state.wcag === 'AA' ? 'AAA' : 'AA'); } },
+    { sec: 'Actions', label: 'Recompute the live budget', sub: 'real', run: recomputeBudget },
+    { sec: 'Actions', label: 'Copy git clone command', sub: 'git', run: function () { copyText('git clone https://github.com/abheet19/glass.git'); } },
+    { sec: 'Actions', label: 'Show keyboard shortcuts', sub: '?', run: openShortcuts }
+  ];
+  PROJECTS.forEach(function (p) { PALETTE_ITEMS.push({ sec: 'Set accent', label: p.name, sub: p.theme, run: function () { setAccent(p.theme); } }); });
+  ALL_COMPONENTS.forEach(function (c) { PALETTE_ITEMS.push({ sec: c.cat === 'pattern' ? 'Patterns' : 'Components', label: 'Open ' + c.name, sub: c.file, run: function () { openDetail(c.id); } }); });
+}
+var paletteSel = 0, paletteFiltered = [];
+function renderPalette(term) {
+  term = (term || '').toLowerCase();
+  paletteFiltered = PALETTE_ITEMS.filter(function (it) { return !term || it.label.toLowerCase().indexOf(term) >= 0 || it.sec.toLowerCase().indexOf(term) >= 0; });
+  paletteSel = 0;
+  var list = $('#paletteList'); list.innerHTML = '';
+  if (!paletteFiltered.length) { list.innerHTML = '<p class="palette-empty">No matches for "' + esc(term) + '".</p>'; return; }
+  var lastSec = null;
+  paletteFiltered.forEach(function (it, i) {
+    if (it.sec !== lastSec) { var h = document.createElement('div'); h.className = 'palette-section'; h.textContent = it.sec; list.appendChild(h); lastSec = it.sec; }
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'menu-item palette-item'; b.dataset.idx = i;
+    b.setAttribute('data-active', String(i === paletteSel));
+    b.innerHTML = '<span>' + esc(it.label) + '</span><span class="p-sub">' + esc(it.sub) + '</span>';
+    b.onclick = function () { it.run(); closePalette(); };
+    list.appendChild(b);
+  });
+}
+function movePaletteSel(delta) {
+  if (!paletteFiltered.length) return;
+  paletteSel = (paletteSel + delta + paletteFiltered.length) % paletteFiltered.length;
+  $$('.palette-item').forEach(function (el) { el.setAttribute('data-active', String(Number(el.dataset.idx) === paletteSel)); });
+  var sel = $('.palette-item[data-active="true"]'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+}
+var lastFocus = null;
+function returnFocus() {
+  var el = lastFocus; lastFocus = null;
+  if (el && document.contains(el) && typeof el.focus === 'function') el.focus();
+  else $('#openPaletteBtn').focus();
+}
+function openPalette() { lastFocus = document.activeElement; buildPalette(); $('#paletteOverlay').hidden = false; $('#paletteInput').value = ''; renderPalette(''); setTimeout(function () { $('#paletteInput').focus(); }, 0); }
+function closePalette() { $('#paletteOverlay').hidden = true; returnFocus(); }
+function openShortcuts() { lastFocus = document.activeElement; $('#shortcutsOverlay').hidden = false; setTimeout(function () { $('#shortcutsClose').focus(); }, 0); }
+function closeShortcuts() { $('#shortcutsOverlay').hidden = true; returnFocus(); }
+function recomputeBudget() {
+  var computed = renderBudget(); renderRamp();
+  var passing = computed.filter(function (c) { return c.pass; }).length;
+  toast('Live budget: ' + passing + '/' + computed.length + ' pairs pass at ' + state.accent + ' · ' + effectiveGround() + ' · WCAG ' + state.wcag);
+}
+
+/* ---------------- wiring ---------------------------------------------------- */
+document.addEventListener('click', function (e) {
+  var goto = e.target.closest && e.target.closest('[data-goto]');
+  if (goto) {
+    setScreen(goto.getAttribute('data-goto'));
+    var pref = goto.getAttribute('data-lib-tab');
+    if (pref) goLibTab(pref);
+    $('#avatarMenu').hidden = true;
+    $('#avatarBtn').setAttribute('aria-expanded', 'false');
+    return;
+  }
+  var avatarMenu = $('#avatarMenu'), avatarBtn = $('#avatarBtn');
+  if (!avatarMenu.hidden && !avatarMenu.contains(e.target) && e.target !== avatarBtn) { avatarMenu.hidden = true; avatarBtn.setAttribute('aria-expanded', 'false'); }
+  var dpMenu = $('#dpMenu'), dpMenuBtn = $('#dpMenuBtn');
+  if (dpMenu && !dpMenu.hidden && e.target !== dpMenuBtn && !dpMenu.contains(e.target)) { dpMenu.hidden = true; if (dpMenuBtn) dpMenuBtn.setAttribute('aria-expanded', 'false'); }
 });
-
-document.getElementById('workspace-divider').addEventListener('keydown', event => {
-  if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-  event.preventDefault();
-  const separator = event.currentTarget;
-  const current = Number(separator.getAttribute('aria-valuenow'));
-  const next = Math.min(75, Math.max(35, current + (event.key === 'ArrowRight' ? 5 : -5)));
-  separator.setAttribute('aria-valuenow', String(next));
-  document.getElementById('workspace-editor-grid').style.setProperty('--workspace-primary-pane', `${next}%`);
+$('#hamburgerBtn').addEventListener('click', function (e) {
+  e.stopPropagation();
+  var open = $('#sidebar').classList.toggle('open');
+  $('#hamburgerBtn').setAttribute('aria-expanded', String(open));
 });
+document.addEventListener('click', function (e) {
+  var sb = $('#sidebar');
+  if (sb.classList.contains('open') && !sb.contains(e.target) && e.target !== $('#hamburgerBtn') && !$('#hamburgerBtn').contains(e.target)) {
+    sb.classList.remove('open'); $('#hamburgerBtn').setAttribute('aria-expanded', 'false');
+  }
+});
+$('#avatarBtn').addEventListener('click', function (e) {
+  e.stopPropagation();
+  var open = $('#avatarMenu').hidden;
+  $('#avatarMenu').hidden = !open;
+  $('#avatarBtn').setAttribute('aria-expanded', String(open));
+});
+$('#menuRestart').addEventListener('click', function () { $('#avatarMenu').hidden = true; confirmRestart(); });
+$('#footerRestart').addEventListener('click', confirmRestart);
+function confirmRestart() {
+  openModal({ title: 'Restart onboarding?', body: '<p>You will pick an accent and a ground again. Nothing else resets.</p>',
+    actions: [{ label: 'Cancel' }, { label: 'Restart', primary: true, onClick: startOnboarding }] });
+}
+$('#flatToggleMenu').addEventListener('change', function (e) { setFlat(e.target.checked); });
+$('#flatToggle').addEventListener('change', function (e) { setFlat(e.target.checked); });
+$('#groundToggleBtn').addEventListener('click', cycleGround);
+$$('#groundSeg [data-ground]').forEach(function (b) { b.addEventListener('click', function () { setGround(b.dataset.ground); }); });
+$$('#wcagSeg [data-wcag]').forEach(function (b) { b.addEventListener('click', function () { setWcag(b.dataset.wcag); }); });
+$('#libSearch').addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
+$('#overviewRecomputeBtn').addEventListener('click', recomputeBudget);
+$('#inspectPatternBtn').addEventListener('click', function () { openDetail('workspace'); });
 
-document.getElementById('workspace-composer').addEventListener('submit', event => {
-  event.preventDefault();
-  const prompt = document.getElementById('workspace-prompt');
-  const status = document.getElementById('workspace-composer-status');
-  const value = prompt.value.trim();
-  status.textContent = value ? `Queued: ${value}` : 'Describe a task before running.';
+/* workspace pattern (verbatim behaviour, relocated into Library > Patterns) */
+var fileTablist = $('#workspace-demo [aria-label="Open files"]');
+var fileTabsCtl = wireTabs(fileTablist, function (tab) {
+  var key = tab.id.replace('workspace-file-tab-', '');
+  ['tokens', 'primitives', 'forms'].forEach(function (k) { var el = $('#workspace-file-panel-' + k); if (el) el.hidden = (k !== key); });
+});
+$('#workspace-demo [aria-label="Project explorer"]').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-workspace-file]'); if (!b) return;
+  var key = b.getAttribute('data-workspace-file');
+  var target = fileTabsCtl.tabs.filter(function (t) { return t.id === 'workspace-file-tab-' + key; })[0];
+  if (target) fileTabsCtl.select(target);
+});
+var dockTablist = $('#workspace-demo [aria-label="Developer tool views"]');
+wireTabs(dockTablist, function (tab) {
+  var key = tab.id.replace('workspace-dock-tab-', '');
+  ['problems', 'output', 'debug', 'terminal', 'ports'].forEach(function (k) { var el = $('#workspace-dock-panel-' + k); if (el) el.hidden = (k !== key); });
+});
+var wsFrame = $('#workspace-demo');
+[['workspace-toggle-nav', 'data-nav-collapsed'], ['workspace-toggle-aside', 'data-aside-collapsed']].forEach(function (pair) {
+  var btn = $('#' + pair[0]);
+  btn.addEventListener('click', function () {
+    var collapsed = wsFrame.getAttribute(pair[1]) === 'true';
+    wsFrame.setAttribute(pair[1], String(!collapsed));
+    btn.setAttribute('aria-expanded', String(collapsed));
+  });
+});
+$('#workspace-divider').addEventListener('keydown', function (e) {
+  if (['ArrowLeft', 'ArrowRight'].indexOf(e.key) < 0) return;
+  e.preventDefault();
+  var sep = e.currentTarget;
+  var current = Number(sep.getAttribute('aria-valuenow'));
+  var next = Math.min(75, Math.max(35, current + (e.key === 'ArrowRight' ? 5 : -5)));
+  sep.setAttribute('aria-valuenow', String(next));
+  $('#workspace-editor-grid').style.setProperty('--workspace-primary-pane', next + '%');
+});
+$('#workspace-composer').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var prompt = $('#workspace-prompt'), status = $('#workspace-composer-status');
+  var value = prompt.value.trim();
+  status.textContent = value ? 'Queued: ' + value : 'Describe a task before running.';
   if (value) prompt.value = '';
 });
-for (const button of document.querySelectorAll('[data-menu-sample]')) {
-  button.addEventListener('click', () => { document.getElementById('menu-sample-status').textContent = `${button.dataset.menuSample} style selected. Demo only; no data was changed.`; });
+
+document.addEventListener('click', function (e) { var b = e.target.closest('.copy-btn'); if (b) copyText(b.getAttribute('data-copy').replace(/&#10;/g, '\n')); });
+
+$('#openPaletteBtn').addEventListener('click', openPalette);
+$('#paletteOverlay').addEventListener('click', function (e) { if (e.target === $('#paletteOverlay')) closePalette(); });
+$('#paletteInput').addEventListener('input', function (e) { renderPalette(e.target.value); });
+$('#shortcutsBtn').addEventListener('click', openShortcuts);
+$('#shortcutsClose').addEventListener('click', closeShortcuts);
+$('#shortcutsOverlay').addEventListener('click', function (e) { if (e.target === $('#shortcutsOverlay')) closeShortcuts(); });
+
+document.addEventListener('keydown', function (e) {
+  var mod = e.ctrlKey || e.metaKey;
+  if (mod && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); if ($('#paletteOverlay').hidden) openPalette(); else closePalette(); return; }
+  if (!$('#paletteOverlay').hidden) {
+    if (e.key === 'Escape') closePalette();
+    else if (e.key === 'ArrowDown') { e.preventDefault(); movePaletteSel(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); movePaletteSel(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); var it = paletteFiltered[paletteSel]; if (it) { it.run(); closePalette(); } }
+    return;
+  }
+  if (!$('#shortcutsOverlay').hidden) { if (e.key === 'Escape') closeShortcuts(); return; }
+  if (!$('#modalScrim').hidden) { if (e.key === 'Escape') closeModal(); return; }
+  var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '') || (e.target && e.target.isContentEditable);
+  if (typing) return;
+  if (e.key === '?') { e.preventDefault(); openShortcuts(); return; }
+  if (e.key === 'g' || e.key === 'G') { cycleGround(); return; }
+  if (e.key === '1') { setScreen('overview'); return; }
+  if (e.key === '2') { setScreen('library'); return; }
+  if (e.key === '3') { setScreen('settings'); return; }
+});
+
+$('#obSkip').addEventListener('click', finishOnboarding);
+$('#obNext').addEventListener('click', function () { if (state.obStep === 1) { state.obStep = 2; renderOnboardingStep(); } else { finishOnboarding(); } });
+$('#obBack').addEventListener('click', function () { if (state.obStep === 2) { state.obStep = 1; renderOnboardingStep(); } });
+$$('.ground-tile').forEach(function (t) { t.addEventListener('click', function () { setGround(t.getAttribute('data-ob-ground')); renderOnboardingStep(); }); });
+
+try {
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (state.ground === 'system') refreshLiveNumbers(); });
+} catch (e) {}
+
+/* Deep links: ?glass=weft&theme=light&flat=1&screen=library — handy for
+   sharing a specific palette or screen, and for scripted screenshots. */
+(function () {
+  var q = new URLSearchParams(location.search);
+  var g = q.get('glass'); if (g && THEMES.some(function (t) { return t[0] === g; })) state.accent = g;
+  var t = q.get('theme'); if (t === 'light' || t === 'dark') state.ground = t;
+  if (q.get('flat') === '1') state.flat = true;
+  var s = q.get('screen'); if (s && ['overview', 'library', 'settings'].indexOf(s) >= 0) state.screen = s;
+})();
+
+/* ---------------- init ------------------------------------------------------ */
+function init() {
+  renderCatChips();
+  renderGrid();
+  renderProjTable();
+  renderOnboardingAccents();
+  renderOnboardingStep();
+  renderSettingsAccent();
+  initLibTabs();
+  initSetTabs();
+  initDetailTabs();
+  applyTheme();
+
+  var seen = false;
+  try { seen = localStorage.getItem('glass-onboarded') === '1'; } catch (e) {}
+  if (seen) { $('#screen-onboarding').hidden = true; $('#studio').style.display = 'flex'; setScreen(state.screen); }
+  else { startOnboarding(); }
 }
-for (const button of document.querySelectorAll('[data-sample-button]')) {
-  button.addEventListener('click', () => { document.getElementById('button-sample-status').textContent = `${button.textContent} button activated.`; });
-}
-renderGallery();
-refresh();
-matchMedia('(prefers-color-scheme: light)').addEventListener('change', refresh);
+init();
+})();
 </script>
 </body>
 </html>
