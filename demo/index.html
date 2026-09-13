@@ -25,6 +25,13 @@
 <link rel="stylesheet" href="../src/themes/rephrase.css">
 <link rel="stylesheet" href="../src/themes/detect.css">
 
+<!-- Redesign typography. The system's stylesheets under ../src still reach the
+     network for nothing; this demo page adopts the Glass Studio display/body/mono
+     faces, each with a system fallback so the page is complete offline too. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
 <style>
 /* Demo-only layout. Every value below is a token from the system; this page
    introduces no colour, no radius, no duration and no font of its own. Where
@@ -250,6 +257,138 @@ pre.code-block .tag { color: var(--accent); }
   .cmdk-trigger .kbd { display: none; }
   .seg3 { flex-direction: column; }
 }
+
+/* =============================================================================
+   GLASS STUDIO — REDESIGN LAYER
+   Demo-only. Re-skins the app to the Glass Studio visual language (Bricolage /
+   Manrope / JetBrains Mono, softer radii, a looser section rhythm, a deeper
+   blur, a floatier shadow and an accent atmosphere) and supplies styling for
+   the demo-only utility classes (.display, .lede, .ramp, .tablewrap, the
+   foundations grids and the theme gallery) that the shipped markup uses. The
+   contrast law, the eight verified themes and every colour token are untouched:
+   colour still comes entirely from ../src, so the live budget on this page is
+   still measuring the real system.
+   ============================================================================= */
+
+:root {
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-ui: "Manrope", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* softer corner ladder + one extra step, from the artifact */
+  --r-1: 7px; --r-2: 11px; --r-3: 16px; --r-4: 22px;
+
+  /* looser rhythm at the top end (section gaps and screen padding) */
+  --sp-6: 28px; --sp-7: 40px; --sp-8: 56px;
+
+  /* snappier curve, shorter slow tier */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t-base: 200ms;
+  --t-slow: 340ms;
+
+  /* deeper blur; a floatier, longer-reach shadow with a specular top edge */
+  --gl-blur: blur(20px) saturate(1.3);
+  --gl-shadow:
+    inset 0 1px 0 var(--gl-spec),
+    0 26px 60px -22px oklch(0% 0 0 / .62),
+    0 2px 10px oklch(0% 0 0 / .3);
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+/* ---- the atmosphere: a broad accent glow off the top corners --------------- */
+.glass-page.glass-atmosphere {
+  background-image:
+    radial-gradient(1100px 620px at 14% -8%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 60%),
+    radial-gradient(900px 560px at 100% 8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 55%);
+}
+
+/* ---- typography ------------------------------------------------------------ */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  text-wrap: balance;
+  color: var(--ink);
+  font-size: var(--fs-3);
+}
+.brand { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; font-size: 1.06rem; }
+.screen h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.kicker {
+  font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 0;
+}
+.lede { color: var(--ink-2); font-size: var(--fs-1); line-height: var(--lh-3); max-width: 64ch; margin: 6px 0 0; }
+.sec-note { color: var(--ink-2); font-size: var(--fs-1); line-height: var(--lh-3); max-width: 74ch; }
+.stat-line { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
+.stat-line b { color: var(--ink); font-weight: 700; }
+.mono { font-family: var(--font-mono); }
+
+/* ---- shell chrome dimensions ----------------------------------------------- */
+.topbar { height: 60px; gap: var(--sp-4); }
+.sidebar { width: 236px; }
+.cmdk-trigger { min-height: 36px; max-width: 420px; border-radius: var(--r-2); }
+.screen { max-width: 1180px; padding: var(--sp-6) var(--sp-7) var(--sp-8); }
+@media (max-width: 900px) {
+  .sidebar { top: 60px; }
+  .screen { padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+}
+
+/* ---- primitives, nudged to the artifact’s shape --------------------------- */
+.btn { border-radius: var(--r-2); font-weight: 650; }
+.btn-primary { font-weight: 700; box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--accent) 60%, transparent); }
+.card { border-radius: var(--r-3); }
+.chip { font-weight: 650; }
+
+/* ---- overview hero: an accent bloom in the corner -------------------------- */
+.hero-card > * { position: relative; }
+.hero-card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(560px 280px at 90% -12%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%);
+}
+.hero-title { font-size: var(--fs-3); }
+
+/* ---- foundations: the ramp ------------------------------------------------- */
+.ramp { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--sp-3); }
+.ramp-cell { display: flex; flex-direction: column; gap: 6px; }
+.ramp-swatch { height: 52px; border-radius: var(--r-2); border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); }
+.ramp-meta { display: flex; flex-direction: column; gap: 1px; }
+.ramp-name { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-2); }
+.ramp-val { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+
+/* ---- foundations: type & radii card --------------------------------------- */
+.grid { display: grid; }
+.grid.g2 { grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
+@media (max-width: 640px) { .grid.g2 { grid-template-columns: 1fr; } }
+.type-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) 0; border-top: 1px solid var(--line); }
+.type-row:first-child { border-top: none; }
+.type-tag { font-family: var(--font-mono); color: var(--ink-2); font-size: var(--fs-0); }
+.radii { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+.radii figure { display: flex; align-items: center; gap: 12px; margin: 0; }
+.radii .box { width: 46px; height: 46px; flex: none; background: var(--gl-fill); border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); }
+.radii figcaption { font-family: var(--font-mono); font-size: var(--fs-0); color: var(--ink-2); }
+
+/* ---- foundations: the budget & a11y tables (bare <table> in a .tablewrap) -- */
+.tablewrap { overflow-x: auto; border: 1px solid var(--gl-edge); border-radius: var(--r-2); }
+.tablewrap table { width: 100%; border-collapse: collapse; font-size: var(--fs-0); min-width: 520px; }
+.tablewrap th { text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); font-weight: 700; padding: 10px 14px; background: var(--gl-fill); position: sticky; top: 0; }
+.tablewrap td { padding: 10px 14px; border-top: 1px solid var(--line); color: var(--ink); vertical-align: top; }
+.tablewrap tbody tr:hover td { background: var(--surface); }
+.tablewrap .num, .tablewrap .tok { font-family: var(--font-mono); font-size: .8rem; }
+
+/* ---- foundations: the eight-theme gallery ---------------------------------- */
+#gallery-rows { padding: 0; }
+.gal-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: var(--sp-4); align-items: center; padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--line); cursor: pointer; transition: background var(--t-fast) var(--ease); }
+.gal-row:first-child { border-top: none; }
+.gal-row:hover { background: var(--surface); }
+.gal-name { display: flex; flex-direction: column; gap: 1px; }
+.gal-title { font-family: var(--font-mono); font-weight: 700; color: var(--ink); }
+.gal-origin { font-size: .72rem; color: var(--ink-3); }
+.strip-label { display: block; font-size: .66rem; font-family: var(--font-mono); color: var(--ink-3); margin-bottom: 4px; }
+.strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; height: 26px; border-radius: 6px; overflow: hidden; }
+.strip i { display: block; }
+@media (max-width: 640px) { .gal-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 
