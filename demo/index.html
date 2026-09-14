@@ -278,6 +278,15 @@ pre.code-block .tag { color: var(--accent); }
   /* softer corner ladder + one extra step, from the artifact */
   --r-1: 7px; --r-2: 11px; --r-3: 16px; --r-4: 22px;
 
+  /* the artifact's type scale (denser body + meta, tighter prose leading). The
+     colour tokens and the contrast law are untouched — only the size ladder and
+     body leading move, and they move for the whole re-skinned demo uniformly. */
+  --fs-0: 0.75rem;                                  /* meta, chips, table cells */
+  --fs-1: 0.9375rem;                                /* body */
+  --fs-2: 1.375rem;                                 /* panel and section titles */
+  --fs-3: clamp(1.7rem, 1.35rem + 1.4vw, 2.35rem);  /* display */
+  --lh-3: 1.5;                                      /* prose / body leading */
+
   /* looser rhythm at the top end (section gaps and screen padding) */
   --sp-6: 28px; --sp-7: 40px; --sp-8: 56px;
 
@@ -313,7 +322,7 @@ pre.code-block .tag { color: var(--accent); }
   color: var(--ink);
   font-size: var(--fs-3);
 }
-.brand { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; font-size: 1.06rem; }
+.brand { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; font-size: 1.15rem; }
 .screen h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
 .kicker {
   font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 600;
@@ -339,7 +348,16 @@ pre.code-block .tag { color: var(--accent); }
 .btn { border-radius: var(--r-2); font-weight: 650; }
 .btn-primary { font-weight: 700; box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--accent) 60%, transparent); }
 .card { border-radius: var(--r-3); }
-.chip { font-weight: 650; }
+.chip { font-weight: 700; }
+
+/* ---- sidebar nav, to the artifact's roomier shape ------------------------- */
+.nav-item {
+  gap: var(--sp-3);
+  padding: 8px var(--sp-2);
+  border-radius: var(--r-2);
+  font-size: var(--fs-1);
+  font-weight: 600;
+}
 
 /* ---- overview hero: an accent bloom in the corner -------------------------- */
 .hero-card > * { position: relative; }
@@ -348,6 +366,51 @@ pre.code-block .tag { color: var(--accent); }
   background: radial-gradient(560px 280px at 90% -12%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%);
 }
 .hero-title { font-size: var(--fs-3); }
+.hero-card { padding: var(--sp-6); }
+
+/* ---- section rhythm, to the artifact's spacing ---------------------------- */
+.sec-label { margin: var(--sp-2) 0 var(--sp-3); }
+.sec-label:first-child { margin-top: 0; }
+.metric-grid { margin-bottom: var(--sp-6); }
+.quick-card { padding: var(--sp-4); }
+.comp-card { padding: var(--sp-4); }
+/* card-shaped buttons must inherit the page face + size, not the UA button
+   default (Arial 13.33px) the way .btn already does via font: inherit. */
+.quick-card, .comp-card, .use-card { font: inherit; }
+.cmdk-trigger { font-family: inherit; }
+.sec-label { font-weight: 700; }
+.btn { letter-spacing: normal; }
+.hero-title { margin-bottom: 0; }
+
+/* ---- overview stat tiles: the artifact's circular conic gauge rings, the
+   determinate circular sibling of the shipped .gauge bar. Each tile keeps its
+   real live value; the ring is driven by --pct and its centre disc matches the
+   opaque tile plane so KPI numbers stay on a measured, readable surface. ----- */
+.metric-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.metric-card.stat-tile {
+  display: flex; flex-direction: row; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4);
+}
+.stat-ring {
+  --pct: 100; position: relative; width: 52px; height: 52px; flex: none; border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--pct) * 1%), var(--line) 0);
+}
+.stat-ring::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--surface); }
+.stat-ring span {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: .66rem; font-weight: 700; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.stat-swatch {
+  width: 52px; height: 52px; flex: none; border-radius: 50%;
+  border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); background: var(--accent);
+}
+.stat-copy { min-width: 0; }
+.stat-copy b {
+  display: block; font-family: var(--font-mono); font-size: var(--fs-2);
+  font-variant-numeric: tabular-nums; color: var(--ink); line-height: 1.1;
+}
+.stat-copy span { display: block; font-size: .78rem; color: var(--ink-2); margin-top: 3px; }
 
 /* ---- foundations: the ramp ------------------------------------------------- */
 .ramp { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--sp-3); }
@@ -644,25 +707,21 @@ pre.code-block .tag { color: var(--accent); }
 
         <p class="sec-label">Live on this page, right now</p>
         <div class="metric-grid">
-          <div class="card glass metric-card">
-            <span class="metric-card-label">Live pairs passing</span>
-            <span class="metric-card-value" id="statPairs">—</span>
-            <span class="gauge" style="margin-top:4px"><span class="gauge-fill" id="statPairsGauge"></span></span>
+          <div class="card glass metric-card stat-tile">
+            <div class="stat-ring" id="statPairsRing" role="img" aria-label="Live contrast pairs passing"><span id="statPairsPct">—</span></div>
+            <div class="stat-copy"><b id="statPairs">—</b><span>live contrast pairs passing</span></div>
           </div>
-          <div class="card glass metric-card">
-            <span class="metric-card-label">Components documented</span>
-            <span class="metric-card-value" id="statComponents">—</span>
-            <span class="card-note">across 6 real stylesheets, 1 pattern</span>
+          <div class="card glass metric-card stat-tile">
+            <div class="stat-ring" style="--pct:100" role="img" aria-label="All components documented"><span>100%</span></div>
+            <div class="stat-copy"><b id="statComponents">—</b><span>components, each with a live detail page</span></div>
           </div>
-          <div class="card glass metric-card">
-            <span class="metric-card-label">Themes on shared tokens</span>
-            <span class="metric-card-value">8 / 8</span>
-            <span class="card-note">none left on an old vocabulary</span>
+          <div class="card glass metric-card stat-tile">
+            <div class="stat-ring" style="--pct:100" role="img" aria-label="Eight of eight themes on shared tokens"><span>8/8</span></div>
+            <div class="stat-copy"><b>8 / 8</b><span>themes on the shared token vocabulary</span></div>
           </div>
-          <div class="card glass metric-card">
-            <span class="metric-card-label">Active palette</span>
-            <span class="metric-card-value" id="statPalette" style="font-size:var(--fs-1)">—</span>
-            <span class="card-note" id="statWcagNote">WCAG AA</span>
+          <div class="card glass metric-card stat-tile">
+            <div class="stat-swatch" aria-hidden="true"></div>
+            <div class="stat-copy"><b id="statPalette" style="font-size:var(--fs-1)">—</b><span id="statWcagNote">WCAG AA</span></div>
           </div>
         </div>
 
@@ -1751,8 +1810,10 @@ function refreshLiveNumbers() {
   var computed = renderBudget();
   renderRamp();
   var passing = computed.filter(function (c) { return c.pass; }).length;
+  var pairsPct = Math.round(passing / computed.length * 100);
   $('#statPairs').textContent = passing + ' / ' + computed.length;
-  $('#statPairsGauge').style.width = Math.round(passing / computed.length * 100) + '%';
+  $('#statPairsRing').style.setProperty('--pct', pairsPct);
+  $('#statPairsPct').textContent = pairsPct + '%';
   $('#statComponents').textContent = String(ALL_COMPONENTS.length);
   $('#statPalette').textContent = state.accent + ' · ' + effectiveGround();
   $('#statWcagNote').textContent = 'WCAG ' + state.wcag;
