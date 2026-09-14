@@ -21,18 +21,15 @@ const THEMES = ['zeno', 'weft', 'vantage', 'shield', 'textify', 'health', 'rephr
 try {
   await page.goto(url, { waitUntil: 'load' });
 
-  await check('onboarding walks accent + ground picks, enters the Studio, and is not shown again', async () => {
+  await check('onboarding welcomes, sets a theme and appearance, offers products to explore, enters the Studio, and is not shown again', async () => {
     await page.locator('#screen-onboarding').waitFor();
     assert.equal(await page.locator('#studio').isVisible(), false);
+    assert.ok((await page.locator('[data-ob-explore]').count()) >= 4, 'explore-a-product entries present');
     await page.locator('[data-ob-accent="weft"]').click();
     assert.equal(await page.locator('[data-ob-accent="weft"]').getAttribute('aria-pressed'), 'true');
-    await page.locator('#obNext').click();
-    assert.equal(await page.locator('#obStep2').isVisible(), true);
-    await page.locator('#obBack').click();
-    assert.equal(await page.locator('#obStep1').isVisible(), true);
-    await page.locator('#obNext').click();
     await page.locator('[data-ob-ground="dark"]').click();
-    await page.locator('#obNext').click();
+    assert.equal(await page.locator('[data-ob-ground="dark"]').getAttribute('aria-pressed'), 'true');
+    await page.locator('#obEnter').click();
     assert.equal(await page.locator('#studio').isVisible(), true);
     assert.equal(await page.locator('#screen-onboarding').isHidden(), true);
     assert.equal(await page.locator('html').getAttribute('data-glass'), 'weft');
@@ -310,6 +307,58 @@ try {
     await page.locator('#settab-install').click();
     await page.locator('.copy-btn').first().click();
     assert.ok((await page.locator('.toast').count()) > 0);
+  });
+
+  await check('header theme switcher plus the added interactive components respond', async () => {
+    // always-available theme switcher in the header
+    await page.locator('#sidebar [data-goto="overview"]').click();
+    await page.locator('#accentSwitchBtn').click();
+    assert.equal(await page.locator('#accentMenu').isVisible(), true);
+    await page.locator('#accentMenu [data-accent-pick="mono"]').click();
+    assert.equal(await page.locator('html').getAttribute('data-glass'), 'mono');
+    assert.equal(await page.locator('#accentMenu').isHidden(), true);
+
+    // accordion expands
+    await page.locator('[data-goto="library"]').first().click();
+    await page.locator('.comp-card', { hasText: 'Accordion' }).click();
+    const acc = page.locator('.acc-item').nth(1);
+    assert.equal(await acc.evaluate(el => el.open), false);
+    await acc.locator('summary').click();
+    assert.equal(await acc.evaluate(el => el.open), true);
+
+    // tag input adds a tag
+    await page.locator('[data-goto="library"]').first().click();
+    await page.locator('.comp-card', { hasText: 'Tag input' }).click();
+    await page.locator('#dpTagField').waitFor();
+    const tags = await page.locator('#dpTagInput .tag').count();
+    await page.locator('#dpTagField').fill('release');
+    await page.locator('#dpTagField').press('Enter');
+    assert.equal(await page.locator('#dpTagInput .tag').count(), tags + 1);
+
+    // rating responds to the keyboard
+    await page.locator('[data-goto="library"]').first().click();
+    await page.locator('.comp-card', { hasText: 'Rating' }).click();
+    await page.locator('#dpRating [aria-checked="true"]').focus();
+    await page.keyboard.press('ArrowRight');
+    assert.ok((await page.locator('#dpRatingOut').innerText()).includes('4 of 5'));
+
+    // stepper advances
+    await page.locator('[data-goto="library"]').first().click();
+    await page.locator('.comp-card', { hasText: 'Stepper' }).click();
+    await page.locator('#dpStepNext').click();
+    assert.equal(await page.locator('#dpStepper .step').nth(2).getAttribute('aria-current'), 'step');
+
+    // drawer opens and closes on Escape
+    await page.locator('[data-goto="library"]').first().click();
+    await page.locator('.comp-card', { hasText: 'Drawer / sheet' }).click();
+    await page.locator('#dpDrawerBtn').click();
+    assert.equal(await page.locator('#drawerOverlay').isVisible(), true);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#drawerOverlay').isHidden(), true);
+
+    // restore the shipped default accent
+    await page.locator('#accentSwitchBtn').click();
+    await page.locator('#accentMenu [data-accent-pick="zeno"]').click();
   });
 
   await check('deep links select the expected accent, ground, transparency and screen', async () => {

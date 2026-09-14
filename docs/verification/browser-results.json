@@ -1,7 +1,7 @@
 {
   "url": "file:///D:/Code/glass/demo/index.html",
   "checks": [
-    "onboarding walks accent + ground picks, enters the Studio, and is not shown again",
+    "onboarding welcomes, sets a theme and appearance, offers products to explore, enters the Studio, and is not shown again",
     "all eight themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA",
     "WCAG AA/AAA target changes the required minimum and the live pass count",
     "roving tabindex, arrow keys, Home/End work across Library, Settings and Detail tabs",
@@ -14,10 +14,11 @@
     "accessible names, labels, IDs and local anchors are structurally complete",
     "reduced motion stops skeleton animation",
     "restart-onboarding confirms with a real modal, and Cancel leaves state untouched",
+    "header theme switcher plus the added interactive components respond",
     "deep links select the expected accent, ground, transparency and screen",
     "mobile layout contains overflow within intended scroll containers"
   ],
-  "count": 15,
+  "count": 16,
   "browserErrors": [],
   "scope": "Behavior and screenshots for the Glass Studio demo app; contrast math is separately checked by npm run check. No pixel-baseline or consumer-app certification."
 }

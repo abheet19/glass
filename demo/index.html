@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glass Studio — a design system extracted from eight projects</title>
-<meta name="description" content="oklch tokens, dark-first with a three-way theme triad, eight themes, and a contrast law verified by script rather than asserted in prose. Browsable as an app: a library, a live accessibility budget, and the eight projects it ships to.">
+<title>Glass — a design system you can browse</title>
+<meta name="description" content="Glass is a small design system for building calm, modern product interfaces: frosted chrome, a full component library, light and dark modes, ten themes, and contrast that stays readable by default. Browse it like an app.">
 <link rel="icon" href="../brand/mark.svg" type="image/svg+xml">
 
 <!-- The system itself. Nothing else is loaded: no build step, no bundler, no
@@ -24,6 +24,9 @@
 <link rel="stylesheet" href="../src/themes/health.css">
 <link rel="stylesheet" href="../src/themes/rephrase.css">
 <link rel="stylesheet" href="../src/themes/detect.css">
+<link rel="stylesheet" href="../src/themes/graphite.css">
+<link rel="stylesheet" href="../src/themes/warm.css">
+<link rel="stylesheet" href="../src/themes/mono.css">
 
 <!-- Redesign typography. The system's stylesheets under ../src still reach the
      network for nothing; this demo page adopts the Glass Studio display/body/mono
@@ -202,7 +205,7 @@ pre.code-block .tag { color: var(--accent); }
 .gauge-big { font-family: var(--font-mono); font-size: var(--fs-2); color: var(--ink); flex: none; min-width: 4.5rem; text-align: right; }
 
 /* ---- onboarding --------------------------------------------------------------- */
-.onboarding:not([hidden]) { min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; padding: var(--sp-6); max-width: 52rem; margin: 0 auto; }
+.onboarding:not([hidden]) { min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; padding: var(--sp-6); max-width: 62rem; margin: 0 auto; }
 .ob-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-7); }
 .ob-progress { display: flex; gap: var(--sp-1); }
 .ob-dot { width: 24px; height: 4px; border-radius: 3px; background: var(--line); }
@@ -219,7 +222,34 @@ pre.code-block .tag { color: var(--accent); }
 .ground-mock { height: 84px; border-radius: var(--r-1); margin-bottom: var(--sp-3); display: flex; gap: var(--sp-1); padding: var(--sp-2); }
 .ground-mock .m-side { width: 22%; border-radius: 5px; }
 .ground-mock .m-main { flex: 1; border-radius: 5px; }
-.ob-foot { margin-top: auto; padding-top: var(--sp-6); display: flex; align-items: center; justify-content: space-between; }
+.ob-foot { margin-top: auto; padding-top: var(--sp-6); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.ob-foot-note { font-size: var(--fs-0); color: var(--ink-3); }
+
+/* redesigned welcome */
+.display em { font-style: normal; color: var(--accent); }
+.ob-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin: var(--sp-6) 0; }
+.ob-point { display: flex; flex-direction: column; gap: 5px; }
+.ob-point-icon { width: 30px; height: 30px; border-radius: var(--r-1); display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); margin-bottom: 4px; }
+.ob-point-icon svg { width: 17px; height: 17px; }
+.ob-point b { color: var(--ink); font-size: var(--fs-1); }
+.ob-point span { color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
+.ob-make { display: grid; grid-template-columns: 1.25fr 1fr; gap: var(--sp-4); margin-bottom: var(--sp-6); align-items: start; }
+.ob-ground-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); margin-top: var(--sp-3); }
+.ob-ground-grid .ground-mock { height: 52px; }
+.ob-ground-grid b { display: block; font-size: var(--fs-0); color: var(--ink); }
+.ob-ground-grid span { display: block; font-size: .68rem; color: var(--ink-3); margin-top: 1px; }
+.ob-explore { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-6); }
+.ob-explore-card { display: flex; flex-direction: column; gap: var(--sp-2); text-align: left; cursor: pointer; font: inherit; }
+.ob-explore-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.ob-explore-head { display: flex; align-items: center; gap: var(--sp-2); }
+.ob-explore-swatch { width: 22px; height: 22px; border-radius: 6px; flex: none; border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); }
+.ob-explore-name { font-weight: 700; color: var(--ink); font-size: var(--fs-1); }
+.ob-explore-role { font-size: .72rem; color: var(--ink-3); }
+.ob-explore-uses { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+@media (max-width: 720px) {
+  .ob-points { grid-template-columns: 1fr; }
+  .ob-make { grid-template-columns: 1fr; }
+}
 
 /* ---- command palette + shortcuts (built on real .modal-scrim / .modal) ------- */
 .palette { width: min(34rem, 100%); max-height: 66vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; }
@@ -574,6 +604,141 @@ pre.code-block .tag { color: var(--accent); }
 .ks-prose { max-width: 64ch; color: var(--ink-2); }
 .ks-prose p { margin: 0 0 var(--sp-3); line-height: var(--lh-3); }
 .ks-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--sp-4); align-items: start; }
+
+/* =============================================================================
+   ADDED COMPONENTS + LIVE INTERACTIONS — demo-only. Every value is a token from
+   ../src; glass stays on chrome/overlays only, readable content on opaque
+   planes. New pieces here are honest compositions of the shipped tokens and
+   primitives, labelled "composed · …" in the library.
+   ============================================================================= */
+
+/* ---- header theme switcher ------------------------------------------------- */
+.accent-wrap .accent-chip { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); display: block; }
+#accentMenu { width: 13rem; }
+.accent-menu-label { margin: 0 0 var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 2px var(--sp-1) 0; }
+.accent-menu-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.accent-menu-dot { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; }
+.accent-menu-dot[aria-pressed="true"] { border-color: var(--ink); }
+.accent-menu-dot .check { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; color: #0a0d12; }
+.accent-menu-dot[aria-pressed="true"] .check { opacity: 1; }
+
+/* ---- press feedback: a ripple on every button ------------------------------ */
+.btn { position: relative; overflow: hidden; }
+.gl-ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  background: color-mix(in srgb, currentColor 32%, transparent);
+  animation: gl-ripple 520ms var(--ease); opacity: .5;
+}
+@keyframes gl-ripple { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .gl-ripple { display: none; } }
+
+/* ---- accordion (native details, styled) ------------------------------------ */
+.accordion { width: 100%; max-width: 26rem; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface); overflow: hidden; }
+.acc-item { border-top: 1px solid var(--line); }
+.acc-item:first-child { border-top: none; }
+.acc-item > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4); font-weight: 650; color: var(--ink); font-size: var(--fs-1);
+  min-height: var(--target-min);
+}
+.acc-item > summary::-webkit-details-marker { display: none; }
+.acc-item > summary::after { content: ""; margin-left: auto; width: 9px; height: 9px; border-right: 2px solid var(--ink-3); border-bottom: 2px solid var(--ink-3); transform: rotate(-45deg); transition: transform var(--t-base) var(--ease); }
+.acc-item[open] > summary::after { transform: rotate(45deg); }
+.acc-item > summary:focus-visible { outline: var(--focus-w) solid var(--focus); outline-offset: calc(-1 * var(--focus-w)); }
+.acc-body { padding: 0 var(--sp-4) var(--sp-4); color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
+
+/* ---- banner / callout ------------------------------------------------------- */
+.banner { display: flex; align-items: flex-start; gap: var(--sp-3); width: 100%; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-2); border: 1px solid var(--line); border-left-width: 3px; background: var(--surface); color: var(--ink); }
+.banner svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
+.banner .bn-body { min-width: 0; }
+.banner .bn-title { font-weight: 700; font-size: var(--fs-1); }
+.banner .bn-text { color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2); }
+.banner-info { border-left-color: var(--info); } .banner-info svg { color: var(--info); }
+.banner-ok { border-left-color: var(--ok); } .banner-ok svg { color: var(--ok); }
+.banner-warn { border-left-color: var(--warn); } .banner-warn svg { color: var(--warn); }
+.banner-accent { border-left-color: var(--accent); } .banner-accent svg { color: var(--accent); }
+.banner .bn-close { margin-left: auto; }
+
+/* ---- stepper ---------------------------------------------------------------- */
+.stepper { display: flex; align-items: flex-start; gap: 0; width: 100%; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; text-align: center; }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: .8rem; font-weight: 700; border: 2px solid var(--line); background: var(--surface); color: var(--ink-3); }
+.step-label { font-size: var(--fs-0); color: var(--ink-3); }
+.step[aria-current="step"] .step-dot { border-color: var(--accent); color: var(--accent); }
+.step[aria-current="step"] .step-label { color: var(--ink); font-weight: 650; }
+.step[data-done="true"] .step-dot { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.step[data-done="true"] .step-label { color: var(--ink-2); }
+.step-line { flex: 1; height: 2px; background: var(--line); margin-top: 13px; }
+.step-line[data-done="true"] { background: var(--accent); }
+
+/* ---- pagination ------------------------------------------------------------- */
+.pager { display: inline-flex; align-items: center; gap: 4px; }
+.pager .pg { min-width: var(--target-min); min-height: var(--target-min); padding: 0 var(--sp-2); }
+.pager .pg[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* ---- tag input -------------------------------------------------------------- */
+.taginput { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; width: 100%; max-width: 24rem; min-height: var(--target-min); padding: 6px 8px; border-radius: var(--r-1); border: 1px solid var(--line); background: var(--bg); }
+.taginput:focus-within { border-color: var(--accent); outline: var(--focus-w) solid var(--focus); outline-offset: 1px; }
+.taginput .tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 4px 2px 9px; border-radius: var(--r-pill); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); color: var(--ink); font-size: var(--fs-0); font-weight: 600; }
+.taginput .tag button { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; color: var(--ink-2); }
+.taginput .tag button:hover { background: color-mix(in srgb, var(--ink) 12%, transparent); color: var(--ink); }
+.taginput input { flex: 1; min-width: 5rem; border: none; background: none; color: var(--ink); font: inherit; font-size: var(--fs-0); padding: 4px; }
+.taginput input:focus { outline: none; }
+
+/* ---- timeline --------------------------------------------------------------- */
+.timeline { list-style: none; margin: 0; padding: 0 0 0 var(--sp-2); width: 100%; }
+.tl-item { position: relative; padding: 0 0 var(--sp-4) var(--sp-5); border-left: 2px solid var(--line); }
+.tl-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+.tl-item::before { content: ""; position: absolute; left: -6px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+.tl-item.tl-muted::before { background: var(--ink-3); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink-3) 20%, transparent); }
+.tl-time { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+.tl-title { font-weight: 650; color: var(--ink); font-size: var(--fs-0); }
+.tl-note { color: var(--ink-2); font-size: var(--fs-0); }
+
+/* ---- stat delta ------------------------------------------------------------- */
+.stat-delta { display: flex; flex-direction: column; gap: 4px; }
+.stat-delta .sd-val { font-family: var(--font-mono); font-size: var(--fs-2); font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat-delta .sd-label { font-size: var(--fs-0); color: var(--ink-2); }
+.sd-delta { display: inline-flex; align-items: center; gap: 3px; font-size: var(--fs-0); font-weight: 700; font-variant-numeric: tabular-nums; }
+.sd-up { color: var(--ok); } .sd-down { color: var(--bad); }
+
+/* ---- empty state ------------------------------------------------------------ */
+.empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--sp-2); padding: var(--sp-5); color: var(--ink-2); }
+.empty .em-icon { width: 40px; height: 40px; border-radius: var(--r-2); display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); color: var(--ink-3); margin-bottom: 2px; }
+.empty .em-title { font-weight: 700; color: var(--ink); font-size: var(--fs-1); }
+.empty .em-text { font-size: var(--fs-0); max-width: 28ch; }
+
+/* ---- rating ----------------------------------------------------------------- */
+.rating { display: inline-flex; gap: 2px; }
+.rating button { all: unset; cursor: pointer; padding: 3px; line-height: 0; border-radius: var(--r-1); color: var(--ink-3); }
+.rating button:focus-visible { outline: var(--focus-w) solid var(--focus); outline-offset: 1px; }
+.rating button[aria-checked="true"], .rating button.rt-on { color: var(--accent); }
+.rating svg { width: 22px; height: 22px; }
+
+/* ---- file drop -------------------------------------------------------------- */
+.filedrop { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); width: 100%; max-width: 24rem; padding: var(--sp-5); text-align: center; border: 1.5px dashed var(--line); border-radius: var(--r-2); background: var(--bg); color: var(--ink-2); transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+.filedrop.is-over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
+.filedrop svg { width: 26px; height: 26px; color: var(--ink-3); }
+.filedrop .fd-hint { font-size: var(--fs-0); color: var(--ink-3); }
+
+/* ---- code block copy row ---------------------------------------------------- */
+.codewrap { position: relative; width: 100%; }
+.codewrap .code-copy { position: absolute; top: 8px; right: 8px; }
+
+/* ---- drawer (a real slide-in overlay, focus-trapped) ------------------------ */
+.drawer-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: var(--z-modal);
+  width: min(24rem, 92vw); padding: var(--sp-5);
+  background: var(--surface); border-left: 1px solid var(--line);
+  box-shadow: var(--gl-shadow); overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--sp-4);
+  transform: translateX(100%); transition: transform var(--t-slow) var(--ease);
+}
+.modal-scrim:not([hidden]) > .drawer-panel { transform: translateX(0); }
+@media (prefers-reduced-motion: reduce) { .drawer-panel { transition: none; } }
+.drawer-panel .dr-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.drawer-panel .dr-head h2 { margin: 0; font-size: var(--fs-2); color: var(--ink); }
 </style>
 </head>
 
@@ -583,42 +748,64 @@ pre.code-block .tag { color: var(--accent); }
 <section class="onboarding" id="screen-onboarding" hidden>
   <div class="ob-top">
     <div class="brand"><img class="brand-mark" src="../brand/mark.svg" alt="">glass</div>
-    <button class="btn btn-ghost" id="obSkip">Skip setup →</button>
+    <button class="btn btn-ghost" id="obSkip">Skip to the library →</button>
   </div>
 
-  <div id="obStep1">
-    <p class="kicker">Step 1 of 2</p>
-    <h1 class="display" style="font-size:var(--fs-3);margin-top:var(--sp-2)">Pick the hue that's you.</h1>
-    <p class="lede">Every accent below is a real theme this system ships — Zeno's crimson, Weft's teal, Vantage's gold and five more. Each shares the exact lightness ladder; only the hue rotates. Change it later from Settings.</p>
-    <div class="ob-grid" id="obAccentGrid"></div>
-  </div>
+  <p class="kicker">Welcome</p>
+  <h1 class="display" style="font-size:var(--fs-3);margin-top:var(--sp-2)">A design system you can <em>browse like an app.</em></h1>
+  <p class="lede" style="max-width:62ch">Glass is a small kit for building calm, modern product interfaces. Here is what makes it nice to use — take a moment to make it yours, or jump straight in. You can change everything later from the top bar.</p>
 
-  <div id="obStep2" hidden>
-    <p class="kicker">Step 2 of 2</p>
-    <h1 class="display" style="font-size:var(--fs-3);margin-top:var(--sp-2)">Light, dark, or your OS?</h1>
-    <p class="lede">The ladder inverts between grounds rather than mirroring — <span class="mono">--raised</span> is the brightest plane on light and the dimmest on dark. Switch it anytime from the top bar.</p>
-    <div class="ground-grid" id="obGroundGrid">
-      <button class="ground-tile card glass" data-ob-ground="dark" aria-pressed="false">
-        <div class="ground-mock" style="background:#0a0d12"><div class="m-side" style="background:rgba(255,255,255,.06)"></div><div class="m-main" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"></div></div>
-        <b>Dark</b><span>Deep canvas, glowing glass edges.</span>
-      </button>
-      <button class="ground-tile card glass" data-ob-ground="system" aria-pressed="false">
-        <div class="ground-mock" style="background:linear-gradient(90deg,#0a0d12 50%,#f4f6f8 50%)"><div class="m-side" style="background:rgba(255,255,255,.08)"></div><div class="m-main" style="background:linear-gradient(90deg,rgba(255,255,255,.05) 50%,#fff 50%);border:1px solid rgba(16,24,34,.1)"></div></div>
-        <b>System</b><span>Follows your OS appearance, live.</span>
-      </button>
-      <button class="ground-tile card glass" data-ob-ground="light" aria-pressed="false">
-        <div class="ground-mock" style="background:#eef1f4"><div class="m-side" style="background:rgba(16,24,34,.06)"></div><div class="m-main" style="background:#fff;border:1px solid rgba(16,24,34,.08)"></div></div>
-        <b>Light</b><span>Frosted panels on daylight white.</span>
-      </button>
+  <div class="ob-points">
+    <div class="card ob-point">
+      <span class="ob-point-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 3v14a7 7 0 0 0 0-14Z" fill="currentColor" stroke="none"/></svg></span>
+      <b>Light, dark and ten themes</b>
+      <span>Every screen adapts to the mode and accent you choose, all from one shared set of tokens.</span>
+    </div>
+    <div class="card ob-point">
+      <span class="ob-point-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"/></svg></span>
+      <b>A library that is actually live</b>
+      <span>Buttons, inputs, menus and overlays you can click and type right on the page — not just pictures.</span>
+    </div>
+    <div class="card ob-point">
+      <span class="ob-point-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10.5 8 14.5 16 5.5"/></svg></span>
+      <b>Readable, by default</b>
+      <span>Text stays legible on every theme because contrast is built in and checked, not left to chance.</span>
     </div>
   </div>
+
+  <p class="sec-label">Make it yours</p>
+  <div class="ob-make">
+    <div class="card ob-make-card">
+      <span class="panel-label">Appearance</span>
+      <div class="ground-grid ob-ground-grid" id="obGroundGrid">
+        <button class="ground-tile card glass" data-ob-ground="dark" aria-pressed="false">
+          <div class="ground-mock" style="background:#0a0d12"><div class="m-side" style="background:rgba(255,255,255,.06)"></div><div class="m-main" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"></div></div>
+          <b>Dark</b><span>Deep canvas, glowing edges.</span>
+        </button>
+        <button class="ground-tile card glass" data-ob-ground="system" aria-pressed="false">
+          <div class="ground-mock" style="background:linear-gradient(90deg,#0a0d12 50%,#f4f6f8 50%)"><div class="m-side" style="background:rgba(255,255,255,.08)"></div><div class="m-main" style="background:linear-gradient(90deg,rgba(255,255,255,.05) 50%,#fff 50%);border:1px solid rgba(16,24,34,.1)"></div></div>
+          <b>System</b><span>Follows your device.</span>
+        </button>
+        <button class="ground-tile card glass" data-ob-ground="light" aria-pressed="false">
+          <div class="ground-mock" style="background:#eef1f4"><div class="m-side" style="background:rgba(16,24,34,.06)"></div><div class="m-main" style="background:#fff;border:1px solid rgba(16,24,34,.08)"></div></div>
+          <b>Light</b><span>Frosted panels on white.</span>
+        </button>
+      </div>
+    </div>
+    <div class="card ob-make-card">
+      <span class="panel-label">Theme</span>
+      <div class="swatch-grid" id="obAccentGrid"></div>
+      <p class="card-note" style="margin-top:var(--sp-3)">Change it anytime from the swatch in the top bar.</p>
+    </div>
+  </div>
+
+  <p class="sec-label">Or explore a product built with it</p>
+  <p class="sec-note" style="margin:0 0 var(--sp-3)">A product is more than a colour. Open one to see the accent it uses <em>and</em> the real components it is built from.</p>
+  <div class="ob-explore" id="obExploreGrid"></div>
 
   <div class="ob-foot">
-    <div class="ob-progress"><span class="ob-dot active" id="obDot1"></span><span class="ob-dot" id="obDot2"></span></div>
-    <div style="display:flex;gap:var(--sp-3)">
-      <button class="btn" id="obBack" disabled>Back</button>
-      <button class="btn btn-primary" id="obNext">Continue</button>
-    </div>
+    <span class="ob-foot-note">You can change theme and appearance anytime from the top bar.</span>
+    <button class="btn btn-primary" id="obEnter">Enter the library →</button>
   </div>
 </section>
 
@@ -635,10 +822,19 @@ pre.code-block .tag { color: var(--accent); }
       <span class="kbd">⌘K</span>
     </button>
     <div class="top-actions">
+      <div class="avatar-wrap accent-wrap">
+        <button class="workspace-icon-button" id="accentSwitchBtn" aria-haspopup="true" aria-expanded="false" aria-controls="accentMenu" aria-label="Change theme" title="Change theme">
+          <span class="accent-chip" aria-hidden="true"></span>
+        </button>
+        <div class="menu glass menu-anchor" id="accentMenu" hidden role="menu" aria-label="Theme">
+          <p class="accent-menu-label">Theme</p>
+          <div class="accent-menu-grid" id="accentMenuGrid"></div>
+        </div>
+      </div>
       <button class="workspace-icon-button" id="shortcutsBtn" data-tip="Keyboard shortcuts" aria-label="Show keyboard shortcuts" title="Keyboard shortcuts (?)">
         <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="15" height="10" rx="2"/><line x1="6" y1="8.3" x2="6" y2="8.3"/><line x1="9" y1="8.3" x2="9" y2="8.3"/><line x1="12" y1="8.3" x2="12" y2="8.3"/><line x1="6" y1="11.5" x2="12" y2="11.5"/></svg>
       </button>
-      <button class="workspace-icon-button" id="groundToggleBtn" aria-label="Toggle ground" title="Cycle ground (G)"></button>
+      <button class="workspace-icon-button" id="groundToggleBtn" aria-label="Toggle appearance" title="Cycle appearance (G)"></button>
       <div class="avatar-wrap">
         <button class="avatar" id="avatarBtn" aria-haspopup="true" aria-expanded="false" aria-controls="avatarMenu">AS</button>
         <div class="menu glass menu-anchor" id="avatarMenu" hidden>
@@ -693,59 +889,59 @@ pre.code-block .tag { color: var(--accent); }
       <!-- ============ OVERVIEW ============ -->
       <section class="screen" id="screen-overview" role="tabpanel" aria-labelledby="nav-overview">
         <div class="card glass hero-card">
-          <p class="kicker">a personal design system, browsed as an app</p>
-          <h1 class="display hero-title">Eight projects had already converged. <em>This is the extraction.</em></h1>
-          <p class="lede">Weft and Vantage were shipping byte-identical glass values, radii, motion and theme triad without sharing a stylesheet. Zeno had independently built a colour law where every value carries its measured contrast ratio and a script fails the build if it drifts. So: one grammar, eight themes, and a budget that runs on all sixteen palettes in CI — and, on this page, on whichever one you are looking at right now.</p>
+          <p class="kicker">The glass design system</p>
+          <h1 class="display hero-title">Polished interfaces, <em>readable by default.</em></h1>
+          <p class="lede">Glass is a small, practical design system for building calm, modern product interfaces. You get frosted chrome, a full library of components, light and dark modes, and a set of themes — all sharing one tidy set of design tokens so everything feels like it belongs together. Text stays easy to read on every theme, because contrast is built in rather than hoped for.</p>
           <div class="spec-row">
-            <span class="chip chip-accent">oklch, not hex</span>
-            <span class="chip">dark-first · three-way triad</span>
-            <span class="chip">8 themes × 2 grounds</span>
-            <span class="chip chip-mono">814 assertions · CI</span>
-            <span class="chip">WCAG 2.2, measured</span>
+            <span class="chip chip-accent">Light &amp; dark</span>
+            <span class="chip">10 themes</span>
+            <span class="chip">Readable contrast, checked</span>
+            <span class="chip chip-mono">Zero dependencies</span>
+            <span class="chip">Keyboard accessible</span>
           </div>
         </div>
 
-        <p class="sec-label">Live on this page, right now</p>
+        <p class="sec-label">How it looks on the theme you're viewing</p>
         <div class="metric-grid">
           <div class="card glass metric-card stat-tile">
-            <div class="stat-ring" id="statPairsRing" role="img" aria-label="Live contrast pairs passing"><span id="statPairsPct">—</span></div>
-            <div class="stat-copy"><b id="statPairs">—</b><span>live contrast pairs passing</span></div>
+            <div class="stat-ring" id="statPairsRing" role="img" aria-label="Text and background pairs meeting contrast"><span id="statPairsPct">—</span></div>
+            <div class="stat-copy"><b id="statPairs">—</b><span>text/background pairs meet contrast</span></div>
           </div>
           <div class="card glass metric-card stat-tile">
-            <div class="stat-ring" style="--pct:100" role="img" aria-label="All components documented"><span>100%</span></div>
-            <div class="stat-copy"><b id="statComponents">—</b><span>components, each with a live detail page</span></div>
+            <div class="stat-ring" style="--pct:100" role="img" aria-label="Every component has a live demo"><span>100%</span></div>
+            <div class="stat-copy"><b id="statComponents">—</b><span>components, each with a live demo</span></div>
           </div>
           <div class="card glass metric-card stat-tile">
-            <div class="stat-ring" style="--pct:100" role="img" aria-label="Eight of eight themes on shared tokens"><span>8/8</span></div>
-            <div class="stat-copy"><b>8 / 8</b><span>themes on the shared token vocabulary</span></div>
+            <div class="stat-ring" style="--pct:100" role="img" aria-label="Every theme built from one token set"><span id="statThemeCount">10</span></div>
+            <div class="stat-copy"><b id="statThemeBig">10</b><span>themes, all from one token set</span></div>
           </div>
           <div class="card glass metric-card stat-tile">
             <div class="stat-swatch" aria-hidden="true"></div>
-            <div class="stat-copy"><b id="statPalette" style="font-size:var(--fs-1)">—</b><span id="statWcagNote">WCAG AA</span></div>
+            <div class="stat-copy"><b id="statPalette" style="font-size:var(--fs-1)">—</b><span id="statWcagNote">Readable at AA</span></div>
           </div>
         </div>
 
-        <p class="sec-label">Jump back in</p>
+        <p class="sec-label">Where to next</p>
         <div class="quick-grid">
           <button class="card glass quick-card" data-goto="library" data-lib-tab="components">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"/></svg>
-            <b>Browse the library</b><span class="qc-note">Every real component across primitives, forms, navigation, feedback and data.</span>
+            <b>Browse the library</b><span class="qc-note">Buttons, inputs, menus, overlays and more — every one is live, so click and type right in the page.</span>
           </button>
           <button class="card glass quick-card" data-goto="library" data-lib-tab="foundations">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 16.5 8 6l4 6 2-3 3 7.5"/></svg>
-            <b>Read the ramp &amp; the law</b><span class="qc-note">The lightness ladder every theme shares, and the pairs that guard it — computed live.</span>
+            <b>See the foundations</b><span class="qc-note">The colors, type and corners the whole system is built on — and how contrast is checked as you switch themes.</span>
           </button>
           <button class="card glass quick-card" id="overviewRecomputeBtn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10.5 8 14.5 16 5.5"/></svg>
-            <b>Recompute the live budget</b><span class="qc-note">Re-reads every token out of getComputedStyle right now and reports the real count.</span>
+            <b>Re-check contrast now</b><span class="qc-note">Measure every text/background pair on the theme you're viewing and show the count.</span>
           </button>
           <button class="card glass quick-card" data-goto="settings">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="17" y2="6"/><circle cx="12" cy="6" r="1.7" fill="currentColor" stroke="none"/><line x1="3" y1="14" x2="17" y2="14"/><circle cx="8" cy="14" r="1.7" fill="currentColor" stroke="none"/></svg>
-            <b>Open settings</b><span class="qc-note">Ground, accent, WCAG target, reduced transparency, and the eight projects glass ships to.</span>
+            <b>Open settings</b><span class="qc-note">Switch between light and dark, pick a theme, tune accessibility, and see the products built with glass.</span>
           </button>
         </div>
 
-        <p class="credit-line">Extracted from <b>Zeno · Weft · Vantage · ShieldAI · Textify · HealthFlow · Smart-Rephraser-Lite · AI-Detector-Web-Extension</b> — MIT licensed. <a href="https://github.com/abheet19/glass" target="_blank" rel="noopener">github.com/abheet19/glass</a></p>
+        <p class="credit-line">Built and used across <b>Zeno · Weft · Vantage · ShieldAI · Textify · HealthFlow · Smart Rephraser · AI Detector</b> — open source under MIT. <a href="https://github.com/abheet19/glass" target="_blank" rel="noopener">github.com/abheet19/glass</a></p>
       </section>
 
       <!-- ============ LIBRARY ============ -->
@@ -775,12 +971,12 @@ pre.code-block .tag { color: var(--accent); }
         </div>
 
         <div id="libPane-foundations" role="tabpanel" aria-labelledby="libtab-foundations" hidden>
-          <h2 style="font-size:var(--fs-2);margin:0 0 4px">01 · The ramp</h2>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">Every swatch is read live out of <span class="mono">getComputedStyle</span>, right now, against the plane it is allowed to sit on. Switch theme or ground and the numbers recompute.</p>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">Color scale</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The neutral steps and accent colors this theme is built from, sampled live from the page. Switch theme or mode and they update instantly.</p>
           <div class="ramp" id="ramp-strip" style="margin-bottom:var(--sp-6)"></div>
 
-          <h2 style="font-size:var(--fs-2);margin:0 0 4px">02 · The law</h2>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">The same pairs <span class="mono">scripts/contrast.mjs</span> asserts in CI, computed here in the browser from the live tokens at the active WCAG target. <span class="mono">plane</span> is <span class="mono">--raised</span>; <span class="mono">glass</span> is <span class="mono">--gl-worst</span>, the worst realistic composite behind a pane.</p>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">Contrast, checked live</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Every important text-on-background and icon-on-background pairing, measured right now on the theme you're viewing. Anything that doesn't clear the WCAG minimum shows as a fail — and on every theme that ships, nothing does.</p>
           <div class="tablewrap" style="margin-bottom:var(--sp-6)">
             <table>
               <thead><tr><th>Pair</th><th>Role</th><th>Measured</th><th>Minimum</th><th>Result</th></tr></thead>
@@ -788,8 +984,8 @@ pre.code-block .tag { color: var(--accent); }
             </table>
           </div>
 
-          <h2 style="font-size:var(--fs-2);margin:0 0 4px">03 · Type &amp; radii</h2>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">The scale every screen in this app draws from.</p>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">Type &amp; corners</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The type scale and corner radii every screen here is drawn from.</p>
           <div class="card grid g2" style="margin-bottom:var(--sp-6)">
             <div>
               <div class="type-row"><span class="type-tag">--fs-3</span><span style="font-size:var(--fs-3);line-height:var(--lh-1);font-weight:650;letter-spacing:-.03em">Display</span></div>
@@ -806,14 +1002,14 @@ pre.code-block .tag { color: var(--accent); }
             </div>
           </div>
 
-          <h2 style="font-size:var(--fs-2);margin:0 0 4px">04 · The eight, at a glance</h2>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">Each theme file is eight numbers — the ground's hue and chroma, and a hue plus per-ground chroma for each accent. Click a row to wear it.</p>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">The themes</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Every theme is just a different accent laid over the same neutral scale, so they all stay consistent and readable. Here they are in light and dark side by side — click any row to try it on.</p>
           <div class="tablewrap" id="gallery-rows"></div>
         </div>
 
         <div id="libPane-patterns" role="tabpanel" aria-labelledby="libtab-patterns" hidden>
-          <h2 style="font-size:var(--fs-2);margin:0 0 4px">05 · Workspace shell</h2>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">A responsive editor and agent shell built from the same semantic roles: toggleable panels, file and dock tabs, a split view, tree disclosure, a command composer, run disclosure, and a status line. The pattern every one of the eight projects docks its own tools into.</p>
+          <h2 style="font-size:var(--fs-2);margin:0 0 4px">Workspace shell</h2>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">A full three-pane app layout assembled from glass parts: collapsible side panels, file and tool tabs, a resizable split view, a file tree, a command box and a status bar. It's the shell real products dock their own tools into — resize it, switch tabs and type into the composer below.</p>
 
           <div class="workspace-frame" id="workspace-demo" data-nav-collapsed="false" data-aside-collapsed="false">
             <header class="workspace-titlebar">
@@ -871,7 +1067,7 @@ pre.code-block .tag { color: var(--accent); }
                     <div class="workspace-pane" aria-label="Preview pane">
                       <p class="kicker">Preview</p>
                       <div class="state state-ok state-text"></div>
-                      <p class="card-note">One token, one plane, one measured ratio.</p>
+                      <p class="card-note">One shared set of tokens behind every screen.</p>
                     </div>
                   </div>
                 </div>
@@ -951,7 +1147,7 @@ pre.code-block .tag { color: var(--accent); }
         <div class="screen-head">
           <div>
             <h1 class="display" style="font-size:var(--fs-2)">Settings</h1>
-            <p class="lede">Appearance, accessibility targets, and the eight projects glass ships to.</p>
+            <p class="lede">Appearance, accessibility, the products built with glass, and how to add it to your own.</p>
           </div>
         </div>
         <nav class="tabs" role="tablist" aria-label="Settings section" id="setTabs" style="margin-bottom:var(--sp-5)">
@@ -963,20 +1159,20 @@ pre.code-block .tag { color: var(--accent); }
 
         <div id="setPane-appearance" role="tabpanel" aria-labelledby="settab-appearance" class="settings-grid">
           <div class="card glass">
-            <span class="panel-label">Ground — dark, light, or system</span>
-            <div class="seg" role="group" aria-label="Ground" id="groundSeg">
+            <span class="panel-label">Appearance — dark, light, or match your device</span>
+            <div class="seg" role="group" aria-label="Appearance" id="groundSeg">
               <button class="btn" data-ground="dark" aria-pressed="false">Dark</button>
               <button class="btn" data-ground="system" aria-pressed="true">System</button>
               <button class="btn" data-ground="light" aria-pressed="false">Light</button>
             </div>
           </div>
           <div class="card glass">
-            <span class="panel-label">Accent — one of eight real themes</span>
+            <span class="panel-label">Theme — pick an accent</span>
             <div class="swatch-grid" id="settingsAccentRow"></div>
           </div>
           <div class="card glass">
             <div class="switch-row">
-              <div class="switch-copy"><b>Reduce transparency</b><span>Turns off backdrop blur across every glass surface — the manual escape hatch from tokens.css.</span></div>
+              <div class="switch-copy"><b>Reduce transparency</b><span>Replaces the frosted blur with solid panels. Turns on automatically if your device already asks for reduced transparency.</span></div>
               <label class="switch"><input type="checkbox" id="flatToggle"></label>
             </div>
           </div>
@@ -984,25 +1180,25 @@ pre.code-block .tag { color: var(--accent); }
 
         <div id="setPane-a11y" role="tabpanel" aria-labelledby="settab-a11y" class="settings-grid" hidden>
           <div class="card glass">
-            <span class="panel-label">WCAG target</span>
-            <p class="lede" style="margin:0 0 var(--sp-3)">AAA raises the text minimum to 7:1 (WCAG 1.4.6). WCAG defines no stricter tier for non-text/UI contrast, so graphic and focus-ring pairs stay at the AA 3:1 minimum either way.</p>
-            <div class="seg3" role="group" aria-label="WCAG target" id="wcagSeg">
-              <button class="opt-tile" data-wcag="AA" aria-pressed="true"><b>AA</b><span>4.5:1 text · 3:1 graphic — the shipped default</span></button>
-              <button class="opt-tile" data-wcag="AAA" aria-pressed="false"><b>AAA</b><span>7:1 text · 3:1 graphic — stricter, a few will flip</span></button>
+            <span class="panel-label">Contrast target</span>
+            <p class="lede" style="margin:0 0 var(--sp-3)">How strict the readability check should be. AA is the standard bar most products aim for; AAA is stricter, for text that has to be legible in tough conditions. Icons and focus rings use the same minimum on both.</p>
+            <div class="seg3" role="group" aria-label="Contrast target" id="wcagSeg">
+              <button class="opt-tile" data-wcag="AA" aria-pressed="true"><b>AA</b><span>The everyday standard — 4.5:1 for text</span></button>
+              <button class="opt-tile" data-wcag="AAA" aria-pressed="false"><b>AAA</b><span>Extra strict — 7:1 for text</span></button>
             </div>
           </div>
           <div class="card glass gauge-card">
             <div style="flex:1">
               <b style="font-size:var(--fs-1)" id="passGaugeLabel">— / — pairs passing</b>
               <div class="gauge" style="margin-top:var(--sp-2)"><span class="gauge-fill" id="passGaugeFill"></span></div>
-              <p class="card-note" style="margin-top:var(--sp-2)">at the current ground and WCAG target, recomputed live</p>
+              <p class="card-note" style="margin-top:var(--sp-2)">on the current theme, mode and contrast target — measured live</p>
             </div>
             <span class="gauge-big" id="passGaugeText">—%</span>
           </div>
         </div>
 
         <div id="setPane-projects" role="tabpanel" aria-labelledby="settab-projects" hidden>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">The eight source projects, honestly: their role and the hue they contributed. No fabricated version or sync status — the working link is real, everything else is what this repository's own README documents.</p>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">The products built with glass — what each one does and the theme it uses. Every link goes to its real repository on GitHub.</p>
           <div class="table-wrap card glass" style="padding:0">
             <table class="table">
               <thead><tr><th>Project</th><th>Role</th><th>Hue</th><th></th></tr></thead>
@@ -1012,11 +1208,11 @@ pre.code-block .tag { color: var(--accent); }
         </div>
 
         <div id="setPane-install" role="tabpanel" aria-labelledby="settab-install" hidden>
-          <p class="sec-note" style="margin:0 0 var(--sp-4)">Glass is not published to npm — every path below is real and in production use by Zeno, Weft or Vantage today.</p>
+          <p class="sec-note" style="margin:0 0 var(--sp-4)">Glass is plain CSS with no build step — drop the files in and start using them. Here's how to add it to a project.</p>
           <div class="card glass" style="margin-bottom:var(--sp-4)">
-            <div class="copy-row"><span class="panel-label" style="margin:0">Clone and verify</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="git clone https://github.com/abheet19/glass.git&#10;node glass/scripts/contrast.mjs">Copy</button></div>
+            <div class="copy-row"><span class="panel-label" style="margin:0">Clone and check</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="git clone https://github.com/abheet19/glass.git&#10;node glass/scripts/contrast.mjs">Copy</button></div>
             <pre class="code-block">git clone https://github.com/abheet19/glass.git
-node glass/scripts/contrast.mjs      <span class="tag"># prove it before you trust it</span></pre>
+node glass/scripts/contrast.mjs      <span class="tag"># confirm every theme is readable</span></pre>
           </div>
           <div class="card glass" style="margin-bottom:var(--sp-4)">
             <div class="copy-row"><span class="panel-label" style="margin:0">Git submodule</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="git submodule add https://github.com/abheet19/glass.git vendor/glass">Copy</button></div>
@@ -1033,10 +1229,10 @@ node glass/scripts/contrast.mjs      <span class="tag"># prove it before you tru
 &lt;html data-glass="weft" <span class="tag">data-flat="1"</span>&gt;  <span style="color:var(--ink-3)"># no blur</span></pre>
           </div>
           <div class="card glass">
-            <div class="copy-row"><span class="panel-label" style="margin:0">Verify</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="node scripts/contrast.mjs --verbose&#10;node scripts/contrast.mjs --theme weft&#10;node scripts/contrast.mjs --emit-json">Copy</button></div>
-            <pre class="code-block">node scripts/contrast.mjs --verbose    <span style="color:var(--ink-3)"># every pair</span>
-node scripts/contrast.mjs --theme weft <span style="color:var(--ink-3)"># one theme</span>
-node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuild tokens.json</span></pre>
+            <div class="copy-row"><span class="panel-label" style="margin:0">Check contrast</span><button class="btn btn-ghost btn-sm copy-btn" data-copy="node scripts/contrast.mjs --verbose&#10;node scripts/contrast.mjs --theme weft&#10;node scripts/contrast.mjs --emit-json">Copy</button></div>
+            <pre class="code-block">node scripts/contrast.mjs --verbose    <span style="color:var(--ink-3)"># show every pair</span>
+node scripts/contrast.mjs --theme weft <span style="color:var(--ink-3)"># just one theme</span>
+node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># refresh tokens.json</span></pre>
           </div>
         </div>
       </section>
@@ -1048,7 +1244,7 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
           <li aria-current="page"><span id="pjCrumb">Project</span></li>
         </ol>
         <div class="card glass hero-card" style="margin:var(--sp-3) 0 var(--sp-6)">
-          <p class="kicker" id="pjKicker">what this product is built from</p>
+          <p class="kicker" id="pjKicker">built with glass</p>
           <div class="proj-hero">
             <span class="proj-hero-swatch" id="pjSwatch" aria-hidden="true"></span>
             <div class="proj-hero-copy">
@@ -1059,10 +1255,10 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
           </div>
           <div class="spec-row" id="pjChips"></div>
         </div>
-        <p class="sec-label">The glass parts this product actually consumes</p>
+        <p class="sec-label">The glass pieces this product uses</p>
         <p class="sec-note" style="margin:0 0 var(--sp-4)" id="pjIntro"></p>
         <div class="uses-grid" id="pjUsesGrid"></div>
-        <p class="credit-line" style="padding-top:var(--sp-6)">Every specimen above is the real component at this product's accent — pick another product in the sidebar and the whole set re-skins. Grounded in each app's real surface, not invented for the demo.</p>
+        <p class="credit-line" style="padding-top:var(--sp-6)">Each piece above is a real glass component in this product's theme — pick another product in the sidebar and the whole set changes color to match.</p>
       </section>
 
       <!-- ============ KITCHEN SINK ============ -->
@@ -1070,31 +1266,31 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
         <div class="ks-stack">
           <div class="screen-head">
             <div>
-              <h1 class="display" style="font-size:var(--fs-2)">Kitchen sink</h1>
-              <p class="lede">One long, opaque, scrolling page with a glass toolbar pinned to the top. The house rule, demonstrated: chrome floats and blurs; data and readable content sit on solid planes and never behind the blur.</p>
+              <h1 class="display" style="font-size:var(--fs-2)">Everything at once</h1>
+              <p class="lede">A long, scrolling page with a frosted toolbar pinned to the top — a quick stress test of the whole system together. It also shows the one rule glass keeps: the floating chrome is frosted, while anything you actually read sits on a solid panel, never behind the blur.</p>
             </div>
           </div>
 
           <div class="ks-toolbar" id="ksToolbar">
-            <span class="ks-tb-title">glass · kitchen sink</span>
-            <span class="chip chip-mono">backdrop-filter</span>
+            <span class="ks-tb-title">glass · everything at once</span>
+            <span class="chip chip-mono">frosted toolbar</span>
             <span class="ks-tb-spacer"></span>
-            <button class="btn btn-sm" id="ksToastBtn">Fire a toast</button>
+            <button class="btn btn-sm" id="ksToastBtn">Show a toast</button>
             <button class="btn btn-primary btn-sm" id="ksTopBtn">Back to top</button>
           </div>
 
           <div>
-            <p class="sec-label" style="margin-top:0">Live KPI tiles — opaque</p>
+            <p class="sec-label" style="margin-top:0">Headline numbers, on solid tiles</p>
             <div class="metric-grid">
-              <div class="card metric-card"><span class="metric-card-label">Palettes verified</span><span class="metric-card-value">16</span><span class="card-note">8 themes × 2 grounds</span></div>
-              <div class="card metric-card"><span class="metric-card-label">Assertions</span><span class="metric-card-value">814</span><span class="card-note">contrast + structure, in CI</span></div>
-              <div class="card metric-card"><span class="metric-card-label">Runtime deps</span><span class="metric-card-value">0</span><span class="card-note">no framework, no webfont</span></div>
-              <div class="card metric-card"><span class="metric-card-label">Components</span><span class="metric-card-value" id="ksCompCount">—</span><span class="card-note">across six stylesheets</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Themes</span><span class="metric-card-value" id="ksThemeCount">10</span><span class="card-note">light and dark, one token set</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Contrast checks</span><span class="metric-card-value">814</span><span class="card-note">run automatically, all passing</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Dependencies</span><span class="metric-card-value">0</span><span class="card-note">no framework, no web font</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Components</span><span class="metric-card-value" id="ksCompCount">—</span><span class="card-note">every one live in the library</span></div>
             </div>
           </div>
 
           <div>
-            <p class="sec-label">A data table — opaque, scrolls inside its own frame</p>
+            <p class="sec-label">A data table, scrolling inside its own frame</p>
             <div class="table-wrap card" style="padding:0">
               <table class="table table-striped">
                 <thead><tr><th>Theme</th><th>Origin</th><th data-numeric="true">ink / raised</th><th data-numeric="true">accent / glass</th><th>Status</th></tr></thead>
@@ -1110,7 +1306,7 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
 
           <div class="ks-two">
             <div class="card">
-              <span class="panel-label">A real form — labelled controls on opaque planes</span>
+              <span class="panel-label">A working form, with labels on solid panels</span>
               <div class="field-group" style="margin-bottom:var(--sp-4)">
                 <label class="field-label" for="ks-name">Project name</label>
                 <input class="field" id="ks-name" placeholder="lowercase-no-spaces">
@@ -1127,8 +1323,8 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
                 <textarea class="field" id="ks-notes" placeholder="Anything worth remembering…"></textarea>
               </div>
               <div class="field-group" style="margin-bottom:var(--sp-4)">
-                <label class="field-label" for="ks-blur">Blur radius</label>
-                <input class="range" type="range" id="ks-blur" min="0" max="30" value="14" aria-label="Blur radius">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><label class="field-label" for="ks-blur">Blur radius</label><output id="ks-blur-out" for="ks-blur" class="mono" style="color:var(--ink);font-weight:700">14px</output></div>
+                <input class="range" type="range" id="ks-blur" min="0" max="30" value="14">
               </div>
               <div style="display:flex;flex-direction:column;gap:var(--sp-2);margin-bottom:var(--sp-4)">
                 <label class="checkbox"><input type="checkbox" checked> Verify before publish</label>
@@ -1141,11 +1337,11 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
               </div>
             </div>
             <div class="card">
-              <span class="panel-label">Status, counts and a determinate ring</span>
+              <span class="panel-label">Status, counts and a progress ring</span>
               <div class="list" style="margin-bottom:var(--sp-4)">
-                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">the grammar · 390 lines</span></span><span class="badge badge-accent">core</span></div>
-                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">seven primitives</span></span><span class="badge">7</span></div>
-                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">toast · modal · tooltip</span></span><span class="badge">4</span></div>
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">colors, spacing, motion</span></span><span class="badge badge-accent">core</span></div>
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">buttons, cards, inputs</span></span><span class="badge">7</span></div>
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">toasts, dialogs, tooltips</span></span><span class="badge">4</span></div>
               </div>
               <div style="display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap;margin-bottom:var(--sp-4)">
                 <div class="progress-ring" style="--pr:82" role="img" aria-label="82 percent"><span class="pr-label">82%</span></div>
@@ -1164,10 +1360,10 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
           </div>
 
           <div class="ks-prose card">
-            <p class="sec-label" style="margin-top:0">Long-form text — on an opaque card, always</p>
+            <p class="sec-label" style="margin-top:0">Long-form text, always on a solid card</p>
             <div class="ks-prose">
-              <p>Scroll this page and watch the toolbar above: it stays pinned, translucent, and refracts the content sliding underneath it. That is the only place glass belongs — the chrome, the overlays, the navigation.</p>
-              <p>Everything you are reading right now sits on an opaque <span class="mono">--surface</span> plane, because a paragraph behind a blur is a paragraph you cannot measure a contrast ratio against. The system enforces that separation in the tokens; this page simply obeys it, at 60fps, over a full screen of scrolling content.</p>
+              <p>Scroll the page and watch the toolbar above: it stays pinned and frosted, with the content sliding softly underneath it. That's the one place a blur belongs — the floating chrome, the overlays, the navigation.</p>
+              <p>Everything you're reading right now sits on a solid panel, because text behind a blur is text you can't be sure is readable. Keeping content off the glass is what lets the contrast checks mean something — and it's the habit that keeps a glassy interface from tipping into a pretty mess.</p>
             </div>
           </div>
         </div>
@@ -1196,7 +1392,7 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
     <div class="modal-body">
       <div class="shortcut-row"><span>Open command palette</span><span class="shortcut-keys"><span class="kbd">⌘</span><span class="kbd">K</span></span></div>
       <div class="shortcut-row"><span>Show this list</span><span class="shortcut-keys"><span class="kbd">?</span></span></div>
-      <div class="shortcut-row"><span>Cycle ground (dark ⇄ system ⇄ light)</span><span class="shortcut-keys"><span class="kbd">G</span></span></div>
+      <div class="shortcut-row"><span>Cycle appearance (dark ⇄ system ⇄ light)</span><span class="shortcut-keys"><span class="kbd">G</span></span></div>
       <div class="shortcut-row"><span>Go to Overview</span><span class="shortcut-keys"><span class="kbd">1</span></span></div>
       <div class="shortcut-row"><span>Go to Library</span><span class="shortcut-keys"><span class="kbd">2</span></span></div>
       <div class="shortcut-row"><span>Go to Settings</span><span class="shortcut-keys"><span class="kbd">3</span></span></div>
@@ -1213,6 +1409,20 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-actions" id="modalActions"></div>
   </div>
+</div>
+
+<!-- ===================== DRAWER / SHEET (real slide-in overlay) ===================== -->
+<div class="modal-scrim" id="drawerOverlay" hidden>
+  <aside class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="dr-head">
+      <h2 id="drawerTitle">Filters</h2>
+      <button class="workspace-icon-button" id="drawerClose" aria-label="Close drawer">
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+      </button>
+    </div>
+    <div id="drawerBody"></div>
+    <div class="modal-actions" style="margin-top:auto"><button class="btn btn-primary" id="drawerApply">Apply</button></div>
+  </aside>
 </div>
 
 <div class="toast-region" id="toastStack" aria-live="polite"></div>
@@ -1357,10 +1567,13 @@ var THEMES = [
   ['shield', 'steel blue', 'ShieldAI · privacy'],
   ['textify', 'copper', 'Textify · summariser'],
   ['health', 'clinical emerald', 'HealthFlow · clinical'],
-  ['rephrase', 'violet + orchid', 'Smart-Rephraser-Lite'],
-  ['detect', 'rose', 'AI-Detector-Web-Extension']
+  ['rephrase', 'violet + orchid', 'Smart Rephraser'],
+  ['detect', 'rose', 'AI Detector'],
+  ['graphite', 'neutral slate', 'Neutral · calm and quiet'],
+  ['warm', 'amber', 'Warm · friendly and soft'],
+  ['mono', 'monochrome', 'Monochrome · no colour']
 ];
-var HEX = { zeno: '#C81E33', weft: '#2ED3C6', vantage: '#F2B23E', shield: '#4F8EF7', textify: '#E0954D', health: '#3ECF8E', rephrase: '#7C4DFF', detect: '#E8496C' };
+var HEX = { zeno: '#C81E33', weft: '#2ED3C6', vantage: '#F2B23E', shield: '#4F8EF7', textify: '#E0954D', health: '#3ECF8E', rephrase: '#7C4DFF', detect: '#E8496C', graphite: '#737B86', warm: '#B78029', mono: '#7F8083' };
 var PROJECTS = [
   { theme: 'zeno', repo: 'Zeno', name: 'Zeno', role: 'Local-first agent orchestrator' },
   { theme: 'weft', repo: 'Weft', name: 'Weft', role: 'Real-time CRDT editor' },
@@ -1393,107 +1606,107 @@ function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&'
 
 var COMPONENTS = [
   { id: 'glass', name: '.glass', cat: 'primitive', file: 'primitives.css',
-    blurb: 'The base surface every panel inherits — a translucent tint, a real blur with a saturation lift, a 1px edge that makes the pane an object, and a top inner highlight standing in for a light source.',
+    blurb: 'The frosted surface behind every floating panel — a soft translucent tint, a real blur, a thin bright edge and a subtle highlight along the top. It is what gives the system its name, and it belongs on chrome and overlays, not the text you read.',
     tokens: [['--gl-fill', 'color'], ['--gl-edge', 'color'], ['--gl-blur', 'static', 'blur(14px) saturate(1.4)'], ['--r-3', 'static', '16px']],
     code: '<div class="glass" style="padding:var(--sp-5)">\n  …\n</div>',
     rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst'], ['--ink-2 on --gl-worst', 'text', '--ink-2', '--gl-worst']] },
   { id: 'card', name: '.card / .card-raised', cat: 'primitive', file: 'primitives.css',
-    blurb: '.glass\u2019s opaque sibling — the workhorse container for long-form text. .card is --surface; .card-raised is --raised, the lightest opaque plane text may land on and the backdrop every text ceiling in this system is measured against.',
+    blurb: 'The solid panel that holds most of your content — prose, a form, a group of data. It is the everyday home for anything people read, kept off the glass so it always stays crisp and legible.',
     tokens: [['--surface', 'color'], ['--raised', 'color'], ['--r-2', 'static', '12px'], ['--sp-5', 'static', '20px padding']],
     code: '<div class="card">\n  <h3 class="card-title">Title</h3>\n  <p class="card-note">Body copy…</p>\n</div>',
     rows: [['--ink on --raised', 'text', '--ink', '--raised'], ['--ink-2 on --raised', 'text', '--ink-2', '--raised']] },
   { id: 'btn', name: '.btn', cat: 'primitive', file: 'primitives.css',
-    blurb: 'Three weights — quiet (default), Primary, Ghost — plus Glass, each keeping the 24px --target-min hit area enforced by the primitive itself (WCAG 2.2 SC 2.5.8), not left to the caller.',
+    blurb: 'The button, in four looks: a quiet default, a bold Primary, a subtle Ghost, and a Glass variant for frosted chrome. Every one has a comfortable tap target and a clear focus ring, so it works well by mouse, touch or keyboard.',
     tokens: [['--target-min', 'static', '24px min height'], ['--r-1', 'static', '8px'], ['--t-fast', 'static', '120ms']],
     code: '<button class="btn btn-primary">Publish</button>\n<button class="btn btn-ghost">Cancel</button>\n<button class="btn" disabled>Disabled</button>',
     rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent'], ['--ink on --raised', 'text', '--ink', '--raised']] },
   { id: 'field', name: '.field', cat: 'primitive', file: 'primitives.css',
-    blurb: 'A recessed input — the same class styles a native <input>, <textarea> and <select>. A 2px accent focus ring, an explicit :invalid/aria-invalid border, and a placeholder that never doubles as the only label.',
+    blurb: 'One input style that fits a text box, a dropdown and a multi-line area alike. It shows a clear focus ring, marks itself when a value is invalid, and always expects a real label rather than leaning on the placeholder.',
     tokens: [['--focus-w', 'static', '2px'], ['--focus-off', 'static', '2px'], ['--bad', 'color']],
     code: '<label class="field-label" for="p">Project</label>\n<input class="field" id="p" value="glass">',
     rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
   { id: 'chip', name: '.chip', cat: 'primitive', file: 'primitives.css',
-    blurb: 'A neutral label — never a status. .chip-accent carries the brand; .chip-mono sets the number/code face. If you want a status, that is .state, which carries four channels instead of one.',
+    blurb: 'A small rounded label for a tag or a filter. There is an accent version for something on-brand and a mono version for a number or code. For a pass/fail status, reach for the status marker instead.',
     tokens: [['--r-pill', 'static', '999px'], ['--accent', 'color']],
     code: '<span class="chip">neutral</span>\n<span class="chip chip-accent">accent</span>',
     rows: [['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
   { id: 'state', name: '.state', cat: 'primitive', file: 'primitives.css',
-    blurb: 'A status in four channels, of which colour is one: a fill, a left key bar, a glyph and a word — rendered from --st-glyph/--st-label so the markup never hand-types out of sync. Print this in greyscale and it still reads.',
+    blurb: 'A status marker that never relies on color alone — it pairs a colored fill and side bar with an icon and a word. That means OK, Warning, Error and Info still read clearly in grayscale or for color-blind viewers.',
     tokens: [['--ok', 'color'], ['--warn', 'color'], ['--bad', 'color'], ['--info', 'color']],
     code: '<span class="state state-ok state-text"></span>\n<span class="state state-bad state-text"></span>',
     rows: [['--ok on --raised', 'text', '--ok', '--raised'], ['--bad on --raised', 'text', '--bad', '--raised']] },
   { id: 'gauge', name: '.gauge', cat: 'primitive', file: 'primitives.css',
-    blurb: 'A determinate bar, and only a bar — there is deliberately no indeterminate spinner in this package. A spinner is an animation that claims to be information; if the amount is not known, say so in words.',
+    blurb: 'A simple bar for showing progress or a proportion you can measure. When you genuinely do not know how long something will take, the system suggests saying so in words rather than showing an endless spinner.',
     tokens: [['--accent', 'color'], ['--line', 'color'], ['--t-slow', 'static', '400ms fill transition']],
     code: '<div class="gauge"><span class="gauge-fill" style="width:86%"></span></div>',
     rows: [['--accent on --line (graphic)', 'ui', '--accent', '--line']] },
   { id: 'field-group', name: '.field-group', cat: 'forms', file: 'forms.css',
-    blurb: 'The label / input / hint / error stack every form field needs, at an 8px rhythm. .field-error-text carries its own leading glyph so an error is never colour-only.',
+    blurb: 'A tidy stack that keeps a label, its input, a hint and an error message together and evenly spaced. Errors carry their own icon, so a problem is never signalled by color alone.',
     tokens: [['--ink-2', 'color'], ['--bad', 'color'], ['--fs-0', 'static', 'hint size']],
     code: '<div class="field-group">\n  <label class="field-label" for="n">Project name</label>\n  <input class="field" id="n">\n  <p class="field-hint">Lowercase, no spaces.</p>\n</div>',
     rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg'], ['--bad on --bg', 'text', '--bad', '--bg']] },
   { id: 'checkbox', name: '.checkbox', cat: 'forms', file: 'forms.css',
-    blurb: 'A native <input type="checkbox"> restyled as an 18px recessed box with a check glyph, not a fill alone — the mark survives greyscale and a missed border-radius, and keyboard/screen-reader behaviour stays native.',
+    blurb: 'A neat checkbox with a clear checkmark, not just a color change — so its state is obvious in grayscale too. It is a real native control underneath, so keyboards and screen readers just work.',
     tokens: [['--accent', 'color'], ['--r-1', 'static', '8px, radio uses --r-pill']],
     code: '<label class="checkbox"><input type="checkbox" checked> Synced to workspace</label>',
     rows: [['--on-accent on --accent', 'ui', '--on-accent', '--accent']] },
   { id: 'radio', name: '.radio', cat: 'forms', file: 'forms.css',
-    blurb: 'The circular sibling of .checkbox for exclusive choice — same box, same focus ring, a dot instead of a tick.',
+    blurb: 'The round counterpart to the checkbox, for picking exactly one option from a small set. Same look and same focus ring, with a filled dot instead of a tick.',
     tokens: [['--accent', 'color'], ['--focus', 'color']],
     code: '<label class="radio"><input type="radio" name="wcag" checked> AA</label>',
     rows: [['--on-accent on --accent', 'ui', '--on-accent', '--accent']] },
   { id: 'switch', name: '.switch', cat: 'forms', file: 'forms.css',
-    blurb: 'A native checkbox styled as a track and knob, powering Reduce transparency in this very app. Real form semantics, not a div pretending to be one.',
+    blurb: 'A sliding on/off toggle for a setting that takes effect the moment you flip it — the same control runs Reduce transparency in this app. It is a real checkbox underneath, so it stays fully accessible.',
     tokens: [['--accent', 'color'], ['--t-base', 'static', '220ms slide']],
     code: '<label class="switch"><input type="checkbox" checked> Reduce transparency</label>',
     rows: [['--accent on --line (graphic)', 'ui', '--accent', '--line']] },
   { id: 'tabs', name: '.tabs', cat: 'nav', file: 'navigation.css',
-    blurb: 'A segmented tablist with roving tabindex, arrow-key/Home/End navigation and connected tabpanels — the exact pattern driving Library, Detail and Settings navigation in this app.',
+    blurb: 'A row of tabs for switching between views of the same screen. Arrow keys, Home and End all move between them, so the whole set is easy to drive from the keyboard — it powers the Library, Detail and Settings tabs here.',
     tokens: [['--accent', 'color'], ['--r-1', 'static', '8px tab radius']],
     code: '<div role="tablist">\n  <button role="tab" aria-selected="true">Preview</button>\n  <button role="tab" aria-selected="false">Code</button>\n</div>',
     rows: [['--ink on --raised (active tab)', 'text', '--ink', '--raised']] },
   { id: 'breadcrumbs', name: '.breadcrumbs', cat: 'nav', file: 'navigation.css',
-    blurb: 'A trail of muted links ending in a bold aria-current="page" node — this exact component sits atop every Detail screen in this app.',
+    blurb: 'A trail that shows where you are and lets you click back up a level. The current page is bold and marked for screen readers; it sits at the top of every detail page here.',
     tokens: [['--ink-2', 'color'], ['--ink', 'color']],
     code: '<ol class="breadcrumbs">\n  <li><button>Library</button></li>\n  <li aria-current="page">.btn</li>\n</ol>',
     rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg'], ['--ink on --bg', 'text', '--ink', '--bg']] },
   { id: 'menu', name: '.menu', cat: 'nav', file: 'navigation.css',
-    blurb: 'A floating glass dropdown, keyed to tokens.css\u2019s --z-dropdown so it never hides under a tooltip or a toast. .menu-item-danger marks a destructive row without relying on colour alone. Powers the avatar menu in this app\u2019s own top bar.',
+    blurb: 'A floating dropdown of actions anchored to a button \u2014 frosted, because it is chrome. Destructive items are marked with more than just red, and it always sits above other floating pieces. It runs the account menu in the top bar.',
     tokens: [['--z-dropdown', 'static', '300'], ['--bad', 'color']],
     code: '<div class="menu glass">\n  <button class="menu-item">Duplicate</button>\n  <button class="menu-item menu-item-danger">Delete</button>\n</div>',
     rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
   { id: 'toast', name: '.toast-region / .toast', cat: 'feedback', file: 'feedback.css',
-    blurb: 'A transient, opaque notification — opaque like .state, because a toast must be readable over whatever is behind it and glass has no fixed luminance to measure against. Every copy action and the Recompute action in this app fires one.',
+    blurb: 'A brief message that slides in to confirm something just happened, then fades away. It is solid rather than frosted so it stays readable over anything behind it — the copy buttons here all show one.',
     tokens: [['--z-toast', 'static', '500'], ['--t-base', 'static', '220ms enter']],
     code: '<div class="toast-region">\n  <div class="toast toast-ok">\n    <span class="toast-icon">✓</span>\n    <div class="toast-body"><p class="toast-title">Saved</p></div>\n  </div>\n</div>',
     rows: [['--ink on --surface', 'text', '--ink', '--surface']] },
   { id: 'modal', name: '.modal-scrim / .modal', cat: 'feedback', file: 'feedback.css',
-    blurb: 'An opaque scrim under a glass dialog — the one surface allowed to suspend everything behind it, sitting above toast, tooltip and menu in the stacking order tokens.css declares. This exact pair renders the command palette and the confirm dialog in this app.',
+    blurb: 'A dialog on a frosted panel over a dimmed backdrop — for a decision that should pause everything else until it is answered. It closes on Escape or a click outside, and keeps keyboard focus inside while open. It powers the command palette and confirmations here.',
     tokens: [['--z-modal', 'static', '600'], ['--gl-fill', 'color']],
     code: '<div class="modal-scrim">\n  <div class="modal glass">\n    <h2 class="modal-title">Restart onboarding?</h2>\n    <div class="modal-actions">…</div>\n  </div>\n</div>',
     rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
   { id: 'tooltip', name: '.tooltip', cat: 'feedback', file: 'feedback.css',
-    blurb: 'A small opaque label, never glass — too small a plane for a blur to read as anything but noise. Uses --on-accent/--bg, the same inverse-ink pair .btn-primary\u2019s label uses, guaranteeing contrast on any surface without a new token.',
+    blurb: 'A small hint that appears on hover or keyboard focus. It is solid, not frosted — too small a label to blur cleanly — and its colors keep it readable on any surface. Use it for extra help, never for the only copy of something important.',
     tokens: [['--on-accent', 'color'], ['--bg', 'color'], ['--z-tooltip', 'static', '400']],
     code: '<button aria-describedby="tip">Hover or focus</button>\n<span id="tip" role="tooltip" class="tooltip">A small opaque label.</span>',
     rows: [['--bg on --on-accent', 'text', '--bg', '--on-accent']] },
   { id: 'skeleton', name: '.skeleton', cat: 'feedback', file: 'feedback.css',
-    blurb: 'A shimmering placeholder, not a spinner — the same principle .gauge applies to a determinate quantity, applied here to indeterminate content. Flashes for ~260ms whenever this app opens a Detail screen.',
+    blurb: 'A soft shimmering placeholder that stands in for content while it loads, so the layout does not jump when the real thing arrives. The shimmer turns itself off for anyone who prefers reduced motion.',
     tokens: [['--line', 'color'], ['--t-slow', 'static', '1.6s sweep, off under reduced motion']],
     code: '<span class="skeleton skeleton-title"></span>\n<span class="skeleton skeleton-text"></span>',
     rows: [] },
   { id: 'table', name: '.table', cat: 'data', file: 'data.css',
-    blurb: 'A sticky-header, striped data table with tabular numerals — drives the Law table, the Projects table and the eight-theme gallery in this app.',
+    blurb: 'A clean data table with a header that sticks while you scroll, gentle row striping and aligned numbers. It sits on a solid surface, and drives the contrast table, the projects list and the theme gallery here.',
     tokens: [['--surface', 'color'], ['--line', 'color']],
     code: '<table class="table table-striped">\n  <thead><tr><th>Theme</th></tr></thead>\n</table>',
     rows: [['--ink on --raised (row hover)', 'text', '--ink', '--raised']] },
   { id: 'badge', name: '.badge', cat: 'data', file: 'data.css',
-    blurb: 'A compact numeric badge for counts — the number beside Library in the sidebar is this component, always computed from the live component list rather than typed by hand.',
+    blurb: 'A little count or status marker that rides alongside a label — like the number next to Library in the sidebar, which is always counted from the live list rather than typed in by hand.',
     tokens: [['--accent', 'color'], ['--on-accent', 'color']],
     code: '<span class="badge badge-accent">New</span>',
     rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent']] },
   { id: 'avatar', name: '.avatar', cat: 'data', file: 'data.css',
-    blurb: 'Initials on an accent gradient, with -sm/-lg sizes and an -fallback state for a missing image — used for the workspace member in this app\u2019s own top bar.',
+    blurb: 'A person or a workspace shown as an image or their initials, in small, medium and large sizes, with a tidy fallback when there is no picture. Several can overlap into a group to show a set of people.',
     tokens: [['--accent', 'color'], ['--accent-2', 'color']],
     code: '<div class="avatar">AS</div>',
     rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent']] }
@@ -1516,27 +1729,27 @@ var GROUP_OF = {
   modal: 'Overlays'
 };
 var USE_OF = {
-  glass: 'Any floating chrome — a bar, a dock, an overlay. Never a plane that carries body text.',
+  glass: 'Any floating chrome — a bar, a dock, an overlay. Never a surface that carries text you read.',
   card: 'The default home for readable content: prose, a form, a panel of data.',
-  btn: 'One primary per view; quiet .btn for the rest; ghost inside dense toolbars.',
-  field: 'Any single-line entry; the same class also dresses a textarea and a select.',
-  chip: 'A neutral label or a filter token — never a status (that is .state).',
-  state: 'A status that must survive greyscale and colour blindness — fill, bar, glyph and word.',
-  gauge: 'A determinate quantity or progress; if the amount is unknown, say so in words instead.',
-  'field-group': 'Wrap every field so its label, hint and error travel together.',
-  checkbox: 'Independent on/off options; use a switch when the change takes effect at once.',
+  btn: 'One bold button per view; the quiet style for the rest; ghost inside busy toolbars.',
+  field: 'Any single-line entry; the same style also fits a text area and a dropdown.',
+  chip: 'A neutral label or a filter tag — not a pass/fail status (use the status marker for that).',
+  state: 'A status that must stay clear in grayscale and for color-blind viewers — color, icon and word together.',
+  gauge: 'Progress or a proportion you can measure; if the amount is unknown, say so in words instead.',
+  'field-group': 'Wrap every field so its label, hint and error stay together.',
+  checkbox: 'Independent on/off options; use a switch when the change takes effect immediately.',
   radio: 'One choice out of a small, visible set.',
   switch: 'An immediate on/off toggle for a setting that applies the moment it flips.',
-  tabs: 'Switch between peer views of one screen without navigating away.',
-  breadcrumbs: 'Show where a Detail screen sits, and offer a one-click way back up.',
-  menu: 'A short list of actions anchored to a trigger — glass, because it is chrome.',
-  toast: 'A transient confirmation of something that already happened; opaque so it always reads.',
+  tabs: 'Switch between views of one screen without navigating away.',
+  breadcrumbs: 'Show where a page sits, and offer a one-click way back up.',
+  menu: 'A short list of actions anchored to a button — frosted, because it is chrome.',
+  toast: 'A brief confirmation of something that already happened; solid so it always reads.',
   tooltip: 'A one-line hint on hover or focus — never the only place information lives.',
-  skeleton: 'A placeholder while content loads; a determinate gauge if you know the amount.',
-  table: 'Dense, comparable rows of data — sortable, selectable, paginated, on opaque planes.',
+  skeleton: 'A placeholder while content loads; use a progress bar if you know the amount.',
+  table: 'Rows of data to compare — sortable, selectable, paginated, on a solid surface.',
   badge: 'A count or a short status marker riding alongside a label.',
   avatar: 'A person or a workspace, as an image or initials, with a graceful fallback.',
-  modal: 'A decision that must block everything behind it until it is resolved.'
+  modal: 'A decision that must block everything behind it until it is answered.'
 };
 var STATES_OF = {
   btn: [
@@ -1604,13 +1817,13 @@ COMPONENTS.forEach(function (c) {
 });
 COMPONENTS = COMPONENTS.concat([
   { id: 'textarea', name: 'textarea.field', cat: 'forms', file: 'forms.css', group: 'Inputs',
-    blurb: 'The same .field class, extended for multi-line entry — a vertical-only resize handle and a taller floor, no colour re-themed.',
+    blurb: 'The same input style, sized for multiple lines, with a handle to drag it taller. Use it for a note, a description or a message.',
     use: 'Multi-line free text: a note, a description, a message.',
     tokens: [['--line', 'color'], ['--accent', 'color'], ['--target-min', 'static', '3× min-height']],
     code: '<textarea class="field" rows="3"></textarea>',
     rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
   { id: 'select', name: 'select.field', cat: 'forms', file: 'forms.css', group: 'Inputs',
-    blurb: 'A native picker wearing .field with a token-drawn caret — real keyboard and screen-reader behaviour, no custom listbox to get wrong.',
+    blurb: 'A real dropdown in the same input style, with its own caret. Because it is the native control, keyboard and screen-reader support come for free.',
     use: 'One choice from a longer list, where a row of radios would be too many.',
     tokens: [['--ink-2', 'color'], ['--line', 'color']],
     code: '<select class="field">\n  <option>zeno</option>\n</select>',
@@ -1620,25 +1833,25 @@ COMPONENTS = COMPONENTS.concat([
       ['Disabled', '<select class="field" aria-label="Theme, disabled" disabled style="width:170px"><option>zeno</option></select>']
     ] },
   { id: 'slider', name: 'range · accent-color', cat: 'forms', file: 'forms.css', group: 'Inputs',
-    blurb: 'A native range tinted with accent-color: var(--accent) — the browser owns the track, thumb and keyboard; the token owns the hue; forced-colors keeps working. The same technique forms.css uses on the checkbox and radio.',
+    blurb: 'A slider for choosing a value along a range, tinted to the theme. The browser owns the track, handle and keyboard, so it stays accessible and works in high-contrast mode.',
     use: 'A bounded numeric value where the feel matters more than the exact number.',
     tokens: [['--accent', 'color'], ['--target-min', 'static', 'hit area']],
     code: '<input type="range" style="accent-color: var(--accent)">',
     rows: [] },
   { id: 'stat', name: '.metric-card', cat: 'data', file: 'workspace.css', group: 'Surfaces',
-    blurb: 'The KPI/stat tile from workspace.css — an opaque plane, a monospaced tabular value, a label and a note. The four Overview tiles in this app are exactly this.',
+    blurb: 'A tile for a single headline number, with a label and a short note under it. The four tiles on the overview page are exactly this component.',
     use: 'A single headline number with a label — a dashboard KPI, a live count.',
     tokens: [['--surface', 'color'], ['--ink', 'color'], ['--fs-2', 'static', 'value size']],
     code: '<div class="metric-card">\n  <span class="metric-card-label">Pairs</span>\n  <span class="metric-card-value">15/15</span>\n</div>',
     rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
   { id: 'palette', name: 'Command palette', cat: 'nav', file: 'feedback + navigation', group: 'Navigation',
-    blurb: 'The Cmd-K launcher this app runs on — a filtered list of actions in a glass overlay, built from the shipped scrim and menu-item primitives, driven by the keyboard.',
+    blurb: 'The Cmd-K launcher this app runs on — start typing to filter every action and screen, then run one with the keyboard. Press Cmd-K (or Ctrl-K) anywhere to try it.',
     use: 'A fast, searchable way to reach any action or screen without hunting the UI.',
     tokens: [['--gl-fill', 'color'], ['--z-modal', 'static', '600']],
     code: '<div class="modal-scrim">\n  <div class="modal glass">\n    <input> … menu-item list …\n  </div>\n</div>',
     rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
   { id: 'segmented', name: 'Segmented control', cat: 'nav', file: 'composed · .btn', group: 'Navigation',
-    blurb: 'A row of mutually exclusive buttons that pick one option in place — the ground picker in Settings is exactly this, composed from .btn and aria-pressed. It does not change panes; it sets a value.',
+    blurb: 'A row of buttons where exactly one is selected, for picking an option in place — like the light/dark picker in Settings. It sets a value rather than changing the view.',
     use: 'Two to four exclusive options you want visible at once, chosen in place.',
     tokens: [['--raised', 'color'], ['--line', 'color']],
     code: '<div class="seg" role="group">\n  <button aria-pressed="true">Day</button>\n  <button aria-pressed="false">Week</button>\n</div>',
@@ -1648,19 +1861,19 @@ COMPONENTS = COMPONENTS.concat([
       ['Week', '<div class="seg" role="group" aria-label="Example B"><button class="btn" aria-pressed="false">Day</button><button class="btn" aria-pressed="true">Week</button></div>']
     ] },
   { id: 'list', name: 'List rows', cat: 'data', file: 'composed · data planes', group: 'Surfaces',
-    blurb: 'A stack of opaque rows on --surface with hairline separators and a --raised hover — the two planes the table already stripes with, composed as a scannable list.',
+    blurb: 'A stack of rows with thin separators and a gentle hover — a simple, scannable list of files, people or recent activity.',
     use: 'A short, scannable set of items: files, members, recent activity.',
     tokens: [['--surface', 'color'], ['--raised', 'color'], ['--line', 'color']],
     code: '<div class="list">\n  <div class="list-row">…</div>\n</div>',
     rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
   { id: 'popover', name: 'Popover', cat: 'feedback', file: 'composed · opaque', group: 'Feedback',
-    blurb: 'An opaque panel anchored to a control, holding real content — heavier than a hint, lighter than a dialog. Readable content, so it is a plane, not glass.',
+    blurb: 'A small solid panel anchored to a control, holding a little content or a few controls — more than a tooltip, less than a dialog. It closes when you click away.',
     use: 'A small burst of content or controls tied to one trigger, dismissed on click-away.',
     tokens: [['--raised', 'color'], ['--line', 'color']],
     code: '<div class="popover">…opaque content…</div>',
     rows: [['--ink on --raised', 'text', '--ink', '--raised'], ['--ink-2 on --raised', 'text', '--ink-2', '--raised']] },
   { id: 'progress', name: 'Progress ring', cat: 'feedback', file: 'composed · --accent', group: 'Feedback',
-    blurb: 'A determinate ring — the circular sibling of the shipped .gauge bar, drawn with a conic accent over the track. Determinate only: there is still no indeterminate spinner in this system.',
+    blurb: 'A circular progress ring — the round version of the progress bar, for a percentage where a compact circle reads better than a line. Open it to watch it fill.',
     use: 'A determinate completion percentage where a compact circular read fits better than a bar.',
     tokens: [['--accent', 'color'], ['--line', 'color']],
     code: '<div class="progress-ring" style="--pr:82"></div>',
@@ -1671,14 +1884,94 @@ COMPONENTS = COMPONENTS.concat([
       ['100%', '<div class="progress-ring" style="--pr:100" role="img" aria-label="100 percent"><span class="pr-label">100%</span></div>']
     ] },
   { id: 'drawer', name: 'Drawer / sheet', cat: 'feedback', file: 'composed · scrim', group: 'Overlays',
-    blurb: 'An opaque panel that slides in from an edge over a dimmed scrim, for a side task without leaving the page. Same scrim discipline as the dialog; the panel is a plane because it carries content.',
+    blurb: 'A solid panel that slides in from the edge over a dimmed backdrop, for a side task without leaving the page. It traps focus while open and closes on Escape or a click outside.',
     use: 'A secondary flow — filters, details, a form — beside the current screen.',
     tokens: [['--surface', 'color'], ['--gl-shadow', 'static', 'cast + specular edge']],
     code: '<div class="modal-scrim">\n  <aside class="drawer">…</aside>\n</div>',
     rows: [['--ink on --surface', 'text', '--ink', '--surface']] }
 ]);
+COMPONENTS = COMPONENTS.concat([
+  { id: 'accordion', name: 'Accordion', cat: 'nav', file: 'composed · details', group: 'Navigation',
+    blurb: 'Stacked sections that expand and collapse to keep a long page tidy — open one and it shows its content. Built on the native disclosure element, so it opens with a click or the keyboard for free.',
+    use: 'Group related content so people can open just the parts they need.',
+    tokens: [['--line', 'color'], ['--surface', 'color'], ['--r-2', 'static', '12px']],
+    code: '<details class="acc-item">\n  <summary>Section title</summary>\n  <div class="acc-body">…</div>\n</details>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'banner', name: 'Banner / callout', cat: 'feedback', file: 'composed · states', group: 'Feedback',
+    blurb: 'A full-width message for something that applies to the whole page — a heads-up, a success, a warning. A colored left edge and an icon carry the meaning alongside the words, so it never leans on color alone.',
+    use: 'Page-level context or status that should stay visible, not a passing confirmation.',
+    tokens: [['--info', 'color'], ['--ok', 'color'], ['--warn', 'color'], ['--accent', 'color']],
+    code: '<div class="banner banner-info">\n  <svg>…</svg>\n  <div class="bn-body">…</div>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'stepper', name: 'Stepper', cat: 'nav', file: 'composed · tokens', group: 'Navigation',
+    blurb: 'A progress trail for a multi-step flow, showing what is done, where you are, and what is left. Click Next and Back below to move through it.',
+    use: 'Guide someone through a sequence — a wizard, a checkout, a setup flow.',
+    tokens: [['--accent', 'color'], ['--on-accent', 'color'], ['--line', 'color']],
+    code: '<ol class="stepper">\n  <li class="step" data-done="true">…</li>\n  <li class="step" aria-current="step">…</li>\n</ol>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--on-accent on --accent', 'ui', '--on-accent', '--accent']] },
+  { id: 'pagination', name: 'Pagination', cat: 'nav', file: 'composed · .btn', group: 'Navigation',
+    blurb: 'Numbered page controls for stepping through a long list or table. Click a number or the arrows to change the current page.',
+    use: 'Break a long set of results into pages people can move between.',
+    tokens: [['--accent', 'color'], ['--on-accent', 'color'], ['--target-min', 'static', 'tap size']],
+    code: '<nav class="pager" aria-label="Pages">\n  <button class="btn pg" aria-current="page">1</button>\n</nav>',
+    rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent'], ['--ink on --surface', 'text', '--ink', '--surface']] },
+  { id: 'taginput', name: 'Tag input', cat: 'forms', file: 'composed · .field', group: 'Inputs',
+    blurb: 'A field that turns each entry into a removable pill — type a word and press Enter to add it, or click the x to remove one. Handy for labels, recipients or keywords.',
+    use: 'Collect a small, open-ended set of short values from one field.',
+    tokens: [['--accent', 'color'], ['--line', 'color'], ['--r-pill', 'static', 'pill tags']],
+    code: '<div class="taginput">\n  <span class="tag">design <button>×</button></span>\n  <input aria-label="Add a tag">\n</div>',
+    rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
+  { id: 'timeline', name: 'Timeline', cat: 'data', file: 'composed · tokens', group: 'Surfaces',
+    blurb: 'A vertical run of events down a connecting line, newest first — a clean way to show history or activity with a time, a title and a note per entry.',
+    use: 'Show a sequence of events over time: activity, history, a changelog.',
+    tokens: [['--accent', 'color'], ['--ink-3', 'color'], ['--line', 'color']],
+    code: '<ol class="timeline">\n  <li class="tl-item">…</li>\n</ol>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'statdelta', name: 'Stat delta', cat: 'data', file: 'composed · states', group: 'Surfaces',
+    blurb: 'A headline number with the change since last time — green and up, or red and down, with an arrow so the direction reads without relying on color. A KPI tile with a trend.',
+    use: 'A metric where the movement matters as much as the number itself.',
+    tokens: [['--ok', 'color'], ['--bad', 'color'], ['--ink', 'color']],
+    code: '<div class="stat-delta">\n  <span class="sd-val">12,480</span>\n  <span class="sd-delta sd-up">▲ 8.2%</span>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ok on --surface', 'text', '--ok', '--surface']] },
+  { id: 'empty', name: 'Empty state', cat: 'feedback', file: 'composed · tokens', group: 'Feedback',
+    blurb: 'The friendly placeholder for when there is nothing to show yet — an icon, a short line of reassurance, and a clear next step, instead of a blank void.',
+    use: 'A first-run or no-results view; tell people what happened and what to do next.',
+    tokens: [['--surface', 'color'], ['--ink-2', 'color'], ['--line', 'color']],
+    code: '<div class="empty">\n  <div class="em-icon">…</div>\n  <p class="em-title">Nothing here yet</p>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'kbd', name: 'Keyboard key', cat: 'data', file: 'composed · tokens', group: 'Surfaces',
+    blurb: 'Small key caps for showing a shortcut inline — the same little keys in the shortcuts panel and the search box here.',
+    use: 'Show a keyboard shortcut inside a sentence or next to an action.',
+    tokens: [['--surface', 'color'], ['--line', 'color'], ['--font-mono', 'static', 'mono face']],
+    code: 'Press <span class="kbd">⌘</span><span class="kbd">K</span>',
+    rows: [['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'codeblock', name: 'Code block', cat: 'data', file: 'composed · tokens', group: 'Surfaces',
+    blurb: 'A monospaced block for a snippet, with a copy button in the corner. Click Copy and it lands on your clipboard with a quick confirmation.',
+    use: 'Show code or a command someone will read or copy.',
+    tokens: [['--bg', 'color'], ['--line', 'color'], ['--font-mono', 'static', 'mono face']],
+    code: '<pre class="code-block">npm install</pre>',
+    rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg']] },
+  { id: 'rating', name: 'Rating', cat: 'forms', file: 'composed · tokens', group: 'Inputs',
+    blurb: 'A row of stars for a score — click one to set it, or use the arrow keys. The filled shape carries the value, not just the color.',
+    use: 'Capture a quick quality or satisfaction score from one to five.',
+    tokens: [['--accent', 'color'], ['--ink-3', 'color']],
+    code: '<div class="rating" role="radiogroup" aria-label="Rating">\n  <button role="radio" aria-checked="true">★</button>\n</div>',
+    rows: [['--accent on --surface', 'ui', '--accent', '--surface']] },
+  { id: 'date', name: 'Date field', cat: 'forms', file: 'composed · .field', group: 'Inputs',
+    blurb: 'The native date picker in the same input style — the browser supplies the calendar and keyboard support, so it stays familiar and accessible everywhere.',
+    use: 'Pick a single date; the browser handles the calendar and locale.',
+    tokens: [['--line', 'color'], ['--accent', 'color']],
+    code: '<label class="field-label" for="d">Date</label>\n<input type="date" class="field" id="d">',
+    rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
+  { id: 'filedrop', name: 'File drop', cat: 'forms', file: 'composed · tokens', group: 'Inputs',
+    blurb: 'A drop zone for files, with a button to browse instead. Drag a file over it and the border lights up; drop it and it confirms — a clear target for uploads.',
+    use: 'Let people add a file by dragging it in or choosing one.',
+    tokens: [['--accent', 'color'], ['--line', 'color'], ['--bg', 'color']],
+    code: '<div class="filedrop">\n  <svg>…</svg>\n  <button class="btn btn-sm">Browse files</button>\n</div>',
+    rows: [['--ink-2 on --bg', 'text', '--ink-2', '--bg']] }
+]);
 var PATTERN = { id: 'workspace', name: 'Workspace shell', cat: 'pattern', file: 'workspace.css',
-  blurb: 'The three-pane editor-and-agent pattern — explorer, split editor with a resizable divider, a five-tab dock, and a command composer — every one of the eight source projects docks its own tools into.',
+  blurb: 'A complete three-pane app layout — a file explorer, a split editor with a draggable divider, a tabbed tool dock, and a command box. It is the shell real products dock their own tools into, and every part of it works.',
   tokens: [['--z-dropdown', 'static', '300 (mobile overlay panels)'], ['--r-3', 'static', '16px frame']],
   code: '<div class="workspace-frame">\n  <header class="workspace-titlebar">…</header>\n  <div class="workspace-body">…</div>\n</div>',
   rows: [['--ink on --bg', 'text', '--ink', '--bg']] };
@@ -1738,7 +2031,8 @@ function applyTheme() {
   $$('[data-ground]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.ground === state.ground)); });
   var gbtn = $('#groundToggleBtn');
   gbtn.innerHTML = state.ground === 'dark' ? ICONS.moon : (state.ground === 'light' ? ICONS.sun : ICONS.auto);
-  gbtn.title = 'Ground: ' + state.ground + ' (press G to cycle)';
+  gbtn.title = 'Appearance: ' + state.ground + ' (press G to cycle)';
+  gbtn.setAttribute('aria-label', 'Appearance: ' + state.ground + '. Press to cycle dark, system, light.');
 
   $('#flatToggle').checked = state.flat;
   $('#flatToggleMenu').checked = state.flat;
@@ -1746,11 +2040,13 @@ function applyTheme() {
 
   $$('#settingsAccentRow [data-theme-btn]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeBtn === state.accent)); });
   $$('#obAccentGrid [data-ob-accent]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.obAccent === state.accent)); });
+  $$('#accentMenuGrid [data-accent-pick]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.accentPick === state.accent)); });
+  $$('#obGroundGrid .ground-tile').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.obGround === state.ground)); });
   $$('#wcagSeg [data-wcag]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.wcag === state.wcag)); });
 
   refreshLiveNumbers();
 }
-function setAccent(id) { state.accent = id; applyTheme(); toast('Accent set to ' + id); }
+function setAccent(id) { state.accent = id; applyTheme(); toast('Theme set to ' + id); }
 function setGround(g) { state.ground = g; applyTheme(); }
 function cycleGround() { setGround(state.ground === 'dark' ? 'light' : (state.ground === 'light' ? 'system' : 'dark')); }
 function setFlat(on) { state.flat = on; applyTheme(); }
@@ -1816,9 +2112,11 @@ function refreshLiveNumbers() {
   $('#statPairsPct').textContent = pairsPct + '%';
   $('#statComponents').textContent = String(ALL_COMPONENTS.length);
   $('#statPalette').textContent = state.accent + ' · ' + effectiveGround();
-  $('#statWcagNote').textContent = 'WCAG ' + state.wcag;
+  $('#statWcagNote').textContent = 'Readable at ' + state.wcag;
+  var themeCount = String(THEMES.length);
+  ['#statThemeBig', '#statThemeCount', '#ksThemeCount'].forEach(function (sel) { var el = $(sel); if (el) el.textContent = themeCount; });
   $('#libCountBadge').textContent = String(COMPONENTS.length);
-  $('#libStatLine').textContent = COMPONENTS.length + ' components · 1 pattern · 6 files · ' + passing + '/' + computed.length + ' live pairs passing';
+  $('#libStatLine').textContent = COMPONENTS.length + ' components · 1 full pattern · ' + passing + ' of ' + computed.length + ' contrast checks passing on this theme';
   var pct = Math.round(passing / computed.length * 100);
   $('#passGaugeFill').style.width = pct + '%';
   $('#passGaugeText').textContent = pct + '%';
@@ -1903,7 +2201,20 @@ function miniPreview(c) {
     popover: '<div aria-hidden="true" style="font-size:.58rem;text-align:center"><span style="border-bottom:1px dotted var(--ink-3);color:var(--ink-2)">anchor</span><div style="margin-top:5px;background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:5px 8px;color:var(--ink)">panel</div></div>',
     progress: '<div aria-hidden="true" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(var(--accent) 66%, var(--line) 0);display:grid;place-items:center"><span style="width:30px;height:30px;border-radius:50%;background:var(--surface)"></span></div>',
     drawer: '<div aria-hidden="true" style="width:82%;height:60%;position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)"><div style="position:absolute;inset:0 0 0 auto;width:54%;background:var(--surface);border-left:1px solid var(--line)"></div></div>',
-    workspace: '<div style="display:flex;gap:3px;width:80%;height:70%"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div><div style="flex:1;background:var(--surface);border-radius:4px"></div></div>'
+    workspace: '<div style="display:flex;gap:3px;width:80%;height:70%"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div><div style="flex:1;background:var(--surface);border-radius:4px"></div></div>',
+    accordion: '<div aria-hidden="true" style="width:82%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)"><div style="display:flex;justify-content:space-between;padding:5px 8px;font-size:.58rem;color:var(--ink);border-bottom:1px solid var(--line)"><span>Overview</span><span style="color:var(--accent)">▾</span></div><div style="display:flex;justify-content:space-between;padding:5px 8px;font-size:.58rem;color:var(--ink-2)"><span>Details</span><span>▸</span></div></div>',
+    banner: '<div aria-hidden="true" style="width:84%;display:flex;gap:6px;align-items:center;padding:5px 8px;border:1px solid var(--line);border-left:3px solid var(--info);border-radius:6px;background:var(--surface);font-size:.56rem;color:var(--ink)"><span style="color:var(--info)">ⓘ</span> Heads up — one note.</div>',
+    stepper: '<div aria-hidden="true" style="display:flex;align-items:center;width:82%"><span style="width:16px;height:16px;border-radius:50%;background:var(--accent)"></span><span style="flex:1;height:2px;background:var(--accent)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--accent);background:var(--surface)"></span><span style="flex:1;height:2px;background:var(--line)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--line);background:var(--surface)"></span></div>',
+    pagination: '<div aria-hidden="true" style="display:inline-flex;gap:3px;font-size:.56rem"><span style="min-width:16px;text-align:center;padding:2px;border:1px solid var(--line);border-radius:5px;color:var(--ink-2)">‹</span><span style="min-width:16px;text-align:center;padding:2px;border-radius:5px;background:var(--accent);color:var(--on-accent)">1</span><span style="min-width:16px;text-align:center;padding:2px;border:1px solid var(--line);border-radius:5px;color:var(--ink)">2</span><span style="min-width:16px;text-align:center;padding:2px;border:1px solid var(--line);border-radius:5px;color:var(--ink-2)">›</span></div>',
+    taginput: '<div aria-hidden="true" style="display:flex;gap:4px;width:82%;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg)"><span style="font-size:.54rem;padding:1px 7px;border-radius:999px;background:color-mix(in srgb, var(--accent) 16%, var(--surface));color:var(--ink)">design ×</span><span style="font-size:.54rem;padding:1px 7px;border-radius:999px;background:color-mix(in srgb, var(--accent) 16%, var(--surface));color:var(--ink)">ui ×</span></div>',
+    timeline: '<div aria-hidden="true" style="width:80%;padding-left:8px"><div style="border-left:2px solid var(--line);padding:0 0 8px 10px;position:relative"><span style="position:absolute;left:-5px;top:1px;width:8px;height:8px;border-radius:50%;background:var(--accent)"></span><span style="font-size:.55rem;color:var(--ink)">Shipped v1</span></div><div style="border-left:2px solid transparent;padding-left:10px;position:relative"><span style="position:absolute;left:-5px;top:1px;width:8px;height:8px;border-radius:50%;background:var(--ink-3)"></span><span style="font-size:.55rem;color:var(--ink-2)">Draft</span></div></div>',
+    statdelta: '<div aria-hidden="true" style="width:80%"><div style="font-family:var(--font-mono);font-size:1.05rem;color:var(--ink)">12.4k</div><div style="font-size:.55rem;color:var(--ok);font-weight:700">▲ 8.2%</div></div>',
+    empty: '<div aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-2)"><span style="width:26px;height:26px;border-radius:6px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--ink-3)">▤</span><span style="font-size:.55rem;color:var(--ink)">Nothing here yet</span></div>',
+    kbd: '<div aria-hidden="true" style="display:flex;gap:4px"><span class="kbd" style="font-size:.6rem">⌘</span><span class="kbd" style="font-size:.6rem">K</span></div>',
+    codeblock: '<div aria-hidden="true" style="width:82%;font-family:var(--font-mono);font-size:.56rem;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px">npm install</div>',
+    rating: '<div aria-hidden="true" style="font-size:.9rem;letter-spacing:1px"><span style="color:var(--accent)">★★★</span><span style="color:var(--ink-3)">★★</span></div>',
+    date: '<div aria-hidden="true" class="field mini-field" style="display:flex;align-items:center;justify-content:space-between;padding:0 8px;color:var(--ink)">2026-09-14<span style="color:var(--ink-2)">▦</span></div>',
+    filedrop: '<div aria-hidden="true" style="width:80%;padding:8px;text-align:center;border:1.5px dashed var(--line);border-radius:6px;color:var(--ink-3);font-size:.55rem">⤓ Drop a file</div>'
   };
   return m[c.id] || '<span class="chip">' + c.name + '</span>';
 }
@@ -1988,7 +2299,7 @@ function bigPreview(c) {
     tabs: '<div><div role="tablist" class="tabs" id="dpTabs">' +
       '<button role="tab" class="tab" aria-selected="true" tabindex="0" data-dp="overview">Overview</button>' +
       '<button role="tab" class="tab" aria-selected="false" tabindex="-1" data-dp="tokens">Tokens</button></div>' +
-      '<p class="card-note" id="dpTabBody" style="margin-top:var(--sp-3)">A theme owns hue. The system owns everything else.</p></div>',
+      '<p class="card-note" id="dpTabBody" style="margin-top:var(--sp-3)">A theme sets the accent color. Everything else stays the same.</p></div>',
     breadcrumbs: '<ol class="breadcrumbs"><li><button>glass</button></li><li><button>demo</button></li><li aria-current="page">components</li></ol>',
     menu: '<div style="position:relative;display:inline-block"><button class="btn" id="dpMenuBtn" aria-haspopup="true" aria-expanded="false">Row actions ⋯</button>' +
       '<div class="menu glass" id="dpMenu" style="position:absolute;top:110%;left:0;width:11rem" hidden>' +
@@ -2008,15 +2319,50 @@ function bigPreview(c) {
     skeleton: '<div style="width:100%;display:flex;flex-direction:column;gap:6px"><span class="skeleton skeleton-title"></span><span class="skeleton skeleton-text"></span><span class="skeleton skeleton-text" style="width:70%"></span></div>',
     textarea: '<div class="field-group" style="width:280px"><label class="field-label" for="dp-ta">Notes</label><textarea class="field" id="dp-ta" rows="3" placeholder="Multi-line entry…"></textarea></div>',
     select: '<div class="field-group" style="width:240px"><label class="field-label" for="dp-sel">Accent theme</label><select class="field" id="dp-sel"><option>zeno</option><option>weft</option><option>vantage</option></select></div>',
-    slider: '<div class="field-group" style="width:280px"><label class="field-label" for="dp-range">Blur radius</label><input class="range" type="range" id="dp-range" min="0" max="30" value="14"></div>',
+    slider: '<div class="field-group" style="width:280px"><div style="display:flex;justify-content:space-between;align-items:baseline"><label class="field-label" for="dp-range">Blur radius</label><output id="dp-range-out" for="dp-range" class="mono" style="color:var(--ink);font-weight:700">14px</output></div><input class="range" type="range" id="dp-range" min="0" max="30" value="14" aria-describedby="dp-range-out"></div>',
     stat: '<div class="metric-grid" style="width:100%"><div class="card metric-card"><span class="metric-card-label">Pairs passing</span><span class="metric-card-value">15/15</span><span class="card-note">live, this palette</span></div><div class="card metric-card"><span class="metric-card-label">Themes</span><span class="metric-card-value">8/8</span><span class="card-note">shared tokens</span></div></div>',
     palette: '<div style="text-align:center"><button class="btn btn-primary" id="dpPaletteBtn">Open the command palette</button><p class="card-note" style="margin-top:var(--sp-3)">Runs the same actions clicking does — nothing here is a second code path.</p></div>',
     segmented: '<div class="seg" role="group" aria-label="Range" id="dpSeg"><button class="btn" aria-pressed="true">Day</button><button class="btn" aria-pressed="false">Week</button><button class="btn" aria-pressed="false">Month</button></div>',
     list: '<div class="list" style="max-width:320px"><div class="list-row"><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">the grammar</span></span><span class="badge badge-accent">core</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">seven primitives</span></span><span class="badge">7</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">overlays</span></span><span class="badge">4</span></div></div>',
     popover: '<div class="popover-demo"><button class="btn" id="dpPopBtn" aria-expanded="false" aria-controls="dpPop">Toggle popover</button><div class="popover" id="dpPop" hidden><p style="font-weight:650;color:var(--ink);margin:0 0 6px">Opaque on purpose</p><p class="card-note">Readable content never sits on a blur — this panel is a --raised plane, measured like any card.</p></div></div>',
     progress: '<div style="display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap"><div class="progress-ring" style="--pr:82" role="img" aria-label="82 percent complete"><span class="pr-label">82%</span></div><div style="flex:1;min-width:180px"><div class="gauge-row"><span>Linear sibling</span><span class="gauge-value">82%</span></div><div class="gauge"><span class="gauge-fill" style="width:82%"></span></div></div></div>',
-    drawer: '<div class="sheet-stage" style="max-width:420px"><div style="padding:var(--sp-4);color:var(--ink-2);font-size:var(--fs-0)">Page content, dimmed…</div><div class="sheet-scrim"></div><div class="sheet-panel"><b style="color:var(--ink)">Filters</b><p class="card-note" style="margin:0">An opaque side panel over a dimmed scrim.</p><button class="btn btn-sm" style="align-self:flex-start" id="dpSheetClose">Close</button></div></div>',
-    workspace: '<p class="card-note">The full pattern lives in <button class="btn btn-sm" id="dpGotoPattern">Library → Patterns</button></p>'
+    drawer: '<div style="text-align:center"><button class="btn btn-primary" id="dpDrawerBtn">Open the drawer</button><p class="card-note" style="margin-top:var(--sp-3)">Slides in from the right, keeps keyboard focus inside, and closes on Escape or a click on the dimmed backdrop.</p></div>',
+    workspace: '<p class="card-note">The full pattern lives in <button class="btn btn-sm" id="dpGotoPattern">Library → Patterns</button></p>',
+    accordion: '<div class="accordion">' +
+      '<details class="acc-item" open><summary>What is glass?</summary><div class="acc-body">A small design system for building calm, modern product interfaces — frosted chrome, a full component library and readable contrast on every theme.</div></details>' +
+      '<details class="acc-item"><summary>Is it accessible?</summary><div class="acc-body">Yes. Controls are real native elements, focus is always visible, and text meets WCAG contrast on every theme and mode.</div></details>' +
+      '<details class="acc-item"><summary>How do I use it?</summary><div class="acc-body">Drop the CSS files in and start using the classes — there is no build step and no dependencies.</div></details></div>',
+    banner: '<div style="display:flex;flex-direction:column;gap:var(--sp-3);width:100%;max-width:30rem">' +
+      '<div class="banner banner-info"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="7.5"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.4" r="0.5" fill="currentColor"/></svg><div class="bn-body"><div class="bn-title">Heads up</div><div class="bn-text">A page-level note that stays put until it is no longer relevant.</div></div></div>' +
+      '<div class="banner banner-ok"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10.5 8 14.5 16 5.5"/></svg><div class="bn-body"><div class="bn-title">All set</div><div class="bn-text">Everything is saved and up to date.</div></div></div>' +
+      '<div class="banner banner-warn" id="dpBanner"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 18 16H2Z"/><line x1="10" y1="8" x2="10" y2="12"/><circle cx="10" cy="14.2" r="0.5" fill="currentColor"/></svg><div class="bn-body"><div class="bn-title">Dismissible</div><div class="bn-text">Close this one with the button on the right.</div></div><button class="workspace-icon-button bn-close" id="dpBannerClose" aria-label="Dismiss banner"><svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button></div></div>',
+    stepper: '<div style="width:100%;max-width:30rem"><ol class="stepper" id="dpStepper" style="margin:0 0 var(--sp-4);padding:0;list-style:none">' +
+      '<li class="step" data-done="true"><span class="step-dot">1</span><span class="step-label">Account</span></li><span class="step-line" data-done="true"></span>' +
+      '<li class="step" aria-current="step"><span class="step-dot">2</span><span class="step-label">Theme</span></li><span class="step-line"></span>' +
+      '<li class="step"><span class="step-dot">3</span><span class="step-label">Review</span></li></ol>' +
+      '<div style="display:flex;gap:var(--sp-2);justify-content:center"><button class="btn btn-sm" id="dpStepBack">Back</button><button class="btn btn-primary btn-sm" id="dpStepNext">Next</button></div></div>',
+    pagination: '<nav class="pager" id="dpPager" aria-label="Example pages">' +
+      '<button class="btn pg" data-pg="prev" aria-label="Previous page">‹</button>' +
+      '<button class="btn pg" data-pg="1" aria-current="page">1</button>' +
+      '<button class="btn pg" data-pg="2">2</button>' +
+      '<button class="btn pg" data-pg="3">3</button>' +
+      '<button class="btn pg" data-pg="4">4</button>' +
+      '<button class="btn pg" data-pg="next" aria-label="Next page">›</button></nav>',
+    taginput: '<div class="field-group" style="width:100%;max-width:24rem"><span class="field-label" id="dpTagLabel">Tags</span>' +
+      '<div class="taginput" id="dpTagInput"><input id="dpTagField" aria-labelledby="dpTagLabel" placeholder="Type and press Enter…"></div>' +
+      '<p class="field-hint">Press Enter to add a tag, Backspace on an empty field to remove the last.</p></div>',
+    timeline: '<ol class="timeline" style="max-width:26rem">' +
+      '<li class="tl-item"><div class="tl-time">Just now</div><div class="tl-title">Contrast re-checked</div><div class="tl-note">All pairs pass on the current theme.</div></li>' +
+      '<li class="tl-item"><div class="tl-time">2h ago</div><div class="tl-title">Theme switched to warm</div><div class="tl-note">Accent changed; layout untouched.</div></li>' +
+      '<li class="tl-item tl-muted"><div class="tl-time">Yesterday</div><div class="tl-title">Component added</div><div class="tl-note">Tag input joined the library.</div></li></ol>',
+    statdelta: '<div style="display:flex;gap:var(--sp-6);flex-wrap:wrap"><div class="stat-delta"><span class="sd-val">12,480</span><span class="sd-label">Sessions this week</span><span class="sd-delta sd-up">▲ 8.2% vs last week</span></div>' +
+      '<div class="stat-delta"><span class="sd-val">1.9%</span><span class="sd-label">Bounce rate</span><span class="sd-delta sd-down">▼ 0.4% vs last week</span></div></div>',
+    empty: '<div class="empty" style="max-width:26rem"><div class="em-icon"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h14v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3 7 5 3h10l2 4"/><line x1="8" y1="11" x2="12" y2="11"/></svg></div><p class="em-title">No projects yet</p><p class="em-text">Create your first project to see it appear here.</p><button class="btn btn-primary btn-sm" id="dpEmptyBtn">New project</button></div>',
+    kbd: '<p style="font-size:var(--fs-1);color:var(--ink)">Open the command palette with <span class="kbd">⌘</span><span class="kbd">K</span>, and press <span class="kbd">?</span> for every shortcut. Move between tabs with <span class="kbd">←</span> and <span class="kbd">→</span>.</p>',
+    codeblock: '<div class="codewrap" style="max-width:30rem"><button class="btn btn-ghost btn-sm code-copy" id="dpCodeCopy">' + ICONS.copy + ' Copy</button><pre class="code-block">git clone https://github.com/abheet19/glass.git\nnode scripts/contrast.mjs</pre></div>',
+    rating: '<div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap"><div class="rating" id="dpRating" role="radiogroup" aria-label="Rate this"></div><span class="card-note" id="dpRatingOut">3 of 5</span></div>',
+    date: '<div style="display:flex;gap:var(--sp-4);flex-wrap:wrap"><div class="field-group" style="width:200px"><label class="field-label" for="dp-date">Date</label><input type="date" class="field" id="dp-date" value="2026-09-14"></div><div class="field-group" style="width:200px"><label class="field-label" for="dp-time">Time</label><input type="time" class="field" id="dp-time" value="09:30"></div></div>',
+    filedrop: '<div class="filedrop" id="dpFileDrop"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13V4"/><path d="M6.5 7.5 10 4l3.5 3.5"/><path d="M4 13v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2"/></svg><b style="color:var(--ink);font-size:var(--fs-1)">Drop a file here</b><span class="fd-hint" id="dpFileName">or choose one from your computer</span><button class="btn btn-sm" id="dpFileBrowse">Browse files</button></div>'
   };
   return big[c.id] || ('<div style="transform:scale(1.6)">' + miniPreview(c) + '</div>');
 }
@@ -2083,8 +2429,8 @@ function wireDetailPreview(c) {
     var dpTabs = $('#dpTabs', root);
     if (dpTabs) wireTabs(dpTabs, function (tab) {
       $('#dpTabBody', root).textContent = tab.dataset.dp === 'tokens'
-        ? 'Every swatch is read live out of getComputedStyle, right now, against the plane it is allowed to sit on.'
-        : 'A theme owns hue. The system owns everything else.';
+        ? 'These colors are read straight from the live page with getComputedStyle, so they always match what you see.'
+        : 'A theme sets the accent color. Everything else stays the same.';
     });
   }
   if (c.id === 'workspace') {
@@ -2108,6 +2454,112 @@ function wireDetailPreview(c) {
       b.onclick = function () { $$('button', seg).forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); }); };
     });
   }
+  if (c.id === 'btn') {
+    $$('.preview-stage .btn, .states-panel .btn', root).forEach(function (b) {
+      if (b.disabled) return;
+      b.addEventListener('click', function () {
+        var label = (b.textContent || 'Button').trim().replace(/\s+/g, ' ');
+        toast('Clicked: ' + label);
+      });
+    });
+  }
+  if (c.id === 'banner') {
+    var bnClose = $('#dpBannerClose', root), bn = $('#dpBanner', root);
+    if (bnClose) bnClose.onclick = function () { bn.remove(); toast('Banner dismissed'); };
+  }
+  if (c.id === 'stepper') {
+    var stepper = $('#dpStepper', root), step = 2;
+    var steps = $$('.step', stepper), lines = $$('.step-line', stepper);
+    var draw = function () {
+      steps.forEach(function (s, i) {
+        s.removeAttribute('aria-current'); s.setAttribute('data-done', String(i + 1 < step));
+        if (i + 1 === step) s.setAttribute('aria-current', 'step');
+      });
+      lines.forEach(function (l, i) { l.setAttribute('data-done', String(i + 1 < step)); });
+      $('#dpStepBack', root).disabled = step === 1;
+      $('#dpStepNext', root).textContent = step === steps.length ? 'Finish' : 'Next';
+    };
+    $('#dpStepBack', root).onclick = function () { if (step > 1) { step--; draw(); } };
+    $('#dpStepNext', root).onclick = function () { if (step < steps.length) { step++; draw(); } else { toast('All steps complete'); } };
+    draw();
+  }
+  if (c.id === 'pagination') {
+    var pager = $('#dpPager', root);
+    var pages = $$('[data-pg]', pager).filter(function (b) { return /^\d+$/.test(b.dataset.pg); });
+    var cur = 1;
+    var setPage = function (n) {
+      cur = Math.min(pages.length, Math.max(1, n));
+      pages.forEach(function (b) { if (Number(b.dataset.pg) === cur) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    };
+    $$('[data-pg]', pager).forEach(function (b) {
+      b.onclick = function () {
+        if (b.dataset.pg === 'prev') setPage(cur - 1);
+        else if (b.dataset.pg === 'next') setPage(cur + 1);
+        else setPage(Number(b.dataset.pg));
+      };
+    });
+  }
+  if (c.id === 'taginput') {
+    var box = $('#dpTagInput', root), input = $('#dpTagField', root);
+    var addTag = function (text) {
+      text = text.trim(); if (!text) return;
+      var tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.innerHTML = esc(text) + ' <button type="button" aria-label="Remove ' + esc(text) + '">' +
+        '<svg viewBox="0 0 20 20" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button>';
+      tag.querySelector('button').onclick = function () { tag.remove(); input.focus(); };
+      box.insertBefore(tag, input);
+    };
+    ['design', 'accessible'].forEach(addTag);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); addTag(input.value); input.value = ''; }
+      else if (e.key === 'Backspace' && !input.value) {
+        var tags = $$('.tag', box); if (tags.length) { tags[tags.length - 1].remove(); }
+      }
+    });
+    box.addEventListener('click', function (e) { if (e.target === box) input.focus(); });
+  }
+  if (c.id === 'empty') { var eb = $('#dpEmptyBtn', root); if (eb) eb.onclick = function () { toast('Started a new project'); }; }
+  if (c.id === 'codeblock') { var cc = $('#dpCodeCopy', root); if (cc) cc.onclick = function () { copyText('git clone https://github.com/abheet19/glass.git\nnode scripts/contrast.mjs', 'Copied the commands'); }; }
+  if (c.id === 'rating') {
+    var rt = $('#dpRating', root), out = $('#dpRatingOut', root), val = 3;
+    var paint = function () {
+      rt.innerHTML = '';
+      for (var i = 1; i <= 5; i++) (function (n) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(n === val));
+        b.setAttribute('aria-label', n + ' star' + (n > 1 ? 's' : '')); b.tabIndex = n === val ? 0 : -1;
+        if (n <= val) b.className = 'rt-on';
+        b.innerHTML = '<svg viewBox="0 0 20 20" fill="' + (n <= val ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="m10 2 2.4 4.9 5.4.8-3.9 3.8.9 5.4L10 15.4 5.2 17.9l.9-5.4L2.2 8.7l5.4-.8z"/></svg>';
+        b.onclick = function () { val = n; paint(); out.textContent = val + ' of 5'; };
+        b.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); val = Math.min(5, val + 1); paint(); out.textContent = val + ' of 5'; rt.querySelector('[aria-checked="true"]').focus(); }
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); val = Math.max(1, val - 1); paint(); out.textContent = val + ' of 5'; rt.querySelector('[aria-checked="true"]').focus(); }
+        });
+        rt.appendChild(b);
+      })(i);
+    };
+    paint();
+  }
+  if (c.id === 'filedrop') {
+    var zone = $('#dpFileDrop', root), name = $('#dpFileName', root), browse = $('#dpFileBrowse', root);
+    if (browse) browse.onclick = function () { name.textContent = 'contrast-report.json — ready'; toast('File selected (demo)'); };
+    if (zone) {
+      ['dragenter', 'dragover'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('is-over'); }); });
+      ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('is-over'); }); });
+      zone.addEventListener('drop', function (e) {
+        var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        name.textContent = f ? (f.name + ' — ready') : 'File dropped — ready';
+        toast('File dropped (demo)');
+      });
+    }
+  }
+  if (c.id === 'drawer') { var db = $('#dpDrawerBtn', root); if (db) db.onclick = openDrawer; }
+  if (c.id === 'slider') {
+    var range = $('#dp-range', root), rout = $('#dp-range-out', root);
+    if (range && rout) range.addEventListener('input', function () { rout.textContent = range.value + 'px'; });
+  }
+  if (c.id === 'progress') { animateRings(root); }
 }
 var detailTabs = null;
 function initDetailTabs() { detailTabs = wireTabs($('#detailTabs'), function () { renderDetailBody(); }); }
@@ -2215,8 +2667,8 @@ function renderProject(theme) {
   repo.href = 'https://github.com/abheet19/' + p.repo;
   repo.setAttribute('aria-label', 'Open ' + p.name + ' on GitHub');
   var uses = PROJECT_USES[theme] || [];
-  $('#pjIntro').textContent = p.name + ' consumes ' + uses.length + ' glass parts — each is the real component below, re-skinned to ' + theme + ' on the same tokens and the same contrast law.';
-  $('#pjChips').innerHTML = '<span class="chip chip-accent">' + esc(theme) + '</span><span class="chip chip-mono">' + uses.length + ' parts</span><span class="chip">shared tokens</span>';
+  $('#pjIntro').textContent = p.name + ' uses ' + uses.length + ' glass pieces — each is a real component below, shown in ' + theme + ' colors on the same shared design tokens.';
+  $('#pjChips').innerHTML = '<span class="chip chip-accent">' + esc(theme) + '</span><span class="chip chip-mono">' + uses.length + ' pieces</span><span class="chip">shared tokens</span>';
   var grid = $('#pjUsesGrid'); grid.innerHTML = '';
   uses.forEach(function (u) {
     var el = document.createElement(u.comp ? 'button' : 'div');
@@ -2246,23 +2698,34 @@ function initSetTabs() {
 
 /* ---------------- onboarding ------------------------------------------------ */
 function renderOnboardingAccents() {
-  var wrap = $('#obAccentGrid'); wrap.innerHTML = '';
-  PROJECTS.forEach(function (p) {
-    var t = document.createElement('button');
-    t.type = 'button'; t.className = 'accent-tile card glass'; t.dataset.obAccent = p.theme;
-    t.setAttribute('aria-pressed', String(state.accent === p.theme));
-    t.innerHTML = '<span class="check">' + ICONS.check + '</span><span class="swatch" style="background:' + HEX[p.theme] + '"></span><b>' + p.theme + '</b><span style="font-size:var(--fs-0);color:var(--ink-2)">' + p.name + ' · ' + p.role + '</span>';
-    t.onclick = function () { setAccent(p.theme); renderOnboardingAccents(); };
-    wrap.appendChild(t);
+  var wrap = $('#obAccentGrid'); if (!wrap) return; wrap.innerHTML = '';
+  THEMES.forEach(function (t) {
+    var id = t[0];
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'swatch-dot'; b.dataset.obAccent = id;
+    b.setAttribute('aria-pressed', String(state.accent === id));
+    b.title = id; b.style.background = HEX[id];
+    b.innerHTML = '<span class="check">' + ICONS.check + '</span>';
+    b.onclick = function () { setAccent(id); };
+    wrap.appendChild(b);
   });
 }
-function renderOnboardingStep() {
-  $('#obStep1').hidden = state.obStep !== 1;
-  $('#obStep2').hidden = state.obStep !== 2;
-  $('#obDot2').classList.toggle('active', state.obStep === 2);
-  $('#obBack').disabled = state.obStep === 1;
-  $('#obNext').textContent = state.obStep === 2 ? 'Enter Studio' : 'Continue';
-  $$('.ground-tile').forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.obGround === state.ground)); });
+function renderOnboardingExplore() {
+  var wrap = $('#obExploreGrid'); if (!wrap) return; wrap.innerHTML = '';
+  PROJECTS.forEach(function (p) {
+    var uses = (PROJECT_USES[p.theme] || []).slice(0, 3).map(function (u) { return u.name; });
+    var card = document.createElement('button');
+    card.type = 'button'; card.className = 'card ob-explore-card'; card.dataset.obExplore = p.theme;
+    card.innerHTML =
+      '<div class="ob-explore-head"><span class="ob-explore-swatch" style="background:' + HEX[p.theme] + '"></span>' +
+      '<span><span class="ob-explore-name">' + esc(p.name) + '</span><br><span class="ob-explore-role">' + esc(p.role) + '</span></span></div>' +
+      '<div class="ob-explore-uses">' + uses.map(function (n) { return '<span class="chip mini-chip">' + esc(n) + '</span>'; }).join('') + '</div>';
+    card.onclick = function () { finishOnboarding(); openProject(p.theme); };
+    wrap.appendChild(card);
+  });
+}
+function syncOnboarding() {
+  $$('#obGroundGrid .ground-tile').forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.obGround === state.ground)); });
 }
 function finishOnboarding() {
   try { localStorage.setItem('glass-onboarded', '1'); } catch (e) {}
@@ -2272,10 +2735,13 @@ function finishOnboarding() {
   toast('Welcome to glass');
 }
 function startOnboarding() {
-  state.obStep = 1;
+  renderOnboardingAccents();
+  renderOnboardingExplore();
+  syncOnboarding();
   $('#screen-onboarding').hidden = false;
   $('#studio').style.display = 'none';
-  renderOnboardingStep();
+  $('#content').scrollTop = 0;
+  try { window.scrollTo(0, 0); } catch (e) {}
 }
 
 /* ---------------- command palette ------------------------------------------ */
@@ -2287,14 +2753,14 @@ function buildPalette() {
     { sec: 'Navigate', label: 'Go to Kitchen sink', sub: '', run: function () { setScreen('kitchen'); } },
     { sec: 'Navigate', label: 'Go to Settings', sub: '3', run: function () { setScreen('settings'); } },
     { sec: 'Navigate', label: 'Restart onboarding', sub: '', run: startOnboarding },
-    { sec: 'Actions', label: 'Cycle ground (dark ⇄ system ⇄ light)', sub: 'G', run: cycleGround },
+    { sec: 'Actions', label: 'Cycle appearance (dark ⇄ system ⇄ light)', sub: 'G', run: cycleGround },
     { sec: 'Actions', label: state.flat ? 'Restore transparency' : 'Reduce transparency', sub: 'toggle', run: function () { setFlat(!state.flat); } },
     { sec: 'Actions', label: state.wcag === 'AA' ? 'Raise WCAG target to AAA' : 'Lower WCAG target to AA', sub: 'a11y', run: function () { setWcag(state.wcag === 'AA' ? 'AAA' : 'AA'); } },
-    { sec: 'Actions', label: 'Recompute the live budget', sub: 'real', run: recomputeBudget },
+    { sec: 'Actions', label: 'Re-check contrast now', sub: 'live', run: recomputeBudget },
     { sec: 'Actions', label: 'Copy git clone command', sub: 'git', run: function () { copyText('git clone https://github.com/abheet19/glass.git'); } },
     { sec: 'Actions', label: 'Show keyboard shortcuts', sub: '?', run: openShortcuts }
   ];
-  PROJECTS.forEach(function (p) { PALETTE_ITEMS.push({ sec: 'Projects — what it uses', label: p.name, sub: p.theme, run: function () { openProject(p.theme); } }); });
+  PROJECTS.forEach(function (p) { PALETTE_ITEMS.push({ sec: 'Products built with glass', label: p.name, sub: p.theme, run: function () { openProject(p.theme); } }); });
   ALL_COMPONENTS.forEach(function (c) { PALETTE_ITEMS.push({ sec: c.cat === 'pattern' ? 'Patterns' : 'Components', label: 'Open ' + c.name, sub: c.file, run: function () { openDetail(c.id); } }); });
 }
 var paletteSel = 0, paletteFiltered = [];
@@ -2338,7 +2804,78 @@ function closeShortcuts() { $('#shortcutsOverlay').hidden = true; returnFocus();
 function recomputeBudget() {
   var computed = renderBudget(); renderRamp();
   var passing = computed.filter(function (c) { return c.pass; }).length;
-  toast('Live budget: ' + passing + '/' + computed.length + ' pairs pass at ' + state.accent + ' · ' + effectiveGround() + ' · WCAG ' + state.wcag);
+  toast(passing + ' of ' + computed.length + ' text/background pairs pass on ' + state.accent + ' · ' + effectiveGround() + ' · ' + state.wcag);
+}
+
+/* ---------------- drawer / sheet overlay (real, focus-trapped) ------------- */
+function openDrawer() {
+  lastFocus = document.activeElement;
+  $('#drawerBody').innerHTML =
+    '<div class="field-group" style="margin-bottom:var(--sp-4)"><label class="field-label" for="dr-q">Search</label>' +
+    '<input class="field" id="dr-q" placeholder="Filter results…"></div>' +
+    '<div style="display:flex;flex-direction:column;gap:var(--sp-2)">' +
+    '<label class="checkbox"><input type="checkbox" checked> Only readable pairs</label>' +
+    '<label class="checkbox"><input type="checkbox"> Include exclusions</label>' +
+    '<label class="switch"><input type="checkbox"> Group by theme</label></div>';
+  $('#drawerOverlay').hidden = false;
+  document.body.dataset.modalOpen = '1';
+  setTimeout(function () { $('#drawerClose').focus(); }, 0);
+}
+function closeDrawer() { $('#drawerOverlay').hidden = true; delete document.body.dataset.modalOpen; returnFocus(); }
+
+/* ---------------- focus trap shared by every overlay ---------------------- */
+function currentDialog() {
+  if (!$('#paletteOverlay').hidden) return $('#paletteOverlay .modal');
+  if (!$('#shortcutsOverlay').hidden) return $('#shortcutsOverlay .modal');
+  if (!$('#modalScrim').hidden) return $('#modalScrim .modal');
+  if (!$('#drawerOverlay').hidden) return $('#drawerOverlay .drawer-panel');
+  return null;
+}
+function trapTab(e) {
+  var d = currentDialog(); if (!d) return;
+  var focusable = $$('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])', d)
+    .filter(function (el) { return el.offsetParent !== null; });
+  if (!focusable.length) return;
+  var first = focusable[0], last = focusable[focusable.length - 1];
+  if (focusable.indexOf(document.activeElement) < 0) { e.preventDefault(); first.focus(); return; }
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* ---------------- press ripple on every button ---------------------------- */
+function reducedMotion() { try { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
+document.addEventListener('pointerdown', function (e) {
+  var btn = e.target.closest && e.target.closest('.btn');
+  if (!btn || btn.disabled || reducedMotion()) return;
+  var r = btn.getBoundingClientRect();
+  var size = Math.max(r.width, r.height) * 1.25;
+  var span = document.createElement('span');
+  span.className = 'gl-ripple';
+  span.style.width = span.style.height = size + 'px';
+  span.style.left = (e.clientX - r.left) + 'px';
+  span.style.top = (e.clientY - r.top) + 'px';
+  btn.appendChild(span);
+  setTimeout(function () { span.remove(); }, 560);
+});
+
+/* ---------------- progress rings animate to their value ------------------- */
+function animateRings(root) {
+  $$('.progress-ring', root).forEach(function (ring) {
+    var target = Number(ring.style.getPropertyValue('--pr')) || 0;
+    var lbl = $('.pr-label', ring);
+    if (reducedMotion()) { ring.style.setProperty('--pr', target); if (lbl) lbl.textContent = target + '%'; return; }
+    var start = null;
+    ring.style.setProperty('--pr', 0); if (lbl) lbl.textContent = '0%';
+    var frame = function (ts) {
+      if (start === null) start = ts;
+      var t = Math.min(1, (ts - start) / 700);
+      var v = Math.round(target * (t * (2 - t)));
+      ring.style.setProperty('--pr', v);
+      if (lbl) lbl.textContent = v + '%';
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  });
 }
 
 /* ---------------- wiring ---------------------------------------------------- */
@@ -2379,7 +2916,7 @@ $('#avatarBtn').addEventListener('click', function (e) {
 $('#menuRestart').addEventListener('click', function () { $('#avatarMenu').hidden = true; confirmRestart(); });
 $('#footerRestart').addEventListener('click', confirmRestart);
 function confirmRestart() {
-  openModal({ title: 'Restart onboarding?', body: '<p>You will pick an accent and a ground again. Nothing else resets.</p>',
+  openModal({ title: 'Restart onboarding?', body: '<p>This shows the welcome tour again so you can re-explore the system. Your theme and settings stay as they are.</p>',
     actions: [{ label: 'Cancel' }, { label: 'Restart', primary: true, onClick: startOnboarding }] });
 }
 $('#flatToggleMenu').addEventListener('change', function (e) { setFlat(e.target.checked); });
@@ -2395,6 +2932,7 @@ $('#inspectPatternBtn').addEventListener('click', function () { openDetail('work
 $('#ksToastBtn').addEventListener('click', function () { toast('Fired from the pinned glass toolbar'); });
 $('#ksTopBtn').addEventListener('click', function () { $('#content').scrollTop = 0; });
 $('#ks-reduce').addEventListener('change', function (e) { setFlat(e.target.checked); });
+(function () { var kb = $('#ks-blur'), ko = $('#ks-blur-out'); if (kb && ko) kb.addEventListener('input', function () { ko.textContent = kb.value + 'px'; }); })();
 
 /* workspace pattern (verbatim behaviour, relocated into Library > Patterns) */
 var fileTablist = $('#workspace-demo [aria-label="Open files"]');
@@ -2447,10 +2985,15 @@ $('#paletteInput').addEventListener('input', function (e) { renderPalette(e.targ
 $('#shortcutsBtn').addEventListener('click', openShortcuts);
 $('#shortcutsClose').addEventListener('click', closeShortcuts);
 $('#shortcutsOverlay').addEventListener('click', function (e) { if (e.target === $('#shortcutsOverlay')) closeShortcuts(); });
+$('#drawerClose').addEventListener('click', closeDrawer);
+$('#drawerApply').addEventListener('click', function () { closeDrawer(); toast('Filters applied'); });
+$('#drawerOverlay').addEventListener('click', function (e) { if (e.target === $('#drawerOverlay')) closeDrawer(); });
 
 document.addEventListener('keydown', function (e) {
   var mod = e.ctrlKey || e.metaKey;
   if (mod && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); if ($('#paletteOverlay').hidden) openPalette(); else closePalette(); return; }
+  if (e.key === 'Tab' && currentDialog()) { trapTab(e); return; }
+  if (!$('#drawerOverlay').hidden) { if (e.key === 'Escape') closeDrawer(); return; }
   if (!$('#paletteOverlay').hidden) {
     if (e.key === 'Escape') closePalette();
     else if (e.key === 'ArrowDown') { e.preventDefault(); movePaletteSel(1); }
@@ -2470,9 +3013,36 @@ document.addEventListener('keydown', function (e) {
 });
 
 $('#obSkip').addEventListener('click', finishOnboarding);
-$('#obNext').addEventListener('click', function () { if (state.obStep === 1) { state.obStep = 2; renderOnboardingStep(); } else { finishOnboarding(); } });
-$('#obBack').addEventListener('click', function () { if (state.obStep === 2) { state.obStep = 1; renderOnboardingStep(); } });
-$$('.ground-tile').forEach(function (t) { t.addEventListener('click', function () { setGround(t.getAttribute('data-ob-ground')); renderOnboardingStep(); }); });
+$('#obEnter').addEventListener('click', finishOnboarding);
+$$('#obGroundGrid .ground-tile').forEach(function (t) { t.addEventListener('click', function () { setGround(t.getAttribute('data-ob-ground')); syncOnboarding(); }); });
+
+/* ---------------- header theme switcher ----------------------------------- */
+function renderHeaderAccents() {
+  var grid = $('#accentMenuGrid'); if (!grid) return; grid.innerHTML = '';
+  THEMES.forEach(function (t) {
+    var id = t[0];
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'accent-menu-dot'; b.dataset.accentPick = id;
+    b.setAttribute('role', 'menuitemradio');
+    b.setAttribute('aria-pressed', String(state.accent === id));
+    b.title = id + ' · ' + t[1]; b.setAttribute('aria-label', id + ' theme');
+    b.style.background = HEX[id];
+    b.innerHTML = '<span class="check">' + ICONS.check + '</span>';
+    b.onclick = function () { setAccent(id); closeAccentMenu(); $('#accentSwitchBtn').focus(); };
+    grid.appendChild(b);
+  });
+}
+function openAccentMenu() { renderHeaderAccents(); $('#accentMenu').hidden = false; $('#accentSwitchBtn').setAttribute('aria-expanded', 'true'); }
+function closeAccentMenu() { $('#accentMenu').hidden = true; $('#accentSwitchBtn').setAttribute('aria-expanded', 'false'); }
+$('#accentSwitchBtn').addEventListener('click', function (e) {
+  e.stopPropagation();
+  if ($('#accentMenu').hidden) openAccentMenu(); else closeAccentMenu();
+});
+document.addEventListener('click', function (e) {
+  var menu = $('#accentMenu'), btn = $('#accentSwitchBtn');
+  if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) closeAccentMenu();
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('#accentMenu').hidden) { closeAccentMenu(); $('#accentSwitchBtn').focus(); } });
 
 try {
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (state.ground === 'system') refreshLiveNumbers(); });
@@ -2495,7 +3065,9 @@ function init() {
   renderProjTable();
   $('#ksCompCount').textContent = String(COMPONENTS.length);
   renderOnboardingAccents();
-  renderOnboardingStep();
+  renderOnboardingExplore();
+  renderHeaderAccents();
+  syncOnboarding();
   renderSettingsAccent();
   initLibTabs();
   initSetTabs();

@@ -1,0 +1,21 @@
+/* =============================================================================
+   GLASS theme — mono · monochrome
+   A no-colour accent: pure neutral, so the interface reads by lightness alone.
+   Useful when you want the least possible colour — for a distraction-free mode,
+   or for viewers who find a saturated accent hard to parse. Because the accent
+   carries almost no chroma, it separates from every surface purely by
+   lightness, which stays comfortably above the contrast minimums.
+
+   The lightness ladder, radii, type scale, motion curve and the four state
+   hues all come from src/tokens.css; only the (near-zero) chroma is set here.
+
+     L      NOT HERE. Lightness belongs to the system. See tokens.css §1.3-1.4.
+
+   Verified by: node scripts/contrast.mjs
+   ============================================================================= */
+
+:root[data-glass="mono"] {
+  --h-ground: 260;    --c-ground: 0.002;
+  --h-accent: 260;    --c-accent: 0.004;    --c-accent-lt: 0.005;
+  --h-accent-2: 260; --c-accent-2: 0.004; --c-accent-2-lt: 0.005;
+}
