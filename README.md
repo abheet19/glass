@@ -35,9 +35,9 @@ that a script proves on every one of them.
 
 <div align="center">
 
-<img src="docs/demo/glass-demo.gif" alt="The Glass demo cycling through all eight themes, recomputing the contrast budget, then exercising the responsive editor-and-agent workspace specimen." width="1000">
+<a href="https://abheet19.github.io/glass/"><img src="docs/media/glass-demo.gif" alt="Glass Studio: the onboarding hue-picker re-skinning the whole app live, then the component gallery scrolling through its groups." width="720"></a>
 
-<sub>Real capture of <a href="demo/index.html"><code>demo/index.html</code></a>, nothing staged. Eight themes, one structure; the same contrast budget CI asserts, recomputed from live tokens; then the responsive editor-and-agent workspace with real file and tool tabs. Recorded by <a href="tools/record-demo.mjs"><code>tools/record-demo.mjs</code></a>; see <a href="#recording-the-demo-gif">Recording the demo GIF</a>. <b>This frame predates the Studio app-shell redesign below</b> (onboarding, sidebar, library, settings, command palette) — it still shows every value it claims to, just inside the prior single-page layout, and is due for a re-capture.</sub>
+<sub><b>▶ <a href="docs/media/glass-reel.mp4">Watch the full 60fps reel</a></b> &nbsp;·&nbsp; <b><a href="https://abheet19.github.io/glass/">Open it live</a></b><br>Real capture of the <a href="https://abheet19.github.io/glass/">live site</a> — nothing staged. The onboarding <b>hue-picker</b> (each of the eight themes worn live) → <b>Skip</b> → the <b>component gallery</b> scrolled through its groups → a <b>component detail</b> → a per-project <b>“what it uses”</b> view where every specimen re-skins to that product's accent. Recorded by <a href="tools/capture-reel60.mjs"><code>tools/capture-reel60.mjs</code></a> against <code>abheet19.github.io/glass</code>; see <a href="#-demo">Demo</a>.</sub>
 
 <br>
 
@@ -76,8 +76,11 @@ $ node scripts/contrast.mjs
 <details open>
 <summary><b>Contents</b></summary>
 
+- [Quick start](#-quick-start)
+- [Demo](#-demo)
 - [What this is](#what-this-is)
 - [The finding](#the-finding)
+- [System design](#-system-design)
 - [Install and use](#-install-and-use)
 - [The token grammar](#-the-token-grammar)
 - [The eight themes](#-the-eight-themes)
@@ -88,10 +91,62 @@ $ node scripts/contrast.mjs
 - [Accessibility](#-accessibility)
 - [Project integrations](#-project-integrations)
 - [Screenshots](#-screenshots)
-- [Recording the demo GIF](#recording-the-demo-gif)
+- [Recording the reel](#recording-the-reel)
 - [What it doesn't do](#-what-it-doesnt-do)
 
 </details>
+
+---
+
+## ⚡ Quick start
+
+No build step, no server, no runtime dependency. Clone it, prove it, open it:
+
+```bash
+git clone https://github.com/abheet19/glass.git
+cd glass
+
+node scripts/contrast.mjs      # prove the colour law before you trust it → PASS 814/814
+open demo/index.html           # the whole Studio app, straight off disk (or just open the live site)
+```
+
+Wire it into a page in three lines — a theme sets the hue, the tokens set everything else:
+
+```html
+<link rel="stylesheet" href="src/tokens.css">        <!-- the grammar -->
+<link rel="stylesheet" href="src/themes/weft.css">   <!-- pick a hue: zeno·weft·vantage·shield·textify·health·rephrase·detect -->
+<link rel="stylesheet" href="src/components.css">     <!-- all six component sheets -->
+
+<html data-glass="weft" data-theme="light">          <!-- hue + ground; drop data-theme for dark-first -->
+```
+
+Regenerate the demo reel, or run the full gate:
+
+```bash
+npm install && npx playwright install chromium
+node tools/capture-reel60.mjs   # → docs/media/glass-reel.mp4 (60fps) + docs/media/glass-demo.gif
+npm run validate                # source hygiene + 814 contrast assertions + real-browser acceptance
+```
+
+Full consumption options (submodule, Tailwind preset, JSON, jsDelivr CDN) are in [Install and use](#-install-and-use).
+
+---
+
+## 🎬 Demo
+
+**[▶ abheet19.github.io/glass](https://abheet19.github.io/glass/)** — the live site is the demo, and the demo is a real consumer of the package. Nothing on it is mocked: it reads its own tokens back out of `getComputedStyle` and measures itself in front of you.
+
+The reel at the top drives the redesigned **Glass Studio** end to end, exactly as a first-time visitor meets it:
+
+| Beat | What you're looking at |
+|---|---|
+| **1 · Onboarding hue-picker** | Eight real themes as wearable tiles. Click one and the *entire* app re-skins live — this is `data-glass`, not a preview swatch. |
+| **2 · Skip → Studio** | The persistent sidebar shell: Overview, Library, Kitchen sink, Settings, and the eight source projects. |
+| **3 · Component gallery** | Library → Components: every real component, grouped and filterable, scrolled through its groups. |
+| **4 · Component detail** | One card opened into Preview / Tokens / Code / Accessibility — Tokens and Accessibility computed live at the current theme, ground and WCAG target. |
+| **5 · Per-project “what it uses”** | Pick a project in the sidebar and the whole specimen set re-colours to that product's accent — the concrete glass parts each app actually consumes. |
+
+The clip is a genuine **60fps** H.264 capture (`docs/media/glass-reel.mp4`, ~1280px) motion-interpolated from the recording; the looping GIF above is the teaser. Both are produced by [`tools/capture-reel60.mjs`](tools/capture-reel60.mjs) against the live URL — see [Recording the reel](#recording-the-reel).
 
 ---
 
@@ -147,6 +202,54 @@ ceiling. It does not set the lightness, because lightness is what contrast is ma
 crimson `#C81E33` is a beautiful colour and, as body text on this system's `--raised` plane, it
 measures **3.2:1** — below AA. The hue survives into `themes/zeno.css`; the lightness does not. Every
 source hex is recorded in its theme file as the documented origin.
+
+---
+
+## 🧠 System design
+
+The one piece of real engineering here is the **contrast engine**, `scripts/contrast.mjs` — a
+zero-dependency colour compiler that treats "does this palette pass WCAG?" as a build check, not a
+manual audit. It never opens a browser and never calls a library. It parses the stylesheets itself,
+resolves the cascade, does the colour math by hand, and exits non-zero if any of **16 palettes**
+(8 themes × 2 grounds) drifts out of budget.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#142d35','primaryTextColor':'#e6f4f1','primaryBorderColor':'#2ed3c6','lineColor':'#647c8d','fontSize':'14px'}}}%%
+flowchart LR
+    CSS["src/*.css<br/>+ 8 theme seeds"] --> P["parse & resolve<br/>var() chains"]
+    P --> O["oklch() → sRGB<br/><i>with gamut mapping</i>"]
+    O --> MIX["color-mix(in srgb)<br/>+ alpha compositing"]
+    MIX --> WCAG["WCAG 2.2 ratios<br/>vs each token's worst backdrop"]
+    WCAG --> G{"814 assertions<br/>hold on all 16?"}
+    G -->|yes| PASS["exit 0 · rebuild tokens.json · ship"]
+    G -->|no| FAIL["exit 1 · block CI & Pages"]
+    classDef proof fill:#143b2b,stroke:#3ecf8e,color:#e6f4f1
+    classDef stop fill:#3a1720,stroke:#e8496c,color:#ffe9ee
+    class WCAG,G,PASS proof
+    class FAIL stop
+```
+
+Four ideas make it hold together:
+
+- **A theme is data, not code.** Every theme file is exactly eight numbers — a ground hue/chroma and
+  a hue-plus-per-ground-chroma for each of two accents — and *nothing else*. Lightness, radii, type,
+  motion and the four state hues live in `tokens.css`, unreachable from a theme. A theme literally
+  cannot break the ladder because it is handed nothing to break it with, and the script asserts the
+  resolved lightness ladder is numerically identical across all eight.
+- **The gamut is respected, not ignored.** oklch is perceptually uniform but not all of it fits in
+  sRGB, so the resolver gamut-maps each colour the way a browser would — which is why each accent
+  ships two chroma values (a dark one and a light one), both capped at what sRGB can actually hold.
+- **Glass is measured, not guessed.** Glass has no fixed luminance, so `--gl-worst` — a
+  never-painted *measurement* token — records the worst realistic composite behind a pane, and text
+  on glass is checked against that.
+- **The demo measures itself.** Glass Studio re-runs the same maths in the browser from
+  `getComputedStyle`, so the live stat tiles, the ramp and the budget table are computed in front of
+  you at whatever theme/ground/WCAG target you've chosen — the README's numbers and the running app
+  come from one source of truth. `src/tokens.json` is generated *from the CSS* and the build fails if
+  the committed file drifts from it.
+
+The CSS itself is the reusable product; the demo's JavaScript only adds example interactions, all of
+which are exercised by `tools/verify-demo.mjs` in a real browser.
 
 ---
 
@@ -652,7 +755,7 @@ computed tokens back out of `getComputedStyle`, converts them with the same math
 uses, and **measures itself in front of you**. Switch theme, ground or WCAG target anywhere in the
 Studio and every number recomputes. Fresh evidence captures of the current Studio shell (desktop,
 mobile, workspace pattern) are written by `npm run test:browser` to `docs/verification/` on every
-run — the two frames below are still the earlier single-page layout and are due for a re-capture.
+run; the reel at the top of this README is the current redesigned Studio, captured live.
 
 <div align="center">
 
@@ -670,29 +773,34 @@ run — the two frames below are still the earlier single-page layout and are du
 
 <div align="center"><sub><a href="demo/index.html">demo/index.html</a> — or <a href="https://abheet19.github.io/glass/demo/">open it live</a>. Deep-link a palette and a screen with <code>?glass=weft&amp;theme=light&amp;screen=library</code>.</sub></div>
 
-### Recording the demo GIF
+<a name="recording-the-reel"></a>
+### Recording the reel
 
-The hero GIF at the top is not a mock-up — it is a scripted capture of that same page, and it
+The hero reel is not a mock-up — it is a scripted Playwright capture of the **live site**, and it
 re-records from scratch:
 
 ```console
 $ npm install                        # playwright, devDependency only — there are still zero runtime deps
 $ npx playwright install chromium
-$ npm run record:demo                # tools/record-demo.mjs  → docs/demo/.frames/
-$ python tools/assemble_gif.py       # Pillow                 → docs/demo/glass-demo.gif
+$ node tools/capture-reel60.mjs      # drives https://abheet19.github.io/glass/ end to end
+                                     #   → docs/media/glass-reel.mp4  (H.264, ~1280px, 60fps)
+                                     #   → docs/media/glass-demo.gif  (looping teaser for this README)
 ```
 
-`record-demo.mjs` drives the Studio's own controls — Settings → Appearance for theme and ground,
-Library → Foundations for the ramp and the live budget, Library → Patterns for the workspace —
-then screenshots them at 1280 CSS px on a 2× device scale. The downscale to 1000 px supersamples the
-UI so table and editor text stay sharp. The script's selectors were updated for the Studio shell;
-the hero GIF above still shows the prior single-page layout and needs a fresh `npm run record:demo`
-+ `python tools/assemble_gif.py` pass to catch up (not part of `npm run validate`, so it does not
-gate CI or Pages).
-`assemble_gif.py` quantises every frame against **one shared 256-colour palette with dithering
-off** — Floyd–Steinberg noise is uncorrelated between frames and destroys GIF's inter-frame
-compression on flat surfaces like these. The storyboard lives in the `board` array at the top of
-`record-demo.mjs`; edit it there.
+`capture-reel60.mjs` opens the live URL in a **fresh profile** (so onboarding actually shows), wears
+a few of the eight accents in the hue-picker, skips into the Studio, scrolls the component gallery
+through its groups, opens a component detail, then walks a per-project "what it uses" view. Playwright
+records the session as `.webm`; ffmpeg then produces two artifacts. The MP4 is a **true 60fps** clip —
+the source is ~25fps, so `minterpolate` (`fps=60`, motion-compensated) synthesises the intermediate
+frames and `-r 60` stamps the rate, so playback is genuinely smooth rather than a padded 25fps. The
+GIF is a shorter, palette-optimised loop derived from that MP4. ffmpeg is auto-detected from
+`$FFMPEG`, then `PATH`, then the local winget install; point it at another deployment with
+`GLASS_URL=…`.
+
+> The earlier theme-switcher animation (`tools/record-demo.mjs` + `python tools/assemble_gif.py`,
+> Pillow, single-palette no-dither quantisation) still exists and still works — it films the eight
+> themes and the live budget as a storyboard rather than the app flow. The reel above is the current
+> hero.
 
 ---
 
