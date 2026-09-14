@@ -165,7 +165,7 @@ try {
     assert.equal(await page.locator('.comp-card').count(), total);
 
     await page.locator('.comp-card', { hasText: '.field' }).first().click();
-    assert.equal(await page.locator('#screen-detail').isVisible(), true);
+    assert.equal(await page.locator('#libDetailInner').isVisible(), true);
     assert.equal(await page.locator('#crumbCat').innerText(), 'Primitives');
     assert.equal(await page.locator('#detailName').innerText(), '.field');
   });

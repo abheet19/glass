@@ -605,6 +605,70 @@ pre.code-block .tag { color: var(--accent); }
 .ks-prose p { margin: 0 0 var(--sp-3); line-height: var(--lh-3); }
 .ks-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--sp-4); align-items: start; }
 
+/* ---- library: category overview strip -------------------------------------- */
+.cat-overview { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-5); }
+.cat-tile {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3); border-radius: var(--r-pill);
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+  cursor: pointer; font: inherit; font-size: var(--fs-0); line-height: 1;
+}
+.cat-tile:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); color: var(--ink); }
+.cat-tile[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--ink); }
+.cat-tile .cat-name { font-weight: 650; }
+.cat-tile .cat-count {
+  font-family: var(--font-mono); font-size: .66rem; min-width: 1.5em; text-align: center;
+  padding: 1px 6px; border-radius: var(--r-pill);
+  background: var(--raised); color: var(--ink-2); border: 1px solid var(--line);
+}
+.cat-tile[aria-pressed="true"] .cat-count { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+
+/* ---- library: persistent master–detail layout ------------------------------ */
+.lib-split { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); align-items: start; }
+.lib-master { min-width: 0; }
+.comp-card[aria-current="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.lib-detail { min-width: 0; }
+.lib-detail .detail-title h1 { font-size: var(--fs-2); }
+.lib-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-1); }
+.detail-cat { display: inline-block; margin-top: 4px; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; color: var(--ink-3); }
+.lib-detail-empty {
+  display: flex; flex-direction: column; gap: var(--sp-3); align-items: flex-start;
+  color: var(--ink-2); font-size: var(--fs-0); line-height: var(--lh-2);
+}
+.lib-detail-empty svg { width: 22px; height: 22px; color: var(--accent); }
+.lib-detail-scrim { display: none; }
+
+@media (min-width: 901px) {
+  .lib-split { grid-template-columns: minmax(0, 1fr) clamp(21rem, 33%, 27rem); }
+  .lib-detail {
+    position: sticky; top: var(--sp-4);
+    max-height: calc(100vh - 6.5rem); overflow-y: auto;
+    padding: var(--sp-5); border: 1px solid var(--line); border-radius: var(--r-3);
+    background: var(--surface);
+  }
+}
+@media (max-width: 900px) {
+  .lib-detail {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-modal);
+    max-height: 86vh; overflow-y: auto; box-sizing: border-box;
+    padding: var(--sp-5) var(--sp-4) var(--sp-6);
+    background: var(--surface); border-top: 1px solid var(--line);
+    border-radius: var(--r-3) var(--r-3) 0 0; box-shadow: var(--gl-shadow);
+    transform: translateY(102%); transition: transform var(--t-slow) var(--ease);
+    visibility: hidden;
+  }
+  .lib-detail[data-open="true"] { transform: translateY(0); visibility: visible; }
+  .lib-detail-scrim {
+    display: block; position: fixed; inset: 0; z-index: calc(var(--z-modal) - 1);
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+    opacity: 0; visibility: hidden; transition: opacity var(--t-slow) var(--ease);
+  }
+  .lib-detail-scrim.open { opacity: 1; visibility: visible; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lib-detail, .lib-detail-scrim { transition: none; }
+}
+
 /* =============================================================================
    ADDED COMPONENTS + LIVE INTERACTIONS — demo-only. Every value is a token from
    ../src; glass stays on chrome/overlays only, readable content on opaque
@@ -959,6 +1023,7 @@ pre.code-block .tag { color: var(--accent); }
         </div>
 
         <div id="libPane-components" role="tabpanel" aria-labelledby="libtab-components">
+          <div class="cat-overview" id="catOverview" role="group" aria-label="Component categories"></div>
           <div class="search-filter-bar" style="margin-bottom:var(--sp-5)">
             <label class="field" style="flex:1 1 14rem">
               <span class="sr">Filter components</span>
@@ -966,8 +1031,41 @@ pre.code-block .tag { color: var(--accent); }
             </label>
             <div class="chip-row" id="catChips"></div>
           </div>
-          <div class="comp-grid" id="compGrid"></div>
-          <p class="table-empty" id="gridEmpty" hidden>No components match "<span id="gridEmptyTerm"></span>".</p>
+          <div class="lib-split">
+            <div class="lib-master">
+              <div class="comp-grid" id="compGrid"></div>
+              <p class="table-empty" id="gridEmpty" hidden>No components match "<span id="gridEmptyTerm"></span>".</p>
+            </div>
+            <aside class="lib-detail" id="libDetail" data-open="false" aria-label="Component details">
+              <div class="lib-detail-empty" id="libDetailEmpty">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><path d="M14 11v6"/><path d="M11 14h6"/></svg>
+                <span>Pick a component to preview it here — its live states, tokens, code and contrast, side by side with the grid. It stays open as you browse the next one.</span>
+              </div>
+              <div class="lib-detail-inner" id="libDetailInner" hidden>
+                <div class="lib-detail-head">
+                  <div>
+                    <div class="detail-title">
+                      <h1 id="detailName"></h1>
+                      <span class="chip chip-mono" id="detailFileChip"></span>
+                    </div>
+                    <span class="detail-cat" id="crumbCat"></span>
+                  </div>
+                  <button class="workspace-icon-button lib-detail-close" id="libDetailClose" type="button" aria-label="Close component details">
+                    <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+                  </button>
+                </div>
+                <p class="lede" id="detailBlurb" style="margin:var(--sp-2) 0 var(--sp-4)"></p>
+                <nav class="tabs" role="tablist" aria-label="Component detail" id="detailTabs" style="margin-bottom:var(--sp-4)">
+                  <button class="tab" role="tab" id="dtab-preview" aria-selected="true" tabindex="0">Preview</button>
+                  <button class="tab" role="tab" id="dtab-tokens" aria-selected="false" tabindex="-1">Tokens</button>
+                  <button class="tab" role="tab" id="dtab-code" aria-selected="false" tabindex="-1">Code</button>
+                  <button class="tab" role="tab" id="dtab-a11y" aria-selected="false" tabindex="-1">Accessibility</button>
+                </nav>
+                <div id="detailBody"></div>
+              </div>
+            </aside>
+          </div>
+          <div class="lib-detail-scrim" id="libDetailScrim"></div>
         </div>
 
         <div id="libPane-foundations" role="tabpanel" aria-labelledby="libtab-foundations" hidden>
@@ -1116,30 +1214,6 @@ pre.code-block .tag { color: var(--accent); }
             <button class="btn" id="inspectPatternBtn">Inspect this pattern in the Library →</button>
           </div>
         </div>
-      </section>
-
-      <!-- ============ DETAIL ============ -->
-      <section class="screen" id="screen-detail" hidden>
-        <ol class="breadcrumbs">
-          <li><button data-goto="library">Library</button></li>
-          <li><span id="crumbCat"></span></li>
-          <li aria-current="page"><span id="crumbName"></span></li>
-        </ol>
-        <div class="detail-head">
-          <div class="detail-title">
-            <h1 id="detailName"></h1>
-            <span class="chip chip-mono" id="detailFileChip"></span>
-          </div>
-          <button class="btn" data-goto="library">← Back to library</button>
-        </div>
-        <p class="lede" id="detailBlurb" style="margin-bottom:var(--sp-5)"></p>
-        <nav class="tabs" role="tablist" aria-label="Component detail" id="detailTabs" style="margin-bottom:var(--sp-5)">
-          <button class="tab" role="tab" id="dtab-preview" aria-selected="true" tabindex="0">Preview</button>
-          <button class="tab" role="tab" id="dtab-tokens" aria-selected="false" tabindex="-1">Tokens</button>
-          <button class="tab" role="tab" id="dtab-code" aria-selected="false" tabindex="-1">Code</button>
-          <button class="tab" role="tab" id="dtab-a11y" aria-selected="false" tabindex="-1">Accessibility</button>
-        </nav>
-        <div id="detailBody"></div>
       </section>
 
       <!-- ============ SETTINGS ============ -->
@@ -2121,13 +2195,13 @@ function refreshLiveNumbers() {
   $('#passGaugeFill').style.width = pct + '%';
   $('#passGaugeText').textContent = pct + '%';
   $('#passGaugeLabel').textContent = passing + ' / ' + computed.length + ' pairs passing';
-  if (!$('#screen-detail').hidden) renderDetailBody();
+  if (state.detailId && state.screen === 'library' && !$('#libDetailInner').hidden) renderDetailBody();
 }
 
 /* ---------------- screen router ---------------- */
 function setScreen(name) {
   state.screen = name;
-  ['overview', 'library', 'detail', 'settings', 'project', 'kitchen'].forEach(function (s) { $('#screen-' + s).hidden = (s !== name); });
+  ['overview', 'library', 'settings', 'project', 'kitchen'].forEach(function (s) { $('#screen-' + s).hidden = (s !== name); });
   $$('.nav-item[data-goto]').forEach(function (b) { b.toggleAttribute('aria-current', b.dataset.goto === name); if (b.dataset.goto === name) b.setAttribute('aria-current', 'page'); });
   $('#sidebar').classList.remove('open');
   $('#hamburgerBtn').setAttribute('aria-expanded', 'false');
@@ -2157,6 +2231,18 @@ function wireTabs(tablist, onActivate) {
 }
 
 /* ---------------- library: components grid -------------------------------- */
+function catCounts() {
+  var counts = { all: COMPONENTS.length };
+  GROUP_ORDER.forEach(function (g) { counts[g] = 0; });
+  COMPONENTS.forEach(function (c) { counts[c.group] = (counts[c.group] || 0) + 1; });
+  return counts;
+}
+function selectCat(cat) {
+  state.cat = cat;
+  renderCatChips();
+  renderCatOverview();
+  renderGrid();
+}
 function renderCatChips() {
   var row = $('#catChips'); row.innerHTML = '';
   CATS.forEach(function (c) {
@@ -2164,8 +2250,23 @@ function renderCatChips() {
     b.className = 'chip chip-filter'; b.type = 'button';
     b.setAttribute('aria-pressed', String(state.cat === c[0]));
     b.textContent = c[1];
-    b.onclick = function () { state.cat = c[0]; renderCatChips(); renderGrid(); };
+    b.onclick = function () { selectCat(c[0]); };
     row.appendChild(b);
+  });
+}
+/* Compact category overview: the library's shape at a glance — one tile per
+   group with a live count, sharing the same state.cat filter as the chips. */
+function renderCatOverview() {
+  var wrap = $('#catOverview'); if (!wrap) return;
+  var counts = catCounts();
+  wrap.innerHTML = '';
+  CATS.forEach(function (c) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'cat-tile';
+    b.setAttribute('aria-pressed', String(state.cat === c[0]));
+    b.innerHTML = '<span class="cat-name">' + esc(c[1]) + '</span><span class="cat-count">' + (counts[c[0]] || 0) + '</span>';
+    b.onclick = function () { selectCat(c[0]); };
+    wrap.appendChild(b);
   });
 }
 function miniPreview(c) {
@@ -2231,6 +2332,8 @@ function renderGrid() {
   function addCard(c) {
     var card = document.createElement('button');
     card.type = 'button'; card.className = 'comp-card card glass';
+    card.dataset.compId = c.id;
+    if (state.detailId === c.id) card.setAttribute('aria-current', 'true');
     card.innerHTML = '<div class="comp-preview">' + miniPreview(c) + '</div>' +
       '<div><p class="comp-name" style="margin:0 0 4px">' + esc(c.name) + '</p><p class="comp-blurb">' + esc(c.blurb) + '</p></div>' +
       '<div class="comp-foot"><span class="comp-file">' + esc(c.file) + '</span>' + stateBadge(true) + '</div>';
@@ -2245,6 +2348,12 @@ function renderGrid() {
     head.innerHTML = '<span>' + g + '</span><span class="ggl-count">' + items.length + '</span><span class="ggl-rule"></span>';
     grid.appendChild(head);
     items.forEach(addCard);
+  });
+}
+function markActiveCard(id) {
+  $$('#compGrid .comp-card').forEach(function (card) {
+    if (id && card.dataset.compId === id) card.setAttribute('aria-current', 'true');
+    else card.removeAttribute('aria-current');
   });
 }
 
@@ -2265,18 +2374,34 @@ function goLibTab(key) {
 
 /* ---------------- detail --------------------------------------------------- */
 function findComp(id) { for (var i = 0; i < ALL_COMPONENTS.length; i++) if (ALL_COMPONENTS[i].id === id) return ALL_COMPONENTS[i]; return null; }
+/* Master–detail: open a component into the persistent side panel (a bottom
+   sheet on mobile). The panel stays open while the reviewer clicks the next
+   component, and re-renders live when the theme or WCAG target changes. */
 function openDetail(id) {
+  var c = findComp(id); if (!c) return;
   state.detailId = id;
-  setScreen('detail');
-  var c = findComp(id);
+  if (state.screen !== 'library') setScreen('library');
+  if (state.libTab !== 'components') { var lt = $('#libtab-components'); if (lt && libTabs) libTabs.select(lt, false); }
+  $('#libDetailEmpty').hidden = true;
+  $('#libDetailInner').hidden = false;
   $('#crumbCat').textContent = CAT_LABEL[c.cat] || c.cat;
-  $('#crumbName').textContent = c.name;
   $('#detailName').textContent = c.name;
   $('#detailFileChip').textContent = c.file;
   $('#detailBlurb').textContent = c.blurb;
   detailTabs.select($('#dtab-preview'), false);
   $('#detailBody').innerHTML = '<span class="skeleton skeleton-title" style="margin-bottom:8px"></span><span class="skeleton skeleton-text"></span>';
   setTimeout(renderDetailBody, 180);
+  markActiveCard(id);
+  $('#libDetail').dataset.open = 'true';
+  $('#libDetailScrim').classList.add('open');
+}
+function closeDetail() {
+  state.detailId = null;
+  $('#libDetailInner').hidden = true;
+  $('#libDetailEmpty').hidden = false;
+  $('#libDetail').dataset.open = 'false';
+  $('#libDetailScrim').classList.remove('open');
+  markActiveCard(null);
 }
 function bigPreview(c) {
   var big = {
@@ -2927,6 +3052,8 @@ $$('#wcagSeg [data-wcag]').forEach(function (b) { b.addEventListener('click', fu
 $('#libSearch').addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
 $('#overviewRecomputeBtn').addEventListener('click', recomputeBudget);
 $('#inspectPatternBtn').addEventListener('click', function () { openDetail('workspace'); });
+$('#libDetailClose').addEventListener('click', closeDetail);
+$('#libDetailScrim').addEventListener('click', closeDetail);
 
 /* kitchen sink — glass toolbar over scrolling opaque content */
 $('#ksToastBtn').addEventListener('click', function () { toast('Fired from the pinned glass toolbar'); });
@@ -3003,6 +3130,7 @@ document.addEventListener('keydown', function (e) {
   }
   if (!$('#shortcutsOverlay').hidden) { if (e.key === 'Escape') closeShortcuts(); return; }
   if (!$('#modalScrim').hidden) { if (e.key === 'Escape') closeModal(); return; }
+  if (e.key === 'Escape' && $('#libDetail') && $('#libDetail').dataset.open === 'true' && window.matchMedia('(max-width: 900px)').matches) { closeDetail(); return; }
   var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '') || (e.target && e.target.isContentEditable);
   if (typing) return;
   if (e.key === '?') { e.preventDefault(); openShortcuts(); return; }
@@ -3061,6 +3189,7 @@ try {
 /* ---------------- init ------------------------------------------------------ */
 function init() {
   renderCatChips();
+  renderCatOverview();
   renderGrid();
   renderProjTable();
   $('#ksCompCount').textContent = String(COMPONENTS.length);
