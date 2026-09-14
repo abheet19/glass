@@ -14,7 +14,7 @@ Glass is a **framework-neutral CSS design system** whose central idea is that a 
 hue, and a script proves the whole palette is accessible before anything ships. It was **extracted**
 from eight of my own projects that had independently converged on the same surface, and its
 distinguishing feature is a **zero-dependency contrast compiler** that verifies WCAG 2.2 ratios
-across 8 themes × 2 grounds = 16 palettes on every push.
+across 11 themes × 2 grounds = 22 palettes on every push.
 
 ## 2. The problem it solves
 
@@ -80,7 +80,7 @@ eight seed values per theme  +  shared semantic tokens (tokens.css)
   → CSS cascade + accessibility modes (reduced-transparency / motion, flat, forced fallbacks)
   → primitives / forms / navigation / feedback / data / workspace sheets (components.css)
   → Glass Studio (demo/index.html) + downstream products consume the SAME sheets
-  → contrast.mjs: 814 contrast/structure assertions over 16 palettes  +  quality.mjs source hygiene
+  → contrast.mjs: 1111 contrast/structure assertions over 22 palettes  +  quality.mjs source hygiene
   → verify-demo.mjs: real-browser acceptance of every interactive flow
   → exact-SHA GitHub Pages release (release.json.sha == git HEAD)
 ```
@@ -88,7 +88,7 @@ eight seed values per theme  +  shared semantic tokens (tokens.css)
 The **contrast engine** (`scripts/contrast.mjs`) is the real engineering: a dependency-free colour
 compiler that parses the stylesheets, resolves `var()` chains, evaluates `oklch()` with sRGB gamut
 mapping, `color-mix(in srgb, …)` and alpha compositing, then asserts WCAG ratios against each token's
-worst permitted backdrop across all 16 palettes and exits non-zero on drift. It also regenerates
+worst permitted backdrop across all 22 palettes and exits non-zero on drift. It also regenerates
 `src/tokens.json` from the CSS and fails if the committed mirror has drifted.
 
 `workspace.css` adds framework-neutral editor/agent/ops shell layout: title/status bars, project
@@ -118,7 +118,7 @@ responsive state* only; the consuming product owns files, terminals, agents and 
   eight numbers and nothing else — asserted).
 - Tested text/focus/status/graphic combinations meet their declared WCAG 2.2 thresholds on both
   grounds.
-- The resolved lightness ladder is numerically identical across all eight themes (spread 0.00).
+- The resolved lightness ladder is numerically identical across all eleven themes (spread 0.00).
 - Colour is never the only state channel; every state carries a unique glyph and a unique word
   (asserted), plus native names/roles/states/keyboard behaviour.
 - At 320px the page cannot overflow; wide data/tabs scroll only inside their intended containers.
@@ -135,7 +135,7 @@ the six real component sheets, so the demo is simultaneously the reference and t
 in the README (`docs/media/glass-reel.mp4`, 60fps; `docs/media/glass-demo.gif`, looping teaser) drives
 this exact flow against the live site:
 
-1. **Onboarding hue-picker** (`#screen-onboarding`, `#obAccentGrid`) — the eight themes as wearable
+1. **Onboarding hue-picker** (`#screen-onboarding`, `#obAccentGrid`) — the themes as wearable
    tiles; clicking one flips the live `data-glass` attribute and the whole app re-skins. Step 2 picks
    a ground (dark / system / light). Shown once, gated by a `localStorage` flag, resettable from the
    sidebar. `#obSkip` jumps straight into the Studio.
@@ -147,7 +147,7 @@ this exact flow against the live site:
    Tokens / Code / Accessibility tabs, Tokens and Accessibility computed live at the current theme,
    ground and WCAG target.
 4. **Library → Foundations / Patterns** — the ramp, the law (the same pairs `contrast.mjs` checks,
-   recomputed in-browser), type & radii, the eight-theme gallery, and the responsive workspace shell.
+   recomputed in-browser), type & radii, the theme gallery, and the responsive workspace shell.
 5. **Per-project "what it uses"** (`#screen-project`, `#pjUsesGrid`) — pick a source project in the
    sidebar and the whole specimen set re-skins to that product's accent, showing the concrete glass
    parts each app actually consumes.
@@ -173,7 +173,7 @@ this exact flow against the live site:
 
 **Q. Why OKLCH instead of hex/HSL?**
 A. Perceptual uniformity. `L 78%` is the same apparent lightness at every hue, so one lightness ladder
-can be shared across all eight accents and land in the same *measured* contrast position. HSL's
+can be shared across every accent and land in the same *measured* contrast position. HSL's
 lightness is not perceptual, so a "50% lightness" teal and crimson would test wildly differently.
 
 **Q. If you author in OKLCH, how do old browsers / canvas / email get colours?**
@@ -191,7 +191,7 @@ dark chroma and a light chroma, both capped at what sRGB can display.
 A. A theme file is *only* eight numbers — a ground hue/chroma and a hue-plus-two-chromas per accent.
 Lightness, radii, type, motion and state hues live in `tokens.css` and are unreachable from a theme.
 The script asserts each theme declares exactly those eight seeds and nothing else, and that the
-resolved lightness ladder is identical across all eight. A theme can't break the ladder because it's
+resolved lightness ladder is identical across all eleven. A theme can't break the ladder because it's
 handed nothing to break it with.
 
 **Q. How do you test contrast on glass, which is translucent?**
@@ -248,7 +248,7 @@ passes, then `--emit-json` to refresh the mirror.
 **Q. Known limits?**
 A. Not on npm; CSS-only (no React/Web-Component bindings by design); integration is per-project;
 `--gl-worst` is a model, not a measurement of *your* page (glass over a photo needs direct
-measurement); one dark lightness ladder for all eight themes (faithful in hue, approximately faithful
+measurement); one dark lightness ladder for all eleven themes (faithful in hue, approximately faithful
 in ground lightness, within 1.8 L points); Tailwind v3 preset only (v4 uses `@theme inline`); no
 pixel-diff baseline suite (contrast + behaviour are machine-checked, visuals need human review).
 
@@ -257,7 +257,7 @@ pixel-diff baseline suite (contrast + behaviour are machine-checked, visuals nee
 ## 11. Delivery and verification
 
 Run `npm run validate` (format check + lint + contrast + browser) and `npm pack --dry-run`. CI runs
-source quality, all 814 contrast/structure assertions across 16 palettes, and the browser groups.
+source quality, all 1111 contrast/structure assertions across 22 palettes, and the browser groups.
 Pages runs the same gates, publishes demo/source/brand, and writes the exact source SHA to
 `/release.json`. This is automated WCAG-aligned evidence for the tested criteria — not an external
 certification, a full screen-reader/device-fleet audit, or an npm publication. Validate each consumer
