@@ -9,15 +9,15 @@
 ### **A theme owns hue. The system owns everything else.**
 
 Eight of my projects converged on the same surface without ever sharing a stylesheet.<br>
-This is the extraction — **one importable grammar**, eight themes, and a contrast law<br>
+This is the extraction — **one importable grammar**, eleven themes, and a contrast law<br>
 that a script proves on every one of them.
 
 <br>
 
 [![CI](https://github.com/abheet19/glass/actions/workflows/ci.yml/badge.svg)](https://github.com/abheet19/glass/actions/workflows/ci.yml)
 [![Demo](https://img.shields.io/badge/demo-live-2ED3C6)](https://abheet19.github.io/glass/demo/)
-[![Palettes](https://img.shields.io/badge/palettes-8_themes_×_2_grounds-4F7DF3)](#-the-eight-themes)
-[![Contrast](https://img.shields.io/badge/contrast-814_assertions_·_machine--verified-3ECF8E)](#-the-contrast-law)
+[![Palettes](https://img.shields.io/badge/palettes-11_themes_×_2_grounds-4F7DF3)](#-the-eleven-themes)
+[![Contrast](https://img.shields.io/badge/contrast-1111_assertions_·_machine--verified-3ECF8E)](#-the-contrast-law)
 [![Colour](https://img.shields.io/badge/colour-oklch-B98BFF)](#why-oklch-and-not-hex)
 [![Runtime deps](https://img.shields.io/badge/runtime_dependencies-0-F2B23E)](#-what-it-doesnt-do)
 [![Network](https://img.shields.io/badge/network_requests-none-C81E33)](#-what-it-doesnt-do)
@@ -37,7 +37,7 @@ that a script proves on every one of them.
 
 <a href="https://abheet19.github.io/glass/"><img src="docs/media/glass-demo.gif" alt="Glass Studio: the onboarding hue-picker re-skinning the whole app live, then the component gallery scrolling through its groups." width="720"></a>
 
-<sub><b>▶ <a href="docs/media/glass-reel.mp4">Watch the full 60fps reel</a></b> &nbsp;·&nbsp; <b><a href="https://abheet19.github.io/glass/">Open it live</a></b><br>Real capture of the <a href="https://abheet19.github.io/glass/">live site</a> — nothing staged. The onboarding <b>hue-picker</b> (each of the eight themes worn live) → <b>Skip</b> → the <b>component gallery</b> scrolled through its groups → a <b>component detail</b> → a per-project <b>“what it uses”</b> view where every specimen re-skins to that product's accent. Recorded by <a href="tools/capture-reel60.mjs"><code>tools/capture-reel60.mjs</code></a> against <code>abheet19.github.io/glass</code>; see <a href="#-demo">Demo</a>.</sub>
+<sub><b>▶ <a href="docs/media/glass-reel.mp4">Watch the full 60fps reel</a></b> &nbsp;·&nbsp; <b><a href="https://abheet19.github.io/glass/">Open it live</a></b><br>Real capture of the <a href="https://abheet19.github.io/glass/">live site</a> — nothing staged. The onboarding <b>hue-picker</b> (each of the eleven themes worn live) → <b>Skip</b> → the <b>component gallery</b> scrolled through its groups → a <b>component detail</b> → a per-project <b>“what it uses”</b> view where every specimen re-skins to that product's accent. Recorded by <a href="tools/capture-reel60.mjs"><code>tools/capture-reel60.mjs</code></a> against <code>abheet19.github.io/glass</code>; see <a href="#-demo">Demo</a>.</sub>
 
 <br>
 
@@ -46,12 +46,12 @@ that a script proves on every one of them.
 > [!NOTE]
 > **The contrast law is verified, not asserted.** Every ratio quoted in this README and in every
 > comment in the source is printed by `node scripts/contrast.mjs`, which runs the whole budget on
-> **8 themes × 2 grounds = 16 palettes** and exits non-zero if any of them drifts. CI runs it on
-> every push. The numbers are the worst case across the eight, not a favourable one.
+> **11 themes × 2 grounds = 22 palettes** and exits non-zero if any of them drifts. CI runs it on
+> every push. The numbers are the worst case across all eleven themes, not a favourable one.
 
 <div align="center">
 
-`◐ tokens` &nbsp;·&nbsp; `▣ primitives` &nbsp;·&nbsp; `⬡ eight themes` &nbsp;·&nbsp; `⚖ one budget`
+`◐ tokens` &nbsp;·&nbsp; `▣ primitives` &nbsp;·&nbsp; `⬡ eleven themes` &nbsp;·&nbsp; `⚖ one budget`
 
 </div>
 
@@ -59,7 +59,7 @@ that a script proves on every one of them.
 $ node scripts/contrast.mjs
 
   GLASS — CONTRAST BUDGET
-  8 themes x 2 grounds = 16 palettes
+  11 themes x 2 grounds = 22 palettes
   text 4.5:1 (WCAG 1.4.3) · graphic 3.0:1 (WCAG 1.4.11) · fill delta 1.10:1
 
   PALETTE           ink/plane  ink/glass ink2/plane ink2/glass  acc/plane  acc/glass acc2/plane acc2/glass
@@ -68,7 +68,7 @@ $ node scripts/contrast.mjs
   weft · light          16.11      15.47       7.52       7.22       5.11       4.91       6.95       6.68
   …
 
-  PASS — 814/814 assertions hold across 16 palettes.
+  PASS — 1111/1111 assertions hold across 22 palettes.
 ```
 
 ---
@@ -83,7 +83,7 @@ $ node scripts/contrast.mjs
 - [System design](#-system-design)
 - [Install and use](#-install-and-use)
 - [The token grammar](#-the-token-grammar)
-- [The eight themes](#-the-eight-themes)
+- [The eleven themes](#-the-eleven-themes)
 - [The contrast law](#-the-contrast-law)
 - [The components](#-the-components)
 - [Workspace shells](#workspace-shells)
@@ -106,7 +106,7 @@ No build step, no server, no runtime dependency. Clone it, prove it, open it:
 git clone https://github.com/abheet19/glass.git
 cd glass
 
-node scripts/contrast.mjs      # prove the colour law before you trust it → PASS 814/814
+node scripts/contrast.mjs      # prove the colour law before you trust it → PASS 1111/1111
 open demo/index.html           # the whole Studio app, straight off disk (or just open the live site)
 ```
 
@@ -125,7 +125,7 @@ Regenerate the demo reel, or run the full gate:
 ```bash
 npm install && npx playwright install chromium
 node tools/capture-reel60.mjs   # → docs/media/glass-reel.mp4 (60fps) + docs/media/glass-demo.gif
-npm run validate                # source hygiene + 814 contrast assertions + real-browser acceptance
+npm run validate                # source hygiene + 1111 contrast assertions + real-browser acceptance
 ```
 
 Full consumption options (submodule, Tailwind preset, JSON, jsDelivr CDN) are in [Install and use](#-install-and-use).
@@ -210,8 +210,8 @@ source hex is recorded in its theme file as the documented origin.
 The one piece of real engineering here is the **contrast engine**, `scripts/contrast.mjs` — a
 zero-dependency colour compiler that treats "does this palette pass WCAG?" as a build check, not a
 manual audit. It never opens a browser and never calls a library. It parses the stylesheets itself,
-resolves the cascade, does the colour math by hand, and exits non-zero if any of **16 palettes**
-(8 themes × 2 grounds) drifts out of budget.
+resolves the cascade, does the colour math by hand, and exits non-zero if any of **22 palettes**
+(11 themes × 2 grounds) drifts out of budget.
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#142d35','primaryTextColor':'#e6f4f1','primaryBorderColor':'#2ed3c6','lineColor':'#647c8d','fontSize':'14px'}}}%%
@@ -220,7 +220,7 @@ flowchart LR
     P --> O["oklch() → sRGB<br/><i>with gamut mapping</i>"]
     O --> MIX["color-mix(in srgb)<br/>+ alpha compositing"]
     MIX --> WCAG["WCAG 2.2 ratios<br/>vs each token's worst backdrop"]
-    WCAG --> G{"814 assertions<br/>hold on all 16?"}
+    WCAG --> G{"1111 assertions<br/>hold on all 22?"}
     G -->|yes| PASS["exit 0 · rebuild tokens.json · ship"]
     G -->|no| FAIL["exit 1 · block CI & Pages"]
     classDef proof fill:#143b2b,stroke:#3ecf8e,color:#e6f4f1
@@ -447,7 +447,7 @@ And the accents drop 28 lightness points, because the same colour cannot clear 4
 
 ---
 
-## ⬡ The eight themes
+## ⬡ The eleven themes
 
 Eight numbers each. The mark hex is the documented origin of the hue; the lightness comes from the
 law. Both resolved accents below are printed by `contrast.mjs --emit-json`.
@@ -462,6 +462,9 @@ law. Both resolved accents below are printed by `contrast.mjs --emit-json`.
 | **health** | HealthFlow · clinical | `#5EE6A8` → `#3ECF8E` → `#1E9A66`, ground `#0A0D0B` | `#49D497` | `#0A764E` |
 | **rephrase** | Smart-Rephraser-Lite | `#B98BFF` → `#7C4DFF` → `#5A3FA0`, ground `#0B0A10` | `#C5A4FD` | `#7444B2` |
 | **detect** | AI-Detector extension | `#F76B8A` → `#E8496C` → `#B02E4C`, ground `#0D0A0C` | `#FD93A6` | `#AE254E` |
+| **graphite** | neutral slate | quiet cool-grey accents | `#AFB8C4` | `#596473` |
+| **warm** | neutral warm option | amber → soft orange | `#E5AB59` | `#875800` |
+| **mono** | neutral monochrome option | near-zero chroma | `#B6B7BA` | `#616366` |
 
 A whole theme file, in full:
 
@@ -485,7 +488,7 @@ chroma and its light one, both capped at what sRGB can actually hold.
 
 Lightness is absent for the opposite reason: it is the one component contrast depends on, so it
 belongs to the system. `contrast.mjs` asserts the resolved ladder is numerically identical across all
-eight themes on both grounds — spread `0.00` points, and it prints that.
+eleven themes on both grounds — spread `0.00` points, and it prints that.
 
 Violet is where the gamut bites hardest: `#7C4DFF` carries C 0.247 at its own L 57.9%, but only
 C 0.129 survives at L 78%. The dark rephrase accent is noticeably calmer than its mark. That is the
@@ -498,7 +501,7 @@ gamut, not a preference.
 ## ⚖ The contrast law
 
 `scripts/contrast.mjs` is a generalisation of [Zeno's own budget script](https://github.com/abheet19/Zeno).
-Zeno's version verified one palette pair. This one verifies sixteen, and **refuses to let a theme opt
+Zeno's version verified one palette pair. This one verifies twenty-two, and **refuses to let a theme opt
 out.** Dependency-free — it parses the CSS, resolves `var()`, `oklch()` (with real sRGB gamut
 mapping), `color-mix(in srgb, …)` and alpha compositing itself.
 
@@ -509,15 +512,15 @@ $ node scripts/contrast.mjs --theme weft
 $ node scripts/contrast.mjs --emit-json # rebuild src/tokens.json
 ```
 
-**814 assertions, all of which must hold:**
+**1111 assertions, all of which must hold:**
 
 | | What it asserts |
 |:--:|---|
-| 📏 | **4.5:1 text** and **3:1 graphic**, against the worst backdrop each token is permitted on — on all 16 palettes |
+| 📏 | **4.5:1 text** and **3:1 graphic**, against the worst backdrop each token is permitted on — on all 22 palettes |
 | 🪟 | text on **glass**, measured against `--gl-worst` rather than guessed at |
 | 🧊 | the two **light blocks** are identical, declaration for declaration |
 | 🔒 | every theme file declares **exactly the eight seeds and nothing else** |
-| 📐 | the resolved **lightness ladder** is numerically identical across all eight themes |
+| 📐 | the resolved **lightness ladder** is numerically identical across all eleven themes |
 | 🔗 | every `var()` in all ten stylesheets **resolves to a property that exists** |
 | ▤ | every state fill **separates from its plane**, and no two collapse onto the same greyscale luminance |
 | 🔤 | every state has a **unique glyph and a unique word** — colour is never the only channel |
@@ -669,10 +672,10 @@ design language — so the demo is both the reference and the dogfood.
 
 | Screen | What it is |
 |---|---|
-| **Onboarding** | Two steps, shown once (a `localStorage` flag, reset from the sidebar or the avatar menu): pick one of the eight real accents, then a ground. Both choices are the live `data-glass`/`data-theme` attributes, not a rehearsal. |
+| **Onboarding** | Two steps, shown once (a `localStorage` flag, reset from the sidebar or the avatar menu): pick one of the eleven real accents, then a ground. Both choices are the live `data-glass`/`data-theme` attributes, not a rehearsal. |
 | **Overview** | A hero, then four **live** stat tiles — pairs passing right now, components documented, themes on shared tokens, the active palette — each read out of the same `getComputedStyle` pipeline as the ramp and the budget, not typed numbers. |
 | **Library → Components** | A searchable, filterable grid of every real component (primitives, forms, navigation, feedback, data — 21 entries, always `COMPONENTS.length`, never hand-counted). Opening one goes to a **Detail** screen with Preview / Tokens / Code / Accessibility tabs — Tokens and Accessibility are computed live at the current theme, ground and WCAG target; Code is copyable. |
-| **Library → Foundations** | The ramp, the law (the same 15 pairs `scripts/contrast.mjs` checks, computed in the browser), type & radii, and the eight-theme gallery — unchanged in substance from the previous single-page layout, just organised as a tab. |
+| **Library → Foundations** | The ramp, the law (the same 15 pairs `scripts/contrast.mjs` checks, computed in the browser), type & radii, and the eleven-theme gallery — unchanged in substance from the previous single-page layout, just organised as a tab. |
 | **Library → Patterns** | The workspace shell specimen, verbatim in behaviour (file tabs, dock tabs, tree disclosure, resizable split, composer) — just relocated off the main scroll and into its own pane. |
 | **Settings** | Appearance (ground, accent, reduce-transparency — a real `.switch` on a native checkbox), Accessibility (the **AA/AAA target**, a new live toggle: AAA raises text to 7:1 per WCAG 1.4.6; WCAG defines no stricter tier for non-text contrast, so graphic pairs hold at 3:1 either way — the copy says so rather than fudging a number), Projects (the eight source repositories, each a real `github.com/abheet19/<repo>` link — no fabricated version or sync-time), and Install (the actual, honest install paths: git clone, submodule, plain CSS, verify — this package is **not on npm**, and the panel never pretends otherwise). |
 
@@ -731,7 +734,7 @@ ShieldAI and Textify also vendor committed Glass CSS with the MIT license. Their
 ### Verify the demo
 
 ```console
-npm run check              # 814 numerical/structural assertions, 16 palettes
+npm run check              # 1111 numerical/structural assertions, 22 palettes
 npm install
 npx playwright install chromium
 npm run test:browser       # 15 groups covering onboarding, the Studio shell, the command
@@ -740,7 +743,7 @@ npm run test:browser       # 15 groups covering onboarding, the Studio shell, th
 ```
 
 Every visible demo action returns an observable result. Onboarding, the command palette and
-shortcuts overlay, all eight themes on both grounds at both WCAG targets, roving-tabindex tab
+shortcuts overlay, all eleven themes on both grounds at both WCAG targets, roving-tabindex tab
 strips, the library's search and category filters, component detail tabs, native form specimens,
 menus, tooltips, toasts, the confirm modal, workspace files, panel toggles, tree disclosure, split
 resize, all five tool tabs, the composer, and structural accessibility (no duplicate IDs, no
@@ -814,12 +817,12 @@ Read this before you rely on it, rather than discover it later.
   `<Button>`, no React, no Web Component, and no plan for one — the whole point is that projects on
   different stacks (plain CSS, Vite, Tailwind + MUI, a browser extension) can share the *tokens*
   and the *markup contract*, not a JS runtime.
-- **Integration is per project.** Theme files exist for all eight source palettes, but that does not mean every app has migrated every component. Zeno, Weft and Vantage consume shared tokens; Textify's current source also vendors its theme and primitives. Check each consumer's current deployment and test evidence before describing it as verified. A later app-level CSS declaration can still override a safer shared token.
+- **Integration is per project.** Theme files exist for all eleven source themes, but that does not mean every app has migrated every component. Zeno, Weft and Vantage consume shared tokens; Textify's current source also vendors its theme and primitives. Check each consumer's current deployment and test evidence before describing it as verified. A later app-level CSS declaration can still override a safer shared token.
 - **No pixel-baseline regression suite.** The contrast budget and demo behavior are machine-checked; screenshots still need human review for visual quality.
 - **`--gl-worst` is a model, not a measurement of your page.** It is the worst realistic composite
   behind a pane. If you put glass over a photograph, the budget cannot help you — measure that case
   directly.
-- **The dark ground uses one lightness ladder for all eight themes.** Faithful to the marks in hue,
+- **The dark ground uses one lightness ladder for all eleven themes.** Faithful to the marks in hue,
   approximately faithful in ground lightness — each source ground sits within 1.8 L points of the
   system's 14%, and the ladder wins.
 - **Tailwind v3 preset only.** For v4, the mapping is the same but goes in `@theme inline`.
