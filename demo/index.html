@@ -389,6 +389,128 @@ pre.code-block .tag { color: var(--accent); }
 .strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; height: 26px; border-radius: 6px; overflow: hidden; }
 .strip i { display: block; }
 @media (max-width: 640px) { .gal-row { grid-template-columns: 1fr; } }
+
+/* =============================================================================
+   GALLERY EXPANSION — demo-only layout for the full component library, the
+   per-project "what it uses" view, and the kitchen-sink page. Like everything
+   above it, this block invents no colour, radius, duration or font: every value
+   is a token from ../src, so the contrast law still governs what you see. Glass
+   (blur + translucency + specular edge) is applied ONLY to chrome/overlay
+   surfaces here; data and readable content sit on opaque planes.
+   ============================================================================= */
+
+/* ---- library: grouped section headers over the card grid ------------------- */
+.gallery-group-label {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin: var(--sp-6) 0 0;
+  font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .09em; color: var(--ink-3);
+}
+.gallery-group-label:first-child { margin-top: 0; }
+.gallery-group-label .ggl-count { color: var(--ink-3); font-weight: 600; }
+.gallery-group-label .ggl-rule { flex: 1; height: 1px; background: var(--line); }
+
+/* ---- card preview: show a couple of live states per component -------------- */
+.comp-preview { flex-wrap: wrap; gap: var(--sp-2) var(--sp-3); }
+
+/* ---- detail: the live states matrix + "when to use" note ------------------- */
+.states-panel { margin-top: var(--sp-4); }
+.states-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: var(--sp-4);
+}
+.state-cell { display: flex; flex-direction: column; gap: var(--sp-2); align-items: flex-start; }
+.state-cell .state-tag {
+  font-family: var(--font-mono); font-size: .66rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3);
+}
+.state-cell .state-stage { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); min-height: 34px; }
+.usage-note {
+  display: flex; gap: var(--sp-2); align-items: flex-start;
+  margin: var(--sp-4) 0 0; padding-top: var(--sp-4); border-top: 1px solid var(--line);
+  font-size: var(--fs-0); color: var(--ink-2); line-height: var(--lh-2);
+}
+.usage-note b { color: var(--ink); font-weight: 650; }
+.usage-note svg { width: 15px; height: 15px; flex: none; color: var(--accent); margin-top: 1px; }
+
+/* ---- action variants composed from tokens (no new colour) ------------------ */
+.btn-danger { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); background: var(--raised); }
+.btn-danger:hover { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--raised)); }
+.btn-dots { display: inline-flex; gap: 3px; align-items: center; }
+.btn-dots i { width: 4px; height: 4px; border-radius: var(--r-pill); background: currentColor; opacity: .55; animation: gl-dots 1s var(--ease) infinite; }
+.btn-dots i:nth-child(2) { animation-delay: .15s; }
+.btn-dots i:nth-child(3) { animation-delay: .30s; }
+@keyframes gl-dots { 0%, 100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
+
+/* ---- inputs: native range on the accent (theme-aware, no new colour) ------- */
+.range { width: 100%; min-height: var(--target-min); accent-color: var(--accent); cursor: pointer; }
+.range:focus-visible { outline: var(--focus-w) solid var(--focus); outline-offset: var(--focus-off); }
+
+/* ---- surfaces: an opaque list of rows -------------------------------------- */
+.list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; background: var(--surface); width: 100%; }
+.list-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--line); color: var(--ink); font-size: var(--fs-0); transition: background var(--t-fast) var(--ease); }
+.list-row:first-child { border-top: none; }
+.list-row:hover { background: var(--raised); }
+.list-row .lr-main { flex: 1; min-width: 0; }
+.list-row .lr-title { color: var(--ink); font-weight: 600; }
+.list-row .lr-sub { color: var(--ink-2); font-size: .74rem; }
+
+/* ---- feedback: opaque popover (readable content is never on glass) --------- */
+.popover-demo { position: relative; display: inline-block; }
+.popover {
+  position: absolute; top: calc(100% + var(--sp-2)); left: 0; z-index: var(--z-dropdown);
+  width: 17rem; padding: var(--sp-4);
+  background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2);
+  box-shadow: 0 14px 34px -16px oklch(0% 0 0 / .5);
+}
+.popover p { margin: 0; }
+
+/* ---- feedback: determinate progress ring (conic accent over track) --------- */
+.progress-ring { position: relative; width: 66px; height: 66px; flex: none; border-radius: var(--r-pill); background: conic-gradient(var(--accent) calc(var(--pr, 68) * 1%), var(--line) 0); display: grid; place-items: center; }
+.progress-ring::before { content: ""; width: 48px; height: 48px; border-radius: var(--r-pill); background: var(--surface); }
+.progress-ring .pr-label { position: absolute; font-family: var(--font-mono); font-size: var(--fs-0); font-weight: 600; color: var(--ink); }
+
+/* ---- overlays: an opaque side sheet, drawn inside a bounded stage ----------- */
+.sheet-stage { position: relative; width: 100%; min-height: 12rem; border-radius: var(--r-2); border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
+.sheet-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 66%, transparent); }
+.sheet-panel { position: absolute; inset: 0 0 0 auto; width: min(17rem, 74%); padding: var(--sp-4); background: var(--surface); border-left: 1px solid var(--line); box-shadow: var(--gl-shadow); display: flex; flex-direction: column; gap: var(--sp-3); }
+
+/* ---- per-project "what it uses" -------------------------------------------- */
+.proj-hero { display: flex; align-items: center; gap: var(--sp-5); flex-wrap: wrap; }
+.proj-hero-swatch { width: 60px; height: 60px; flex: none; border-radius: var(--r-3); border: 1px solid var(--gl-edge); box-shadow: inset 0 1px 0 var(--gl-spec); }
+.proj-hero-copy { min-width: 12rem; flex: 1 1 16rem; }
+.uses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: var(--sp-4); }
+.use-card { display: flex; flex-direction: column; gap: var(--sp-3); text-align: left; cursor: pointer; }
+.use-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.use-stage { min-height: 5.5rem; border-radius: var(--r-1); background: var(--bg); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--sp-2); padding: var(--sp-3); overflow: hidden; }
+.use-name { font-family: var(--font-mono); font-weight: 650; font-size: var(--fs-1); color: var(--ink); }
+.use-role { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-3); }
+.use-note { font-size: var(--fs-0); color: var(--ink-2); margin: 0; line-height: var(--lh-2); flex: 1; }
+.use-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--line); }
+.use-tag { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+
+/* ---- kitchen sink: glass chrome floating over scrolling opaque content ----- */
+.ks-stack { display: flex; flex-direction: column; gap: var(--sp-6); }
+.ks-toolbar {
+  position: sticky; top: 0; z-index: var(--z-dropdown);
+  display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4); border-radius: var(--r-2);
+  border: 1px solid var(--gl-edge); background: var(--gl-fill);
+  -webkit-backdrop-filter: var(--gl-blur); backdrop-filter: var(--gl-blur);
+  box-shadow: var(--gl-shadow);
+}
+/* the one piece of new glass chrome respects the same escape hatches .glass
+   does: no blur under a missing backdrop-filter, reduced transparency, or the
+   manual data-flat toggle — it falls back to the opaque --raised plane. */
+@supports not (backdrop-filter: blur(1px)) { .ks-toolbar { background: var(--raised); } }
+@media (prefers-reduced-transparency: reduce) { .ks-toolbar { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--raised); } }
+:root[data-flat="1"] .ks-toolbar { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--raised); }
+.ks-toolbar .ks-tb-title { font-family: var(--font-mono); font-weight: 650; color: var(--ink); font-size: var(--fs-0); }
+.ks-toolbar .ks-tb-spacer { flex: 1; }
+.ks-prose { max-width: 64ch; color: var(--ink-2); }
+.ks-prose p { margin: 0 0 var(--sp-3); line-height: var(--lh-3); }
+.ks-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--sp-4); align-items: start; }
 </style>
 </head>
 
@@ -481,6 +603,10 @@ pre.code-block .tag { color: var(--accent); }
         <button class="workspace-tree-item nav-item" data-goto="library">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3"/></svg>
           Library <span class="nav-badge" id="libCountBadge"></span>
+        </button>
+        <button class="workspace-tree-item nav-item" data-goto="kitchen">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5 17 6l-7 3.5L3 6z"/><path d="M3 10l7 3.5L17 10"/><path d="M3 14l7 3.5L17 14"/></svg>
+          Kitchen sink
         </button>
         <button class="workspace-tree-item nav-item" data-goto="settings">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="17" y2="6"/><circle cx="12" cy="6" r="1.7" fill="currentColor" stroke="none"/><line x1="3" y1="14" x2="17" y2="14"/><circle cx="8" cy="14" r="1.7" fill="currentColor" stroke="none"/></svg>
@@ -855,6 +981,138 @@ node scripts/contrast.mjs --emit-json  <span style="color:var(--ink-3)"># rebuil
           </div>
         </div>
       </section>
+
+      <!-- ============ PROJECT — "what it uses" ============ -->
+      <section class="screen" id="screen-project" hidden>
+        <ol class="breadcrumbs">
+          <li><button data-goto="overview">Overview</button></li>
+          <li aria-current="page"><span id="pjCrumb">Project</span></li>
+        </ol>
+        <div class="card glass hero-card" style="margin:var(--sp-3) 0 var(--sp-6)">
+          <p class="kicker" id="pjKicker">what this product is built from</p>
+          <div class="proj-hero">
+            <span class="proj-hero-swatch" id="pjSwatch" aria-hidden="true"></span>
+            <div class="proj-hero-copy">
+              <h1 class="display" style="font-size:var(--fs-2);margin:0" id="pjName">Project</h1>
+              <p class="lede" id="pjRole" style="margin-top:6px">Role</p>
+            </div>
+            <a class="btn" id="pjRepo" href="https://github.com/abheet19" target="_blank" rel="noopener">Open on GitHub ↗</a>
+          </div>
+          <div class="spec-row" id="pjChips"></div>
+        </div>
+        <p class="sec-label">The glass parts this product actually consumes</p>
+        <p class="sec-note" style="margin:0 0 var(--sp-4)" id="pjIntro"></p>
+        <div class="uses-grid" id="pjUsesGrid"></div>
+        <p class="credit-line" style="padding-top:var(--sp-6)">Every specimen above is the real component at this product's accent — pick another product in the sidebar and the whole set re-skins. Grounded in each app's real surface, not invented for the demo.</p>
+      </section>
+
+      <!-- ============ KITCHEN SINK ============ -->
+      <section class="screen" id="screen-kitchen" hidden>
+        <div class="ks-stack">
+          <div class="screen-head">
+            <div>
+              <h1 class="display" style="font-size:var(--fs-2)">Kitchen sink</h1>
+              <p class="lede">One long, opaque, scrolling page with a glass toolbar pinned to the top. The house rule, demonstrated: chrome floats and blurs; data and readable content sit on solid planes and never behind the blur.</p>
+            </div>
+          </div>
+
+          <div class="ks-toolbar" id="ksToolbar">
+            <span class="ks-tb-title">glass · kitchen sink</span>
+            <span class="chip chip-mono">backdrop-filter</span>
+            <span class="ks-tb-spacer"></span>
+            <button class="btn btn-sm" id="ksToastBtn">Fire a toast</button>
+            <button class="btn btn-primary btn-sm" id="ksTopBtn">Back to top</button>
+          </div>
+
+          <div>
+            <p class="sec-label" style="margin-top:0">Live KPI tiles — opaque</p>
+            <div class="metric-grid">
+              <div class="card metric-card"><span class="metric-card-label">Palettes verified</span><span class="metric-card-value">16</span><span class="card-note">8 themes × 2 grounds</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Assertions</span><span class="metric-card-value">814</span><span class="card-note">contrast + structure, in CI</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Runtime deps</span><span class="metric-card-value">0</span><span class="card-note">no framework, no webfont</span></div>
+              <div class="card metric-card"><span class="metric-card-label">Components</span><span class="metric-card-value" id="ksCompCount">—</span><span class="card-note">across six stylesheets</span></div>
+            </div>
+          </div>
+
+          <div>
+            <p class="sec-label">A data table — opaque, scrolls inside its own frame</p>
+            <div class="table-wrap card" style="padding:0">
+              <table class="table table-striped">
+                <thead><tr><th>Theme</th><th>Origin</th><th data-numeric="true">ink / raised</th><th data-numeric="true">accent / glass</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>weft</td><td>CRDT editor</td><td data-numeric="true">14.21:1</td><td data-numeric="true">5.40:1</td><td><span class="state state-ok state-text"></span></td></tr>
+                  <tr><td>vantage</td><td>analytics</td><td data-numeric="true">13.88:1</td><td data-numeric="true">5.12:1</td><td><span class="state state-ok state-text"></span></td></tr>
+                  <tr><td>zeno</td><td>agent suite</td><td data-numeric="true">14.19:1</td><td data-numeric="true">4.85:1</td><td><span class="state state-ok state-text"></span></td></tr>
+                  <tr><td>health</td><td>clinical</td><td data-numeric="true">13.90:1</td><td data-numeric="true">5.02:1</td><td><span class="state state-ok state-text"></span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="ks-two">
+            <div class="card">
+              <span class="panel-label">A real form — labelled controls on opaque planes</span>
+              <div class="field-group" style="margin-bottom:var(--sp-4)">
+                <label class="field-label" for="ks-name">Project name</label>
+                <input class="field" id="ks-name" placeholder="lowercase-no-spaces">
+                <p class="field-hint">Lowercase, no spaces.</p>
+              </div>
+              <div class="field-group" style="margin-bottom:var(--sp-4)">
+                <label class="field-label" for="ks-theme">Accent theme</label>
+                <select class="field" id="ks-theme" aria-label="Accent theme">
+                  <option>zeno</option><option>weft</option><option>vantage</option><option>health</option>
+                </select>
+              </div>
+              <div class="field-group" style="margin-bottom:var(--sp-4)">
+                <label class="field-label" for="ks-notes">Notes</label>
+                <textarea class="field" id="ks-notes" placeholder="Anything worth remembering…"></textarea>
+              </div>
+              <div class="field-group" style="margin-bottom:var(--sp-4)">
+                <label class="field-label" for="ks-blur">Blur radius</label>
+                <input class="range" type="range" id="ks-blur" min="0" max="30" value="14" aria-label="Blur radius">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--sp-2);margin-bottom:var(--sp-4)">
+                <label class="checkbox"><input type="checkbox" checked> Verify before publish</label>
+                <label class="switch"><input type="checkbox" id="ks-reduce"> Reduce transparency</label>
+              </div>
+              <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+                <button class="btn btn-primary">Save</button>
+                <button class="btn">Cancel</button>
+                <button class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+            <div class="card">
+              <span class="panel-label">Status, counts and a determinate ring</span>
+              <div class="list" style="margin-bottom:var(--sp-4)">
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">the grammar · 390 lines</span></span><span class="badge badge-accent">core</span></div>
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">seven primitives</span></span><span class="badge">7</span></div>
+                <div class="list-row"><span class="proj-dot" style="--dot:var(--accent)"></span><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">toast · modal · tooltip</span></span><span class="badge">4</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap;margin-bottom:var(--sp-4)">
+                <div class="progress-ring" style="--pr:82" role="img" aria-label="82 percent"><span class="pr-label">82%</span></div>
+                <div style="flex:1;min-width:9rem">
+                  <div class="gauge-row"><span>Coverage</span><span class="gauge-value">82%</span></div>
+                  <div class="gauge"><span class="gauge-fill" style="width:82%"></span></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+                <span class="state state-ok state-text"></span>
+                <span class="state state-info state-text"></span>
+                <span class="chip chip-accent">accent</span>
+                <span class="chip">neutral</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ks-prose card">
+            <p class="sec-label" style="margin-top:0">Long-form text — on an opaque card, always</p>
+            <div class="ks-prose">
+              <p>Scroll this page and watch the toolbar above: it stays pinned, translucent, and refracts the content sliding underneath it. That is the only place glass belongs — the chrome, the overlays, the navigation.</p>
+              <p>Everything you are reading right now sits on an opaque <span class="mono">--surface</span> plane, because a paragraph behind a blur is a paragraph you cannot measure a contrast ratio against. The system enforces that separation in the tokens; this page simply obeys it, at 60fps, over a full screen of scrolling content.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
@@ -924,7 +1182,8 @@ var ICONS = {
   copy: '<svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="6.5" y="6.5" width="10" height="11" rx="1.6"/><path d="M4.5 13.5h-1A1.5 1.5 0 0 1 2 12V3.5A1.5 1.5 0 0 1 3.5 2H12a1.5 1.5 0 0 1 1.5 1.5v1"/></svg>',
   sun: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="3.6"/><line x1="10" y1="1.6" x2="10" y2="3.4"/><line x1="10" y1="16.6" x2="10" y2="18.4"/><line x1="1.6" y1="10" x2="3.4" y2="10"/><line x1="16.6" y1="10" x2="18.4" y2="10"/><line x1="4.3" y1="4.3" x2="5.5" y2="5.5"/><line x1="14.5" y1="14.5" x2="15.7" y2="15.7"/><line x1="4.3" y1="15.7" x2="5.5" y2="14.5"/><line x1="14.5" y1="5.5" x2="15.7" y2="4.3"/></svg>',
   moon: '<svg viewBox="0 0 20 20" fill="currentColor" stroke="none"><path d="M15.5 12.4A7 7 0 1 1 7.6 4.5a5.6 5.6 0 0 0 7.9 7.9Z"/></svg>',
-  auto: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 3v14a7 7 0 0 0 0-14Z" fill="currentColor" stroke="none"/></svg>'
+  auto: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 3v14a7 7 0 0 0 0-14Z" fill="currentColor" stroke="none"/></svg>',
+  info: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.4" r="0.4" fill="currentColor"/></svg>'
 };
 
 /* ---------------- colour maths, identical to scripts/contrast.mjs -------- */
@@ -1180,13 +1439,193 @@ var COMPONENTS = [
     code: '<div class="avatar">AS</div>',
     rows: [['--on-accent on --accent', 'text', '--on-accent', '--accent']] }
 ];
+
+/* -- The original seven-file set, augmented in place with the owner's section
+   grouping and a one-line "when to use", then extended with the components a
+   full library needs. The 21 definitions above are left byte-for-byte the
+   contract the browser tests already exercise; everything new is added here so
+   nothing that ships in ../src is misrepresented. Genuinely-shipped classes
+   carry their real file; compositions built from tokens + primitives say so. -- */
+var GEAR_ICON = '<svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4"/></svg>';
+var GROUP_OF = {
+  glass: 'Surfaces', card: 'Surfaces', chip: 'Surfaces', state: 'Surfaces', gauge: 'Surfaces',
+  table: 'Surfaces', badge: 'Surfaces', avatar: 'Surfaces',
+  btn: 'Actions',
+  field: 'Inputs', 'field-group': 'Inputs', checkbox: 'Inputs', radio: 'Inputs', switch: 'Inputs',
+  tabs: 'Navigation', breadcrumbs: 'Navigation', menu: 'Navigation',
+  toast: 'Feedback', tooltip: 'Feedback', skeleton: 'Feedback',
+  modal: 'Overlays'
+};
+var USE_OF = {
+  glass: 'Any floating chrome — a bar, a dock, an overlay. Never a plane that carries body text.',
+  card: 'The default home for readable content: prose, a form, a panel of data.',
+  btn: 'One primary per view; quiet .btn for the rest; ghost inside dense toolbars.',
+  field: 'Any single-line entry; the same class also dresses a textarea and a select.',
+  chip: 'A neutral label or a filter token — never a status (that is .state).',
+  state: 'A status that must survive greyscale and colour blindness — fill, bar, glyph and word.',
+  gauge: 'A determinate quantity or progress; if the amount is unknown, say so in words instead.',
+  'field-group': 'Wrap every field so its label, hint and error travel together.',
+  checkbox: 'Independent on/off options; use a switch when the change takes effect at once.',
+  radio: 'One choice out of a small, visible set.',
+  switch: 'An immediate on/off toggle for a setting that applies the moment it flips.',
+  tabs: 'Switch between peer views of one screen without navigating away.',
+  breadcrumbs: 'Show where a Detail screen sits, and offer a one-click way back up.',
+  menu: 'A short list of actions anchored to a trigger — glass, because it is chrome.',
+  toast: 'A transient confirmation of something that already happened; opaque so it always reads.',
+  tooltip: 'A one-line hint on hover or focus — never the only place information lives.',
+  skeleton: 'A placeholder while content loads; a determinate gauge if you know the amount.',
+  table: 'Dense, comparable rows of data — sortable, selectable, paginated, on opaque planes.',
+  badge: 'A count or a short status marker riding alongside a label.',
+  avatar: 'A person or a workspace, as an image or initials, with a graceful fallback.',
+  modal: 'A decision that must block everything behind it until it is resolved.'
+};
+var STATES_OF = {
+  btn: [
+    ['Primary', '<button class="btn btn-primary">Publish</button>'],
+    ['Secondary', '<button class="btn">Cancel</button>'],
+    ['Ghost', '<button class="btn btn-ghost">Skip</button>'],
+    ['Glass', '<button class="btn btn-glass">Chrome</button>'],
+    ['Destructive', '<button class="btn btn-danger">Delete</button>'],
+    ['Icon', '<button class="workspace-icon-button" aria-label="Settings">' + GEAR_ICON + '</button>'],
+    ['Loading', '<button class="btn btn-primary" aria-busy="true" disabled>Publishing <span class="btn-dots"><i></i><i></i><i></i></span></button>'],
+    ['Disabled', '<button class="btn" disabled>Disabled</button>']
+  ],
+  chip: [
+    ['Neutral', '<span class="chip">draft</span>'],
+    ['Accent', '<span class="chip chip-accent">synced</span>'],
+    ['Mono', '<span class="chip chip-mono">v0.1.0</span>']
+  ],
+  state: [
+    ['OK', '<span class="state state-ok state-text"></span>'],
+    ['Warning', '<span class="state state-warn state-text"></span>'],
+    ['Error', '<span class="state state-bad state-text"></span>'],
+    ['Info', '<span class="state state-info state-text"></span>']
+  ],
+  gauge: [
+    ['Accent', '<div class="gauge" style="width:120px"><span class="gauge-fill" style="width:64%"></span></div>'],
+    ['OK', '<div class="gauge gauge-ok" style="width:120px"><span class="gauge-fill" style="width:100%"></span></div>'],
+    ['Warn', '<div class="gauge gauge-warn" style="width:120px"><span class="gauge-fill" style="width:48%"></span></div>'],
+    ['Empty', '<div class="gauge" style="width:120px"><span class="gauge-fill" style="width:0"></span></div>']
+  ],
+  checkbox: [
+    ['Checked', '<label class="checkbox"><input type="checkbox" checked> On</label>'],
+    ['Off', '<label class="checkbox"><input type="checkbox"> Off</label>'],
+    ['Disabled', '<label class="checkbox"><input type="checkbox" checked disabled> Locked</label>']
+  ],
+  radio: [
+    ['Selected', '<label class="radio"><input type="radio" name="st-radio" checked> AA</label>'],
+    ['Off', '<label class="radio"><input type="radio" name="st-radio"> AAA</label>'],
+    ['Disabled', '<label class="radio"><input type="radio" name="st-radio-2" disabled> N/A</label>']
+  ],
+  switch: [
+    ['On', '<label class="switch"><input type="checkbox" checked> Enabled</label>'],
+    ['Off', '<label class="switch"><input type="checkbox"> Disabled</label>'],
+    ['Locked', '<label class="switch"><input type="checkbox" disabled> Locked</label>']
+  ],
+  badge: [
+    ['Count', '<span class="badge">12</span>'],
+    ['Accent', '<span class="badge badge-accent">new</span>'],
+    ['OK', '<span class="badge badge-ok">pass</span>'],
+    ['Warning', '<span class="badge badge-warn">stale</span>'],
+    ['Error', '<span class="badge badge-bad">fail</span>'],
+    ['Dot', '<span class="badge-dot badge-info"></span>']
+  ],
+  avatar: [
+    ['Initials', '<div class="avatar">AS</div>'],
+    ['Small', '<div class="avatar avatar-sm">Z</div>'],
+    ['Large', '<div class="avatar avatar-lg">W</div>'],
+    ['Fallback', '<div class="avatar avatar-fallback">?</div>'],
+    ['Group', '<div class="avatar-group"><span class="avatar avatar-sm">Z</span><span class="avatar avatar-sm">W</span><span class="avatar avatar-sm avatar-fallback">V</span></div>']
+  ]
+};
+COMPONENTS.forEach(function (c) {
+  c.group = GROUP_OF[c.id] || 'Surfaces';
+  if (USE_OF[c.id]) c.use = USE_OF[c.id];
+  if (STATES_OF[c.id]) c.states = STATES_OF[c.id];
+});
+COMPONENTS = COMPONENTS.concat([
+  { id: 'textarea', name: 'textarea.field', cat: 'forms', file: 'forms.css', group: 'Inputs',
+    blurb: 'The same .field class, extended for multi-line entry — a vertical-only resize handle and a taller floor, no colour re-themed.',
+    use: 'Multi-line free text: a note, a description, a message.',
+    tokens: [['--line', 'color'], ['--accent', 'color'], ['--target-min', 'static', '3× min-height']],
+    code: '<textarea class="field" rows="3"></textarea>',
+    rows: [['--ink on --bg', 'text', '--ink', '--bg']] },
+  { id: 'select', name: 'select.field', cat: 'forms', file: 'forms.css', group: 'Inputs',
+    blurb: 'A native picker wearing .field with a token-drawn caret — real keyboard and screen-reader behaviour, no custom listbox to get wrong.',
+    use: 'One choice from a longer list, where a row of radios would be too many.',
+    tokens: [['--ink-2', 'color'], ['--line', 'color']],
+    code: '<select class="field">\n  <option>zeno</option>\n</select>',
+    rows: [['--ink on --bg', 'text', '--ink', '--bg']],
+    states: [
+      ['Default', '<select class="field" aria-label="Theme" style="width:170px"><option>zeno</option></select>'],
+      ['Disabled', '<select class="field" aria-label="Theme, disabled" disabled style="width:170px"><option>zeno</option></select>']
+    ] },
+  { id: 'slider', name: 'range · accent-color', cat: 'forms', file: 'forms.css', group: 'Inputs',
+    blurb: 'A native range tinted with accent-color: var(--accent) — the browser owns the track, thumb and keyboard; the token owns the hue; forced-colors keeps working. The same technique forms.css uses on the checkbox and radio.',
+    use: 'A bounded numeric value where the feel matters more than the exact number.',
+    tokens: [['--accent', 'color'], ['--target-min', 'static', 'hit area']],
+    code: '<input type="range" style="accent-color: var(--accent)">',
+    rows: [] },
+  { id: 'stat', name: '.metric-card', cat: 'data', file: 'workspace.css', group: 'Surfaces',
+    blurb: 'The KPI/stat tile from workspace.css — an opaque plane, a monospaced tabular value, a label and a note. The four Overview tiles in this app are exactly this.',
+    use: 'A single headline number with a label — a dashboard KPI, a live count.',
+    tokens: [['--surface', 'color'], ['--ink', 'color'], ['--fs-2', 'static', 'value size']],
+    code: '<div class="metric-card">\n  <span class="metric-card-label">Pairs</span>\n  <span class="metric-card-value">15/15</span>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'palette', name: 'Command palette', cat: 'nav', file: 'feedback + navigation', group: 'Navigation',
+    blurb: 'The Cmd-K launcher this app runs on — a filtered list of actions in a glass overlay, built from the shipped scrim and menu-item primitives, driven by the keyboard.',
+    use: 'A fast, searchable way to reach any action or screen without hunting the UI.',
+    tokens: [['--gl-fill', 'color'], ['--z-modal', 'static', '600']],
+    code: '<div class="modal-scrim">\n  <div class="modal glass">\n    <input> … menu-item list …\n  </div>\n</div>',
+    rows: [['--ink on --gl-worst', 'text', '--ink', '--gl-worst']] },
+  { id: 'segmented', name: 'Segmented control', cat: 'nav', file: 'composed · .btn', group: 'Navigation',
+    blurb: 'A row of mutually exclusive buttons that pick one option in place — the ground picker in Settings is exactly this, composed from .btn and aria-pressed. It does not change panes; it sets a value.',
+    use: 'Two to four exclusive options you want visible at once, chosen in place.',
+    tokens: [['--raised', 'color'], ['--line', 'color']],
+    code: '<div class="seg" role="group">\n  <button aria-pressed="true">Day</button>\n  <button aria-pressed="false">Week</button>\n</div>',
+    rows: [['--ink on --raised', 'text', '--ink', '--raised']],
+    states: [
+      ['Day', '<div class="seg" role="group" aria-label="Example A"><button class="btn" aria-pressed="true">Day</button><button class="btn" aria-pressed="false">Week</button></div>'],
+      ['Week', '<div class="seg" role="group" aria-label="Example B"><button class="btn" aria-pressed="false">Day</button><button class="btn" aria-pressed="true">Week</button></div>']
+    ] },
+  { id: 'list', name: 'List rows', cat: 'data', file: 'composed · data planes', group: 'Surfaces',
+    blurb: 'A stack of opaque rows on --surface with hairline separators and a --raised hover — the two planes the table already stripes with, composed as a scannable list.',
+    use: 'A short, scannable set of items: files, members, recent activity.',
+    tokens: [['--surface', 'color'], ['--raised', 'color'], ['--line', 'color']],
+    code: '<div class="list">\n  <div class="list-row">…</div>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface'], ['--ink-2 on --surface', 'text', '--ink-2', '--surface']] },
+  { id: 'popover', name: 'Popover', cat: 'feedback', file: 'composed · opaque', group: 'Feedback',
+    blurb: 'An opaque panel anchored to a control, holding real content — heavier than a hint, lighter than a dialog. Readable content, so it is a plane, not glass.',
+    use: 'A small burst of content or controls tied to one trigger, dismissed on click-away.',
+    tokens: [['--raised', 'color'], ['--line', 'color']],
+    code: '<div class="popover">…opaque content…</div>',
+    rows: [['--ink on --raised', 'text', '--ink', '--raised'], ['--ink-2 on --raised', 'text', '--ink-2', '--raised']] },
+  { id: 'progress', name: 'Progress ring', cat: 'feedback', file: 'composed · --accent', group: 'Feedback',
+    blurb: 'A determinate ring — the circular sibling of the shipped .gauge bar, drawn with a conic accent over the track. Determinate only: there is still no indeterminate spinner in this system.',
+    use: 'A determinate completion percentage where a compact circular read fits better than a bar.',
+    tokens: [['--accent', 'color'], ['--line', 'color']],
+    code: '<div class="progress-ring" style="--pr:82"></div>',
+    rows: [['--accent on --line (graphic)', 'ui', '--accent', '--line']],
+    states: [
+      ['12%', '<div class="progress-ring" style="--pr:12" role="img" aria-label="12 percent"><span class="pr-label">12%</span></div>'],
+      ['64%', '<div class="progress-ring" style="--pr:64" role="img" aria-label="64 percent"><span class="pr-label">64%</span></div>'],
+      ['100%', '<div class="progress-ring" style="--pr:100" role="img" aria-label="100 percent"><span class="pr-label">100%</span></div>']
+    ] },
+  { id: 'drawer', name: 'Drawer / sheet', cat: 'feedback', file: 'composed · scrim', group: 'Overlays',
+    blurb: 'An opaque panel that slides in from an edge over a dimmed scrim, for a side task without leaving the page. Same scrim discipline as the dialog; the panel is a plane because it carries content.',
+    use: 'A secondary flow — filters, details, a form — beside the current screen.',
+    tokens: [['--surface', 'color'], ['--gl-shadow', 'static', 'cast + specular edge']],
+    code: '<div class="modal-scrim">\n  <aside class="drawer">…</aside>\n</div>',
+    rows: [['--ink on --surface', 'text', '--ink', '--surface']] }
+]);
 var PATTERN = { id: 'workspace', name: 'Workspace shell', cat: 'pattern', file: 'workspace.css',
   blurb: 'The three-pane editor-and-agent pattern — explorer, split editor with a resizable divider, a five-tab dock, and a command composer — every one of the eight source projects docks its own tools into.',
   tokens: [['--z-dropdown', 'static', '300 (mobile overlay panels)'], ['--r-3', 'static', '16px frame']],
   code: '<div class="workspace-frame">\n  <header class="workspace-titlebar">…</header>\n  <div class="workspace-body">…</div>\n</div>',
   rows: [['--ink on --bg', 'text', '--ink', '--bg']] };
 var ALL_COMPONENTS = COMPONENTS.concat([PATTERN]);
-var CATS = [['all', 'All'], ['primitive', 'Primitives'], ['forms', 'Forms'], ['nav', 'Navigation'], ['feedback', 'Feedback'], ['data', 'Data']];
+var GROUP_ORDER = ['Actions', 'Inputs', 'Surfaces', 'Navigation', 'Feedback', 'Overlays'];
+var CATS = [['all', 'All']].concat(GROUP_ORDER.map(function (g) { return [g, g]; }));
 var CAT_LABEL = { primitive: 'Primitives', forms: 'Forms', nav: 'Navigation', feedback: 'Feedback', data: 'Data', pattern: 'Patterns' };
 
 /* ---------------- state ---------------- */
@@ -1244,6 +1683,7 @@ function applyTheme() {
 
   $('#flatToggle').checked = state.flat;
   $('#flatToggleMenu').checked = state.flat;
+  var ksReduce = $('#ks-reduce'); if (ksReduce) ksReduce.checked = state.flat;
 
   $$('#settingsAccentRow [data-theme-btn]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.themeBtn === state.accent)); });
   $$('#obAccentGrid [data-ob-accent]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.obAccent === state.accent)); });
@@ -1328,7 +1768,7 @@ function refreshLiveNumbers() {
 /* ---------------- screen router ---------------- */
 function setScreen(name) {
   state.screen = name;
-  ['overview', 'library', 'detail', 'settings'].forEach(function (s) { $('#screen-' + s).hidden = (s !== name); });
+  ['overview', 'library', 'detail', 'settings', 'project', 'kitchen'].forEach(function (s) { $('#screen-' + s).hidden = (s !== name); });
   $$('.nav-item[data-goto]').forEach(function (b) { b.toggleAttribute('aria-current', b.dataset.goto === name); if (b.dataset.goto === name) b.setAttribute('aria-current', 'page'); });
   $('#sidebar').classList.remove('open');
   $('#hamburgerBtn').setAttribute('aria-expanded', 'false');
@@ -1392,6 +1832,16 @@ function miniPreview(c) {
     table: '<div style="font-size:.55rem;width:80%"><div style="display:flex;justify-content:space-between;color:var(--ink-3);border-bottom:1px solid var(--line);padding-bottom:3px"><span>Row</span><span>Val</span></div></div>',
     badge: '<span class="badge badge-accent">19</span>',
     avatar: '<div class="avatar" style="width:30px;height:30px;font-size:.6rem">AS</div>',
+    textarea: '<div class="field" aria-hidden="true" style="width:82%;height:38px;padding:6px 8px;font-size:.58rem;color:var(--ink-3)">Multi-line…</div>',
+    select: '<div class="field mini-field" aria-hidden="true" style="display:flex;align-items:center;padding-left:8px;color:var(--ink);position:relative">zeno<span style="position:absolute;right:8px;color:var(--ink-2)">▾</span></div>',
+    slider: '<div aria-hidden="true" style="width:78%;height:4px;border-radius:var(--r-pill);background:var(--line);position:relative"><span style="position:absolute;left:58%;top:-5px;width:14px;height:14px;border-radius:50%;background:var(--accent)"></span></div>',
+    stat: '<div aria-hidden="true" style="width:82%"><div style="font-size:.55rem;color:var(--ink-2)">Passing</div><div style="font-family:var(--font-mono);font-size:1.05rem;color:var(--ink)">814</div></div>',
+    palette: '<div aria-hidden="true" style="width:82%;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:.56rem;color:var(--ink-2)"><span class="kbd" style="font-size:.52rem">⌘K</span> Search…</div>',
+    segmented: '<div aria-hidden="true" style="display:inline-flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:6px;background:var(--bg)"><span style="font-size:.58rem;padding:2px 7px;border-radius:4px;background:var(--raised);color:var(--ink)">Dark</span><span style="font-size:.58rem;padding:2px 7px;color:var(--ink-2)">Light</span></div>',
+    list: '<div aria-hidden="true" style="width:82%;font-size:.55rem"><div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--line);color:var(--ink-2)"><span>tokens.css</span><span>core</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:var(--ink-2)"><span>forms.css</span><span>7</span></div></div>',
+    popover: '<div aria-hidden="true" style="font-size:.58rem;text-align:center"><span style="border-bottom:1px dotted var(--ink-3);color:var(--ink-2)">anchor</span><div style="margin-top:5px;background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:5px 8px;color:var(--ink)">panel</div></div>',
+    progress: '<div aria-hidden="true" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(var(--accent) 66%, var(--line) 0);display:grid;place-items:center"><span style="width:30px;height:30px;border-radius:50%;background:var(--surface)"></span></div>',
+    drawer: '<div aria-hidden="true" style="width:82%;height:60%;position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)"><div style="position:absolute;inset:0 0 0 auto;width:54%;background:var(--surface);border-left:1px solid var(--line)"></div></div>',
     workspace: '<div style="display:flex;gap:3px;width:80%;height:70%"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div><div style="flex:1;background:var(--surface);border-radius:4px"></div></div>'
   };
   return m[c.id] || '<span class="chip">' + c.name + '</span>';
@@ -1400,13 +1850,13 @@ function renderGrid() {
   var grid = $('#compGrid'); grid.innerHTML = '';
   var term = state.search.trim().toLowerCase();
   var list = COMPONENTS.filter(function (c) {
-    if (state.cat !== 'all' && c.cat !== state.cat) return false;
+    if (state.cat !== 'all' && c.group !== state.cat) return false;
     if (term && c.name.toLowerCase().indexOf(term) < 0 && c.blurb.toLowerCase().indexOf(term) < 0) return false;
     return true;
   });
   $('#gridEmpty').hidden = list.length > 0;
   $('#gridEmptyTerm').textContent = state.search;
-  list.forEach(function (c) {
+  function addCard(c) {
     var card = document.createElement('button');
     card.type = 'button'; card.className = 'comp-card card glass';
     card.innerHTML = '<div class="comp-preview">' + miniPreview(c) + '</div>' +
@@ -1414,6 +1864,15 @@ function renderGrid() {
       '<div class="comp-foot"><span class="comp-file">' + esc(c.file) + '</span>' + stateBadge(true) + '</div>';
     card.onclick = function () { openDetail(c.id); };
     grid.appendChild(card);
+  }
+  GROUP_ORDER.forEach(function (g) {
+    var items = list.filter(function (c) { return c.group === g; });
+    if (!items.length) return;
+    var head = document.createElement('div');
+    head.className = 'gallery-group-label';
+    head.innerHTML = '<span>' + g + '</span><span class="ggl-count">' + items.length + '</span><span class="ggl-rule"></span>';
+    grid.appendChild(head);
+    items.forEach(addCard);
   });
 }
 
@@ -1486,6 +1945,16 @@ function bigPreview(c) {
     modal: '<button class="btn" id="dpModalBtn">Open example modal</button>',
     tooltip: '<button class="btn" aria-describedby="dp-tip" style="position:relative">Hover or focus<span id="dp-tip" role="tooltip" class="tooltip" style="position:absolute;bottom:calc(100% + 6px);left:0">Rendered from the .tooltip class.</span></button>',
     skeleton: '<div style="width:100%;display:flex;flex-direction:column;gap:6px"><span class="skeleton skeleton-title"></span><span class="skeleton skeleton-text"></span><span class="skeleton skeleton-text" style="width:70%"></span></div>',
+    textarea: '<div class="field-group" style="width:280px"><label class="field-label" for="dp-ta">Notes</label><textarea class="field" id="dp-ta" rows="3" placeholder="Multi-line entry…"></textarea></div>',
+    select: '<div class="field-group" style="width:240px"><label class="field-label" for="dp-sel">Accent theme</label><select class="field" id="dp-sel"><option>zeno</option><option>weft</option><option>vantage</option></select></div>',
+    slider: '<div class="field-group" style="width:280px"><label class="field-label" for="dp-range">Blur radius</label><input class="range" type="range" id="dp-range" min="0" max="30" value="14"></div>',
+    stat: '<div class="metric-grid" style="width:100%"><div class="card metric-card"><span class="metric-card-label">Pairs passing</span><span class="metric-card-value">15/15</span><span class="card-note">live, this palette</span></div><div class="card metric-card"><span class="metric-card-label">Themes</span><span class="metric-card-value">8/8</span><span class="card-note">shared tokens</span></div></div>',
+    palette: '<div style="text-align:center"><button class="btn btn-primary" id="dpPaletteBtn">Open the command palette</button><p class="card-note" style="margin-top:var(--sp-3)">Runs the same actions clicking does — nothing here is a second code path.</p></div>',
+    segmented: '<div class="seg" role="group" aria-label="Range" id="dpSeg"><button class="btn" aria-pressed="true">Day</button><button class="btn" aria-pressed="false">Week</button><button class="btn" aria-pressed="false">Month</button></div>',
+    list: '<div class="list" style="max-width:320px"><div class="list-row"><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">the grammar</span></span><span class="badge badge-accent">core</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">seven primitives</span></span><span class="badge">7</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">overlays</span></span><span class="badge">4</span></div></div>',
+    popover: '<div class="popover-demo"><button class="btn" id="dpPopBtn" aria-expanded="false" aria-controls="dpPop">Toggle popover</button><div class="popover" id="dpPop" hidden><p style="font-weight:650;color:var(--ink);margin:0 0 6px">Opaque on purpose</p><p class="card-note">Readable content never sits on a blur — this panel is a --raised plane, measured like any card.</p></div></div>',
+    progress: '<div style="display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap"><div class="progress-ring" style="--pr:82" role="img" aria-label="82 percent complete"><span class="pr-label">82%</span></div><div style="flex:1;min-width:180px"><div class="gauge-row"><span>Linear sibling</span><span class="gauge-value">82%</span></div><div class="gauge"><span class="gauge-fill" style="width:82%"></span></div></div></div>',
+    drawer: '<div class="sheet-stage" style="max-width:420px"><div style="padding:var(--sp-4);color:var(--ink-2);font-size:var(--fs-0)">Page content, dimmed…</div><div class="sheet-scrim"></div><div class="sheet-panel"><b style="color:var(--ink)">Filters</b><p class="card-note" style="margin:0">An opaque side panel over a dimmed scrim.</p><button class="btn btn-sm" style="align-self:flex-start" id="dpSheetClose">Close</button></div></div>',
     workspace: '<p class="card-note">The full pattern lives in <button class="btn btn-sm" id="dpGotoPattern">Library → Patterns</button></p>'
   };
   return big[c.id] || ('<div style="transform:scale(1.6)">' + miniPreview(c) + '</div>');
@@ -1496,7 +1965,18 @@ function renderDetailBody() {
   var active = $('#detailTabs [aria-selected="true"]');
   var tab = active ? active.id.replace('dtab-', '') : 'preview';
   if (tab === 'preview') {
-    body.innerHTML = '<div class="preview-stage">' + bigPreview(c) + '</div>';
+    var html2 = '<div class="preview-stage">' + bigPreview(c) + '</div>';
+    if (c.states && c.states.length) {
+      html2 += '<div class="card states-panel"><span class="panel-label">States, live</span><div class="states-grid">' +
+        c.states.map(function (s) {
+          return '<div class="state-cell"><span class="state-tag">' + esc(s[0]) + '</span><div class="state-stage">' + s[1] + '</div></div>';
+        }).join('') +
+        '</div><p class="card-note" style="margin-top:var(--sp-3)">Hover or tab to any control above — :hover, :focus-visible and :active are live, from the real component.</p></div>';
+    }
+    if (c.use) {
+      html2 += '<div class="usage-note">' + ICONS.info + '<span><b>When to use.</b> ' + esc(c.use) + '</span></div>';
+    }
+    body.innerHTML = html2;
     wireDetailPreview(c);
   } else if (tab === 'tokens') {
     var p = flatPalette(readPalette(state.accent, state.ground === 'system' ? null : state.ground));
@@ -1550,6 +2030,23 @@ function wireDetailPreview(c) {
     var gp = $('#dpGotoPattern', root);
     if (gp) gp.onclick = function () { setScreen('library'); goLibTab('patterns'); };
   }
+  if (c.id === 'palette') {
+    var pbtn = $('#dpPaletteBtn', root);
+    if (pbtn) pbtn.onclick = openPalette;
+  }
+  if (c.id === 'popover') {
+    var popBtn = $('#dpPopBtn', root), pop = $('#dpPop', root);
+    if (popBtn) popBtn.onclick = function (e) {
+      e.stopPropagation();
+      var open = pop.hidden; pop.hidden = !open; popBtn.setAttribute('aria-expanded', String(open));
+    };
+  }
+  if (c.id === 'segmented') {
+    var seg = $('#dpSeg', root);
+    if (seg) $$('button', seg).forEach(function (b) {
+      b.onclick = function () { $$('button', seg).forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); }); };
+    });
+  }
 }
 var detailTabs = null;
 function initDetailTabs() { detailTabs = wireTabs($('#detailTabs'), function () { renderDetailBody(); }); }
@@ -1588,7 +2085,95 @@ function renderProjTable() {
       '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3"/><path d="M11 4h5v5"/><path d="M9 11 16 4"/></svg></a>';
     listWrap.appendChild(row);
   });
-  $$('[data-set-accent]').forEach(function (b) { b.onclick = function () { setAccent(b.dataset.setAccent); }; });
+  $$('[data-set-accent]').forEach(function (b) { b.onclick = function () { openProject(b.dataset.setAccent); }; });
+}
+
+/* ---------------- per-project "what it uses" -------------------------------- */
+/* Grounded in each app's real surface — the concrete glass parts that product
+   consumes, re-skinned to its accent. Each entry links to the live component
+   detail; product-specific patterns (an orb, funnel bars, a heatmap) are shown
+   as composed specimens with no component to open. */
+var PROJECT_USES = {
+  zeno: [
+    { comp: 'palette', name: 'Command palette', note: 'Cmd-K is the primary way in and out of every agent action.', spec: '<div style="width:90%;border:1px solid var(--line);border-radius:var(--r-1);padding:6px 8px;font-size:.62rem;color:var(--ink-2);background:var(--surface)"><span class="kbd">⌘K</span> run an agent…</div>' },
+    { comp: 'card', name: 'Capsule cards', note: 'Each run and tool result is an opaque capsule card in the timeline.', spec: '<div class="card" style="padding:8px 10px;font-size:.62rem;color:var(--ink-2);border-radius:var(--r-pill)">plan · approved</div>' },
+    { comp: 'state', name: 'Run status', note: 'Approve / running / failed carry the four-channel status vocabulary.', spec: '<span class="state state-ok state-text"></span>' },
+    { comp: null, name: 'The orb', note: 'The live orchestrator map — a Zeno-specific canvas, tinted by the shared accent.', spec: '<div style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--accent), color-mix(in srgb, var(--accent) 30%, var(--bg)));box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent)"></div>' },
+    { comp: 'btn', name: 'Approve / reject', note: 'Primary and quiet actions on the approval kernel.', spec: '<button class="btn btn-primary btn-sm" tabindex="-1" aria-hidden="true">Approve</button>' }
+  ],
+  weft: [
+    { comp: 'workspace', name: 'Nav rail + editor', note: 'The three-pane editor shell — explorer, document, presence.', spec: '<div style="display:flex;gap:3px;width:80%;height:44px"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div></div>' },
+    { comp: 'tabs', name: 'Editor toolbar', note: 'Document / history / comments as a roving tablist.', spec: '<span class="tab" aria-selected="true" style="font-size:.62rem;border:none">Edit</span><span class="tab" style="font-size:.62rem;border:none">History</span>' },
+    { comp: 'chip', name: 'Status pill', note: 'Live / saved / offline as a compact pill by the title.', spec: '<span class="chip chip-accent">live</span>' },
+    { comp: 'card', name: 'Documents grid', note: 'Recent documents as opaque cards, never behind the blur.', spec: '<div class="card" style="width:60%;height:40px;padding:6px;font-size:.55rem;color:var(--ink-2)">Untitled</div>' }
+  ],
+  vantage: [
+    { comp: 'stat', name: 'Stat tiles', note: 'The KPI row across the top of every dashboard.', spec: '<div style="font-family:var(--font-mono);font-size:1rem;color:var(--ink)">12.4k<div style="font-size:.5rem;color:var(--ink-2)">events</div></div>' },
+    { comp: 'gauge', name: 'Funnel bars', note: 'Each funnel step is a determinate bar on the accent.', spec: '<div style="width:80%;display:flex;flex-direction:column;gap:3px"><div class="gauge"><span class="gauge-fill" style="width:100%"></span></div><div class="gauge"><span class="gauge-fill" style="width:62%"></span></div></div>' },
+    { comp: 'table', name: 'Retention heatmap', note: 'A dense opaque table; cell fills are accent mixes, text stays ink.', spec: '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;width:70%">' + [90, 60, 30, 12, 70, 40, 20, 8].map(function (v) { return '<span style="height:12px;border-radius:2px;background:color-mix(in srgb, var(--accent) ' + v + '%, var(--surface))"></span>'; }).join('') + '</div>' },
+    { comp: 'palette', name: 'Command bar', note: 'Jump to any metric or segment with the keyboard.', spec: '<div style="width:88%;border:1px solid var(--line);border-radius:var(--r-1);padding:5px 8px;font-size:.6rem;color:var(--ink-2);background:var(--surface)"><span class="kbd">⌘K</span> segment…</div>' }
+  ],
+  shield: [
+    { comp: 'workspace', name: 'Workspace shell', note: 'The operations console layout for privacy runs.', spec: '<div style="display:flex;gap:3px;width:80%;height:44px"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div></div>' },
+    { comp: 'stat', name: 'KPI cards', note: 'Records scanned, risks found, headline numbers up top.', spec: '<div style="font-family:var(--font-mono);font-size:1rem;color:var(--ink)">0<div style="font-size:.5rem;color:var(--ink-2)">leaks</div></div>' },
+    { comp: 'state', name: 'Risk status', note: 'Clear / warning / blocked in the four-channel vocabulary.', spec: '<span class="state state-info state-text"></span>' }
+  ],
+  textify: [
+    { comp: 'workspace', name: 'Index / retrieve rail', note: 'The document rail and retrieval panel around the summary.', spec: '<div style="display:flex;gap:3px;width:80%;height:44px"><div style="flex:1;background:var(--surface);border-radius:4px"></div><div style="flex:2;background:var(--bg);border:1px solid var(--line);border-radius:4px"></div></div>' },
+    { comp: 'palette', name: 'Command palette', note: 'Summarise, retrieve, cite — all reachable from Cmd-K.', spec: '<div style="width:88%;border:1px solid var(--line);border-radius:var(--r-1);padding:5px 8px;font-size:.6rem;color:var(--ink-2);background:var(--surface)"><span class="kbd">⌘K</span> summarise…</div>' },
+    { comp: 'list', name: 'Sources list', note: 'Retrieved passages as scannable opaque rows.', spec: '<div class="list" style="width:82%"><div class="list-row" style="padding:5px 8px;font-size:.55rem">§1 · intro</div><div class="list-row" style="padding:5px 8px;font-size:.55rem">§2 · method</div></div>' }
+  ],
+  health: [
+    { comp: 'modal', name: 'Access gate', note: 'A blocking dialog guards protected clinical views.', spec: '<div style="width:70%;height:42px;background:var(--gl-fill);border:1px solid var(--gl-edge);border-radius:var(--r-2);display:grid;place-items:center;font-size:.55rem;color:var(--ink)">Verify access</div>' },
+    { comp: 'stat', name: 'Dashboard tiles', note: 'Patients, tasks due, escalations as KPI tiles.', spec: '<div style="font-family:var(--font-mono);font-size:1rem;color:var(--ink)">7<div style="font-size:.5rem;color:var(--ink-2)">due today</div></div>' },
+    { comp: 'table', name: 'Care worklist', note: 'The coordination worklist as an opaque, sortable table.', spec: '<div style="width:78%;font-size:.5rem"><div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:3px 0;color:var(--ink-2)"><span>Patient</span><span>Status</span></div><div style="display:flex;justify-content:space-between;padding:3px 0;color:var(--ink)"><span>A. Rao</span><span>due</span></div></div>' },
+    { comp: 'gauge', name: 'Progress meters', note: 'Care-plan completion as determinate bars.', spec: '<div class="gauge" style="width:78%"><span class="gauge-fill" style="width:72%"></span></div>' }
+  ],
+  rephrase: [
+    { comp: 'textarea', name: 'Rewrite field', note: 'The source text area — the whole surface of a paraphraser.', spec: '<div class="field" aria-hidden="true" style="width:82%;height:34px;padding:6px 8px;font-size:.55rem;color:var(--ink-3)">Paste text…</div>' },
+    { comp: 'btn', name: 'Tone actions', note: 'Formal / casual / shorten as quiet action buttons.', spec: '<button class="btn btn-sm" tabindex="-1" aria-hidden="true">Formal</button>' },
+    { comp: 'toast', name: 'Copied toast', note: 'An opaque confirmation when a rewrite is copied out.', spec: '<div style="font-size:.55rem;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:8px;padding:5px 9px">✓ Copied</div>' },
+    { comp: 'popover', name: 'Synonym popover', note: 'Alternatives for a word in an opaque anchored panel.', spec: '<div style="background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:.55rem;color:var(--ink)">rapid · swift</div>' }
+  ],
+  detect: [
+    { comp: 'badge', name: 'Score badge', note: 'The likelihood score as a compact badge on the verdict.', spec: '<span class="badge badge-accent">92%</span>' },
+    { comp: 'progress', name: 'Confidence ring', note: 'A determinate ring for the detection confidence.', spec: '<div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(var(--accent) 78%, var(--line) 0);display:grid;place-items:center"><span style="width:30px;height:30px;border-radius:50%;background:var(--surface)"></span></div>' },
+    { comp: 'state', name: 'Verdict', note: 'Human / AI / uncertain in the four-channel status vocabulary.', spec: '<span class="state state-warn state-text"></span>' },
+    { comp: 'tooltip', name: 'Why? hint', note: 'A one-line explanation of the score on hover.', spec: '<span style="font-size:.6rem;border-bottom:1px dotted var(--ink-3);color:var(--ink-2)">why?</span>' }
+  ]
+};
+function projectByTheme(t) { for (var i = 0; i < PROJECTS.length; i++) if (PROJECTS[i].theme === t) return PROJECTS[i]; return null; }
+function renderProject(theme) {
+  var p = projectByTheme(theme); if (!p) return;
+  $('#pjCrumb').textContent = p.name;
+  $('#pjName').textContent = p.name;
+  $('#pjRole').textContent = p.role;
+  $('#pjKicker').textContent = 'what ' + p.name + ' is built from';
+  $('#pjSwatch').style.background = HEX[theme];
+  var repo = $('#pjRepo');
+  repo.href = 'https://github.com/abheet19/' + p.repo;
+  repo.setAttribute('aria-label', 'Open ' + p.name + ' on GitHub');
+  var uses = PROJECT_USES[theme] || [];
+  $('#pjIntro').textContent = p.name + ' consumes ' + uses.length + ' glass parts — each is the real component below, re-skinned to ' + theme + ' on the same tokens and the same contrast law.';
+  $('#pjChips').innerHTML = '<span class="chip chip-accent">' + esc(theme) + '</span><span class="chip chip-mono">' + uses.length + ' parts</span><span class="chip">shared tokens</span>';
+  var grid = $('#pjUsesGrid'); grid.innerHTML = '';
+  uses.forEach(function (u) {
+    var el = document.createElement(u.comp ? 'button' : 'div');
+    el.className = 'use-card card glass';
+    if (u.comp) { el.type = 'button'; el.onclick = function () { openDetail(u.comp); }; }
+    el.innerHTML = '<div class="use-stage" aria-hidden="true">' + u.spec + '</div>' +
+      '<div><p class="use-name" style="margin:0 0 2px">' + esc(u.name) + '</p><p class="use-note">' + esc(u.note) + '</p></div>' +
+      '<div class="use-foot"><span class="use-tag">' + esc(u.comp ? u.comp : 'product pattern') + '</span>' +
+      (u.comp ? '<span class="use-tag" style="color:var(--accent)">open →</span>' : '') + '</div>';
+    grid.appendChild(el);
+  });
+}
+function openProject(theme) {
+  if (!projectByTheme(theme)) return;
+  setAccent(theme);
+  renderProject(theme);
+  setScreen('project');
+  $$('#projList [data-set-accent]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.setAccent === theme ? 'true' : 'false'); });
 }
 var setTabsCtl;
 function initSetTabs() {
@@ -1638,6 +2223,7 @@ function buildPalette() {
   PALETTE_ITEMS = [
     { sec: 'Navigate', label: 'Go to Overview', sub: '1', run: function () { setScreen('overview'); } },
     { sec: 'Navigate', label: 'Go to Library', sub: '2', run: function () { setScreen('library'); } },
+    { sec: 'Navigate', label: 'Go to Kitchen sink', sub: '', run: function () { setScreen('kitchen'); } },
     { sec: 'Navigate', label: 'Go to Settings', sub: '3', run: function () { setScreen('settings'); } },
     { sec: 'Navigate', label: 'Restart onboarding', sub: '', run: startOnboarding },
     { sec: 'Actions', label: 'Cycle ground (dark ⇄ system ⇄ light)', sub: 'G', run: cycleGround },
@@ -1647,7 +2233,7 @@ function buildPalette() {
     { sec: 'Actions', label: 'Copy git clone command', sub: 'git', run: function () { copyText('git clone https://github.com/abheet19/glass.git'); } },
     { sec: 'Actions', label: 'Show keyboard shortcuts', sub: '?', run: openShortcuts }
   ];
-  PROJECTS.forEach(function (p) { PALETTE_ITEMS.push({ sec: 'Set accent', label: p.name, sub: p.theme, run: function () { setAccent(p.theme); } }); });
+  PROJECTS.forEach(function (p) { PALETTE_ITEMS.push({ sec: 'Projects — what it uses', label: p.name, sub: p.theme, run: function () { openProject(p.theme); } }); });
   ALL_COMPONENTS.forEach(function (c) { PALETTE_ITEMS.push({ sec: c.cat === 'pattern' ? 'Patterns' : 'Components', label: 'Open ' + c.name, sub: c.file, run: function () { openDetail(c.id); } }); });
 }
 var paletteSel = 0, paletteFiltered = [];
@@ -1677,7 +2263,11 @@ function movePaletteSel(delta) {
 var lastFocus = null;
 function returnFocus() {
   var el = lastFocus; lastFocus = null;
-  if (el && document.contains(el) && typeof el.focus === 'function') el.focus();
+  // Only restore focus to an element that is still in the document AND visible
+  // (offsetParent is null for a display:none element, e.g. one on a screen we
+  // navigated away from). Otherwise land on a control that is always on screen,
+  // so a following key like "?" is never swallowed as typing into a stale input.
+  if (el && document.contains(el) && typeof el.focus === 'function' && el.offsetParent !== null) el.focus();
   else $('#openPaletteBtn').focus();
 }
 function openPalette() { lastFocus = document.activeElement; buildPalette(); $('#paletteOverlay').hidden = false; $('#paletteInput').value = ''; renderPalette(''); setTimeout(function () { $('#paletteInput').focus(); }, 0); }
@@ -1705,6 +2295,8 @@ document.addEventListener('click', function (e) {
   if (!avatarMenu.hidden && !avatarMenu.contains(e.target) && e.target !== avatarBtn) { avatarMenu.hidden = true; avatarBtn.setAttribute('aria-expanded', 'false'); }
   var dpMenu = $('#dpMenu'), dpMenuBtn = $('#dpMenuBtn');
   if (dpMenu && !dpMenu.hidden && e.target !== dpMenuBtn && !dpMenu.contains(e.target)) { dpMenu.hidden = true; if (dpMenuBtn) dpMenuBtn.setAttribute('aria-expanded', 'false'); }
+  var dpPop = $('#dpPop'), dpPopBtn = $('#dpPopBtn');
+  if (dpPop && !dpPop.hidden && e.target !== dpPopBtn && !dpPop.contains(e.target) && !(dpPopBtn && dpPopBtn.contains(e.target))) { dpPop.hidden = true; if (dpPopBtn) dpPopBtn.setAttribute('aria-expanded', 'false'); }
 });
 $('#hamburgerBtn').addEventListener('click', function (e) {
   e.stopPropagation();
@@ -1737,6 +2329,11 @@ $$('#wcagSeg [data-wcag]').forEach(function (b) { b.addEventListener('click', fu
 $('#libSearch').addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
 $('#overviewRecomputeBtn').addEventListener('click', recomputeBudget);
 $('#inspectPatternBtn').addEventListener('click', function () { openDetail('workspace'); });
+
+/* kitchen sink — glass toolbar over scrolling opaque content */
+$('#ksToastBtn').addEventListener('click', function () { toast('Fired from the pinned glass toolbar'); });
+$('#ksTopBtn').addEventListener('click', function () { $('#content').scrollTop = 0; });
+$('#ks-reduce').addEventListener('change', function (e) { setFlat(e.target.checked); });
 
 /* workspace pattern (verbatim behaviour, relocated into Library > Patterns) */
 var fileTablist = $('#workspace-demo [aria-label="Open files"]');
@@ -1835,6 +2432,7 @@ function init() {
   renderCatChips();
   renderGrid();
   renderProjTable();
+  $('#ksCompCount').textContent = String(COMPONENTS.length);
   renderOnboardingAccents();
   renderOnboardingStep();
   renderSettingsAccent();
