@@ -28,7 +28,7 @@ const THEMES = ['zeno', 'weft', 'vantage', 'shield', 'textify', 'health', 'rephr
    frame stays on screen (capped and continuously sampled below — see capture()).
    Beat 1 is the switcher, beat 2 is the proof. */
 const board = [
-  // beat 1 — eight themes, one structure, dark ground. First beat holds long
+  // beat 1 — eleven themes, one structure, dark ground. First beat holds long
   // enough to be a readable still (it is frame 0); the rest are brisk — this
   // is a switcher, and a switcher should read as fast flips, not a slideshow.
   ...THEMES.map((t, i) => ({ theme: t, ground: 'dark', at: 'ramp', hold: i === 0 ? 1400 : 550 })),

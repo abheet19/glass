@@ -15,8 +15,8 @@ npm pack --dry-run
 
 - `format:check`: final newlines, trailing whitespace, and canonical JSON.
 - `lint`: all JavaScript syntax, CSS brace balance, and local CSS imports.
-- `check`: 814 contrast and structural assertions over eight themes on light and dark grounds, including every shipped stylesheet variable.
-- `test:browser`: twelve groups covering all theme/ground controls, keyboard paths, fields, menu actions, tabs, tooltips, reduced motion, deep links, every workspace control, structural labels/IDs/anchors, and page containment at 320 px.
+- `check`: 1111 contrast and structural assertions over eleven themes on light and dark grounds, including every shipped stylesheet variable.
+- `test:browser`: sixteen groups covering all eleven theme and ground controls, keyboard paths, fields, menu actions, tabs, tooltips, reduced motion, deep links, every workspace control, structural labels/IDs/anchors, and page containment at 320 px.
 - `npm pack --dry-run`: verifies the public package payload.
 
 Inspect `docs/verification/glass-workspace-desktop.png` and `glass-workspace-mobile.png` after browser runs. For release, inspect the entire diff, push one commit, wait for CI and Pages, then require `https://abheet19.github.io/glass/release.json` to equal that exact commit SHA and smoke the live demo/deep link.

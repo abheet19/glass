@@ -21,7 +21,7 @@
    A theme therefore cannot alter structure, because it is handed no structural
    token to alter. It is not a convention that a theme "should not" change the
    radius scale; it has no radius token in scope. The ladder is identical across
-   all eight themes by construction, and scripts/contrast.mjs asserts it anyway.
+   all eleven themes by construction, and scripts/contrast.mjs asserts it anyway.
 
    WHY THE LIGHTNESS IS NOT THE BRAND'S. Each theme's source hex — the colour on
    its brand mark — sets the hue and the chroma ceiling. It does NOT set the
@@ -36,7 +36,7 @@
    Weft and Vantage were already there; this file finishes the move.
 
    THE CEILINGS, MEASURED NOT ASSERTED. Every ratio quoted in this file is
-   printed by `node scripts/contrast.mjs`, for all eight themes on both grounds,
+   printed by `node scripts/contrast.mjs`, for all eleven themes on both grounds,
    and CI fails on any regression. The numbers in these comments are the worst
    case across the eight, not a favourable one.
 
@@ -180,7 +180,7 @@
      is written down. This is that case: the tint's white at the strength the
      ambient ground can lift it to, over --line, the lightest neutral glass may
      sit above. It exists so the budget can MEASURE text on glass instead of
-     guessing at it. Zeno's --gl-worst, generalised to eight themes. */
+     guessing at it. Zeno's --gl-worst, generalised to eleven themes. */
   --gl-worst: color-mix(in srgb, oklch(100% 0 0) 8%, var(--line));
 
   /* ---------------------------------------------------------------------------
@@ -290,7 +290,7 @@
   --ink-3: oklch(58% 0.015 var(--h-ground));
 
   /* accent 4.64:1 on --raised, 4.45:1 on the worst glass at L 52% — so L 50%,
-     which lands at 4.94:1 / 4.74:1 worst across the eight themes.
+     which lands at 4.94:1 / 4.74:1 worst across the eleven themes.
      accent-2 6.30:1 on --raised; graphic only on glass, same law as dark. */
   --accent:    oklch(50% var(--c-accent-lt) var(--h-accent));
   --accent-2:  oklch(45% var(--c-accent-2-lt) var(--h-accent-2));

@@ -29,7 +29,7 @@ runtime, so projects on plain CSS, Vite, Tailwind + MUI, and a browser extension
 
 ## 3. Product contract
 
-Semantic OKLCH tokens, eight product themes, reusable product/workspace CSS primitives, a Tailwind v3
+Semantic OKLCH tokens, eleven themes (eight product accents plus three neutral themes), reusable product/workspace CSS primitives, a Tailwind v3
 adapter, a generated JSON mirror for non-CSS consumers, and executable quality/contrast/
 interaction/accessibility/responsive contracts. CSS is the product; the demo's JavaScript only adds
 example interactions.
@@ -100,7 +100,7 @@ responsive state* only; the consuming product owns files, terminals, agents and 
 
 | Path | Responsibility |
 | --- | --- |
-| `src/tokens.css`, `src/tokens.json`, `src/themes/*.css` | semantic roles, generated JSON mirror, eight seed-only theme files (8 numbers each) |
+| `src/tokens.css`, `src/tokens.json`, `src/themes/*.css` | semantic roles, generated JSON mirror, eleven seed-only theme files (8 numbers each) |
 | `src/primitives.css`, `forms.css`, `navigation.css`, `feedback.css`, `data.css` | reusable controls and their states |
 | `src/workspace.css` | responsive editor/agent/ops shell layout primitives |
 | `src/components.css` | single import that pulls in all six component sheets |

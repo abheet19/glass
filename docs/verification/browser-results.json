@@ -2,7 +2,7 @@
   "url": "file:///D:/Code/glass/demo/index.html",
   "checks": [
     "onboarding welcomes, sets a theme and appearance, offers products to explore, enters the Studio, and is not shown again",
-    "all eight themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA",
+    "all eleven themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA",
     "WCAG AA/AAA target changes the required minimum and the live pass count",
     "roving tabindex, arrow keys, Home/End work across Library, Settings and Detail tabs",
     "command palette opens, filters, runs an action by keyboard, and closes; shortcuts overlay opens and closes",

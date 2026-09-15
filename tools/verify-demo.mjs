@@ -16,7 +16,7 @@ page.on('pageerror', error => errors.push(error.message));
 const checks = [];
 const check = async (name, fn) => { await fn(); checks.push(name); };
 
-const THEMES = ['zeno', 'weft', 'vantage', 'shield', 'textify', 'health', 'rephrase', 'detect'];
+const THEMES = ['zeno', 'weft', 'vantage', 'shield', 'textify', 'health', 'rephrase', 'detect', 'mono', 'graphite', 'warm'];
 
 try {
   await page.goto(url, { waitUntil: 'load' });
@@ -39,7 +39,7 @@ try {
     assert.equal(await page.locator('#studio').isVisible(), true);
   });
 
-  await check('all eight themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA', async () => {
+  await check('all eleven themes on both grounds pass the live budget with zero FAIL rows, at AA and AAA', async () => {
     await page.locator('#sidebar [data-goto="settings"]').click();
     for (const wcag of ['AA', 'AAA']) {
       await page.locator('#settab-a11y').click();

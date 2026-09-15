@@ -2,7 +2,7 @@
 # The contrast budget, on every push.
 #
 # Contrast verification: scripts/contrast.mjs runs
-# the budget on 8 themes x 2 grounds and exits non-zero if any of the 814
+# the budget on 11 themes x 2 grounds and exits non-zero if any of the 1111
 # assertions drifts. A colour change that lowers a ceiling cannot merge.
 #
 # The contrast verifier has no dependencies. Browser workflow tests use Playwright.
@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   contrast:
-    name: contrast budget · 16 palettes
+    name: contrast budget · 22 palettes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -14,7 +14,7 @@ npm pack --dry-run
 
 ## Product acceptance
 
-- [ ] Eight themes and light/dark/system grounds update both selected controls and the measured budget.
+- [ ] Eleven themes and light/dark/system grounds update both selected controls and the measured budget.
 - [ ] Keyboard theme/gallery/tabs/Home/End/tooltip/form/menu actions work with visible focus.
 - [ ] Reduced motion stops animation; flat transparency and deep links round-trip.
 - [ ] Every explorer item opens a file tab; explorer/assistant toggle; tree disclosure hides content.

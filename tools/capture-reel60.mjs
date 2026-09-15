@@ -3,7 +3,7 @@
 //
 // The flow is the real product story, in the order a first-time visitor sees it:
 //
-//   1. Onboarding hue-picker — the eight themes are wearable live; we try a few so
+//   1. Onboarding hue-picker — the eleven themes are wearable live; we try a few so
 //      the whole page re-skins (Zeno crimson → Weft teal → Vantage gold → HealthFlow).
 //   2. Skip setup → the Studio shell (Overview).
 //   3. Library → Components — the component gallery, scrolled through its groups.

@@ -140,7 +140,7 @@ The reel at the top drives the redesigned **Glass Studio** end to end, exactly a
 
 | Beat | What you're looking at |
 |---|---|
-| **1 · Onboarding hue-picker** | Eight real themes as wearable tiles. Click one and the *entire* app re-skins live — this is `data-glass`, not a preview swatch. |
+| **1 · Onboarding hue-picker** | Eleven real themes as wearable tiles. Click one and the *entire* app re-skins live — this is `data-glass`, not a preview swatch. |
 | **2 · Skip → Studio** | The persistent sidebar shell: Overview, Library, Kitchen sink, Settings, and the eight source projects. |
 | **3 · Component gallery** | Library → Components: every real component, grouped and filterable, scrolled through its groups. |
 | **4 · Component detail** | One card opened into Preview / Tokens / Code / Accessibility — Tokens and Accessibility computed live at the current theme, ground and WCAG target. |
@@ -216,7 +216,7 @@ resolves the cascade, does the colour math by hand, and exits non-zero if any of
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#142d35','primaryTextColor':'#e6f4f1','primaryBorderColor':'#2ed3c6','lineColor':'#647c8d','fontSize':'14px'}}}%%
 flowchart LR
-    CSS["src/*.css<br/>+ 8 theme seeds"] --> P["parse & resolve<br/>var() chains"]
+    CSS["src/*.css<br/>+ 11 theme seeds"] --> P["parse & resolve<br/>var() chains"]
     P --> O["oklch() → sRGB<br/><i>with gamut mapping</i>"]
     O --> MIX["color-mix(in srgb)<br/>+ alpha compositing"]
     MIX --> WCAG["WCAG 2.2 ratios<br/>vs each token's worst backdrop"]
@@ -235,7 +235,7 @@ Four ideas make it hold together:
   a hue-plus-per-ground-chroma for each of two accents — and *nothing else*. Lightness, radii, type,
   motion and the four state hues live in `tokens.css`, unreachable from a theme. A theme literally
   cannot break the ladder because it is handed nothing to break it with, and the script asserts the
-  resolved lightness ladder is numerically identical across all eight.
+  resolved lightness ladder is numerically identical across all eleven themes.
 - **The gamut is respected, not ignored.** oklch is perceptually uniform but not all of it fits in
   sRGB, so the resolver gamut-maps each colour the way a browser would — which is why each accent
   ships two chroma values (a dark one and a light one), both capped at what sRGB can actually hold.

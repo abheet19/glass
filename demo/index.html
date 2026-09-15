@@ -286,6 +286,7 @@ pre.code-block .tag { color: var(--accent); }
   .brand-tag { display: none; }
   .cmdk-trigger .kbd { display: none; }
   .seg3 { flex-direction: column; }
+  #setTabs { flex-wrap: wrap; gap: var(--sp-1) var(--sp-3); }
 }
 
 /* =============================================================================
@@ -3079,6 +3080,17 @@ wireTabs(dockTablist, function (tab) {
   ['problems', 'output', 'debug', 'terminal', 'ports'].forEach(function (k) { var el = $('#workspace-dock-panel-' + k); if (el) el.hidden = (k !== key); });
 });
 var wsFrame = $('#workspace-demo');
+// The assistant and explorer become overlays at compact widths. Start them
+// closed so they do not cover the editor or intercept its dock controls; each
+// remains available from the labelled toolbar toggle.
+if (window.matchMedia('(max-width: 900px)').matches) {
+  wsFrame.setAttribute('data-aside-collapsed', 'true');
+  $('#workspace-toggle-aside').setAttribute('aria-expanded', 'false');
+}
+if (window.matchMedia('(max-width: 640px)').matches) {
+  wsFrame.setAttribute('data-nav-collapsed', 'true');
+  $('#workspace-toggle-nav').setAttribute('aria-expanded', 'false');
+}
 [['workspace-toggle-nav', 'data-nav-collapsed'], ['workspace-toggle-aside', 'data-aside-collapsed']].forEach(function (pair) {
   var btn = $('#' + pair[0]);
   btn.addEventListener('click', function () {

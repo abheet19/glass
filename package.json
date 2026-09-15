@@ -1,7 +1,7 @@
 {
   "name": "@abheet19/glass",
   "version": "0.1.0",
-  "description": "A framework-neutral design system with OKLCH tokens, light and dark modes, eight product accents, three neutral palettes, and contrast verified by script.",
+  "description": "A framework-neutral design system with OKLCH tokens, light and dark modes, eleven product accents, and contrast verified by script.",
   "license": "MIT",
   "author": "Abheet Singh Isher <abheet19@gmail.com> (https://github.com/abheet19)",
   "homepage": "https://github.com/abheet19/glass#readme",
