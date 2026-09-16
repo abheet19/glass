@@ -296,7 +296,7 @@ pre.code-block .tag { color: var(--accent); }
    blur, a floatier shadow and an accent atmosphere) and supplies styling for
    the demo-only utility classes (.display, .lede, .ramp, .tablewrap, the
    foundations grids and the theme gallery) that the shipped markup uses. The
-   contrast law, the eight verified themes and every colour token are untouched:
+   contrast law, the eleven verified themes and every colour token are untouched:
    colour still comes entirely from ../src, so the live budget on this page is
    still measuring the real system.
    ============================================================================= */
@@ -471,7 +471,7 @@ pre.code-block .tag { color: var(--accent); }
 .tablewrap tbody tr:hover td { background: var(--surface); }
 .tablewrap .num, .tablewrap .tok { font-family: var(--font-mono); font-size: .8rem; }
 
-/* ---- foundations: the eight-theme gallery ---------------------------------- */
+/* ---- foundations: the eleven-theme gallery ------------------------------- */
 #gallery-rows { padding: 0; }
 .gal-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: var(--sp-4); align-items: center; padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--line); cursor: pointer; transition: background var(--t-fast) var(--ease); }
 .gal-row:first-child { border-top: none; }
@@ -2446,7 +2446,7 @@ function bigPreview(c) {
     textarea: '<div class="field-group" style="width:280px"><label class="field-label" for="dp-ta">Notes</label><textarea class="field" id="dp-ta" rows="3" placeholder="Multi-line entry…"></textarea></div>',
     select: '<div class="field-group" style="width:240px"><label class="field-label" for="dp-sel">Accent theme</label><select class="field" id="dp-sel"><option>zeno</option><option>weft</option><option>vantage</option></select></div>',
     slider: '<div class="field-group" style="width:280px"><div style="display:flex;justify-content:space-between;align-items:baseline"><label class="field-label" for="dp-range">Blur radius</label><output id="dp-range-out" for="dp-range" class="mono" style="color:var(--ink);font-weight:700">14px</output></div><input class="range" type="range" id="dp-range" min="0" max="30" value="14" aria-describedby="dp-range-out"></div>',
-    stat: '<div class="metric-grid" style="width:100%"><div class="card metric-card"><span class="metric-card-label">Pairs passing</span><span class="metric-card-value">15/15</span><span class="card-note">live, this palette</span></div><div class="card metric-card"><span class="metric-card-label">Themes</span><span class="metric-card-value">8/8</span><span class="card-note">shared tokens</span></div></div>',
+    stat: '<div class="metric-grid" style="width:100%"><div class="card metric-card"><span class="metric-card-label">Pairs passing</span><span class="metric-card-value">15/15</span><span class="card-note">live, this palette</span></div><div class="card metric-card"><span class="metric-card-label">Themes</span><span class="metric-card-value">' + THEMES.length + '/' + THEMES.length + '</span><span class="card-note">shared tokens</span></div></div>',
     palette: '<div style="text-align:center"><button class="btn btn-primary" id="dpPaletteBtn">Open the command palette</button><p class="card-note" style="margin-top:var(--sp-3)">Runs the same actions clicking does — nothing here is a second code path.</p></div>',
     segmented: '<div class="seg" role="group" aria-label="Range" id="dpSeg"><button class="btn" aria-pressed="true">Day</button><button class="btn" aria-pressed="false">Week</button><button class="btn" aria-pressed="false">Month</button></div>',
     list: '<div class="list" style="max-width:320px"><div class="list-row"><span class="lr-main"><span class="lr-title">tokens.css</span><br><span class="lr-sub">the grammar</span></span><span class="badge badge-accent">core</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">primitives.css</span><br><span class="lr-sub">seven primitives</span></span><span class="badge">7</span></div><div class="list-row"><span class="lr-main"><span class="lr-title">feedback.css</span><br><span class="lr-sub">overlays</span></span><span class="badge">4</span></div></div>',

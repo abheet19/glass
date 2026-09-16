@@ -168,6 +168,14 @@ try {
     assert.equal(await page.locator('#libDetailInner').isVisible(), true);
     assert.equal(await page.locator('#crumbCat').innerText(), 'Primitives');
     assert.equal(await page.locator('#detailName').innerText(), '.field');
+
+    await page.locator('[data-comp-id="stat"]').click();
+    const themeCount = `${THEMES.length}/${THEMES.length}`;
+    await page.locator('#detailBody .metric-card-value', { hasText: themeCount }).waitFor();
+    assert.equal(await page.locator('#detailBody .metric-card-value').last().innerText(), themeCount);
+
+    await page.locator('[data-comp-id="field"]').click();
+    await page.locator('#detailName', { hasText: '.field' }).waitFor();
   });
 
   await check('detail tabs render live tokens, escaped/copyable code, and computed accessibility rows', async () => {
